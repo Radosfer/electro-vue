@@ -181,8 +181,10 @@ export default {
         body: JSON.stringify(title)
       })
     },
-    editHouse (house, fio, cb) {
-      console.log(fio)
+    editHouse (house, fio, phone, cb) {
+      // console.log(house)
+      // console.log(fio)
+      // console.log(phone)
       fetch(baseUrl + '/houses/' + house.id, {
         method: 'PUT',
         headers: {
@@ -190,14 +192,15 @@ export default {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          fio: fio
+          fio: fio,
+          phone: phone
         })
       })
       // delay(1000)
-        .then(() => cb({
-          fio: fio
-        }))
-        .then(() => cb(fio))
+      //   .then(() => cb({
+      //     fio: fio
+      //   }))
+        // .then(() => cb(fio))
         .catch((ex) => console.log('street edit failed', ex))
     }
   },

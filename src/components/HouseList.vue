@@ -163,10 +163,10 @@
             phone: this.selectedPhone,
             start_value: this.selectedStartCounterValue
           })
-          this.addMan({
-            fio: this.selectedMan,
-            phone: this.selectedPhone
-          })
+//          this.addMan({
+//            fio: this.selectedMan,
+//            phone: this.selectedPhone
+//          })
         }
         this.cancelEdit()
       },

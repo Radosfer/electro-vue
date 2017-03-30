@@ -16,15 +16,24 @@
             <pair :data="valuePair" color="red"></pair>
 
           </span>
+                <span v-if="editMode">
+                <input id="fioEdit"
+                       class="edit"
+                       :value="house.fio"
+                       @keyup.enter="doneEditFioPhone"
+                       @keyup.esc="cancelEdit"
+                       v-model="newFio"
+                       placeholder="Введите фамилию, имя и отчество"
+                >
 
                 <input class="edit"
-                       v-show="editMode"
-                       v-focus="editMode"
-                       :value="house.fio"
-                       @keyup.enter="doneEdit"
+                       :value="house.phone"
+                       v-model="newPhone"
+                       @keyup.enter="doneEditFioPhone"
                        @keyup.esc="cancelEdit"
-                       @blur="doneEdit">
-
+                       placeholder="Введите номер телефона"
+                >
+           </span>
             </div>
             <div class="card-reveal">
           <span class="card-title grey-text text-darken-4">
@@ -50,7 +59,9 @@
     props: ['house'],
     data () {
       return {
-        editMode: false
+        editMode: false,
+        newFio: this.house.fio,
+        newPhone: this.house.phone
 
       }
     },
@@ -119,6 +130,17 @@
         const {house} = this
         if (value && this.editMode) {
           this.editStreet({house, value})
+        }
+        this.cancelEdit()
+      },
+      doneEditFioPhone (e) {
+        // todo добавить проверку пустых полей
+        const {house} = this
+        const fio = this.newFio
+        const phone = this.newPhone
+
+        if (this.editMode) {
+          this.editHouse({house, fio, phone})
         }
         this.cancelEdit()
       },

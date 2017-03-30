@@ -33,10 +33,14 @@ const actions = {
     //   }
     // }
     for (let i in state.all) {
+      // console.log(data.phone)
+      // console.log(data.fio)
+      // console.log(data)
+
       if (state.all[i].id === data.house.id) {
         commit(types.HOUSE_LOADED)
         // console.log(data)
-        api.house.editHouse(state.all[i], data.value, house => {
+        api.house.editHouse(state.all[i], data.fio, data.phone, house => {
           commit(types.HOUSE_EDITED, house)
         })
       }
