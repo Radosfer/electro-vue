@@ -186,23 +186,50 @@ export default {
         body: JSON.stringify(title)
       })
     },
-    editHouse (house, title, cb) {
-      // fetch(baseUrl + '/houses/' + house.id, {
-      //   method: 'PUT',
-      //   headers: {
-      //     // 'Access-Control-Allow-Origin': '*',
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify({
-      //     title: title
-      //   })
-      // })
-      // // delay(1000)
-      // //   .then(() => cb({
-      // //     id: street.id,
-      // //     title: title
-      // //   }))
-      //   .catch((ex) => console.log('street edit failed', ex))
+    editHouse (house, fio, cb) {
+      console.log(fio)
+      fetch(baseUrl + '/houses/' + house.id, {
+        method: 'PUT',
+        headers: {
+          // 'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fio: fio
+        })
+      })
+      // delay(1000)
+        .then(() => cb({
+          fio: fio
+        }))
+        .catch((ex) => console.log('street edit failed', ex))
+    }
+  },
+  tariff: {
+    addTariff (title, cb) {
+      // console.log(title)
+      fetch(baseUrl + '/prices', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          created_at: Date(),
+          value: title
+        })
+      })
+        .then(() => cb({
+          value: title
+        }))
+        .catch((ex) => console.log('street adding failed', ex))
+    },
+    getTariffs (cb) {
+      fetch(baseUrl + '/site/price')
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json)
+        })
+        .catch((ex) => console.log('street parsing failed', ex))
     }
   },
   getStreetById (id) {

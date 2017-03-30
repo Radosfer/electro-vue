@@ -7,7 +7,10 @@
                     <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons">add</i></a>
                 </h5>
                 <div class="row" v-show="loaded">
-                    <div class="col s6" v-if="!editMode" v-for="p in houses" :class="{active: p === current}"
+                    <div class="col s6"
+                         v-if="!editMode"
+                         v-for="p in houses"
+                         :class="{active: p === current}"
                          transition="fade">
 
                         <house :house="p"></house>
@@ -23,7 +26,6 @@
                                         id="house"
                                         type="text"
                                         class="validate"
-
                                         v-model="selectedTitle"
                                         @keyup.esc="cancelEdit">
                                 <label for="house">Введите номер дома</label>
@@ -105,7 +107,9 @@
   import house from './house.vue'
   import street from './street.vue'
   import group from './group.vue'
+  import crud from '../mixin/crud'
   export default {
+    mixins: [crud],
     data () {
       return {
         editMode: false,

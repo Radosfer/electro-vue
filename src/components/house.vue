@@ -81,12 +81,14 @@
       },
       ownerPair () {
         return {
+          house: this.house,
           name: 'ФИО:',
           value: this.house.fio
         }
       },
       phonePair () {
         return {
+          house: this.house,
           name: 'Телефон:',
           value: this.house.phone
         }

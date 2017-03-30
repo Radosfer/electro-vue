@@ -51,10 +51,12 @@
         this.editMode = false
       },
       doneEdit (e) {
+//        const value = {fio: e.target.value.trim()}
         const value = e.target.value.trim()
-        const {fio} = this
+        const {house} = this.data
+//        console.log(house)
         if (value && this.editMode) {
-          this.editHouse({fio, value})
+          this.editHouse({house, value})
         }
         this.cancelEdit()
       }

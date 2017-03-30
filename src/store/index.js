@@ -6,6 +6,7 @@ import streets from './modules/streets'
 import houses from './modules/houses'
 import groups from './modules/groups'
 import mans from './modules/mans'
+import tariffs from './modules/tariffs'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     streets,
     houses,
     groups,
-    mans
+    mans,
+    tariffs
   },
   strict: debug
   // plugins: debug ? [createLogger()] : []

@@ -20,7 +20,7 @@ const actions = {
   selectHouse ({commit}, house) {
     commit(types.HOUSE_SELECT, {house})
     api.getHouses(house, houses => {
-      console.log(houses)
+      // console.log(houses)
     })
   },
   editHouse ({commit}, data) {
@@ -35,7 +35,8 @@ const actions = {
     for (let i in state.all) {
       if (state.all[i].id === data.house.id) {
         commit(types.HOUSE_LOADED)
-        api.editHouse(state.all[i], data.value, house => {
+        // console.log(data)
+        api.house.editHouse(state.all[i], data.value, house => {
           commit(types.HOUSE_EDITED, house)
         })
       }
