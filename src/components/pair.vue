@@ -1,8 +1,12 @@
 <template>
     <div :class="classColor">
         {{ data.name }}
-        <span class="right">{{ data.value }} <a href="#!" class="green-text" @click="doEdit()"><i
-                class="tiny material-icons">mode_edit</i></a></span>
+        <span class="right">
+            {{ data.value }}
+            <!--<a href="#!" class="green-text" @click="doEdit()">-->
+                <!--<i class="tiny material-icons">mode_edit</i>-->
+            <!--</a>-->
+        </span>
         <input class="edit"
                v-show="editMode"
                v-focus="editMode"

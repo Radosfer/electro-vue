@@ -72,13 +72,22 @@
                                 <!--Далее-->
                                 <!--<i class="material-icons right">send</i>-->
                                 <!--</button> -->
+                                <span class="left">
+                                <button class="btn waves-effect waves-light"
+                                        type="submit"
+                                        name="action"
+                                        @click="cancelEdit">
+                                    Отмена
+                                    <i class="material-icons right"></i>
+                                </button>
+                                </span>
                                 <span class="right">
                                 <button class="btn waves-effect waves-light"
                                         type="submit"
                                         name="action"
                                         @click="doneEdit">
                                     Готово
-                                    <i class="material-icons right">done</i>
+                                    <i class="material-icons right">done_all</i>
                                 </button>
                                 </span>
                             </div>

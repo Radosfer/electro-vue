@@ -11,16 +11,16 @@
             <pair :data="streetPair" color="green"></pair>
             <pair :data="groupPair"></pair>
             <pair :data="ownerPair" color="blue"></pair>
-
             <pair :data="phonePair"></pair>
             <pair :data="lastPair"></pair>
             <pair :data="valuePair" color="red"></pair>
 
           </span>
+
                 <input class="edit"
                        v-show="editMode"
                        v-focus="editMode"
-                       :value="house.title"
+                       :value="house.fio"
                        @keyup.enter="doneEdit"
                        @keyup.esc="cancelEdit"
                        @blur="doneEdit">

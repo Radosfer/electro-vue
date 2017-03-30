@@ -41,11 +41,6 @@ export default {
           title: title
         })
       })
-      // delay(1000)
-      // .then(() => cb({
-      //   id: 20,
-      //   title: title
-      // }))
         .then(() => cb(true))
         .catch((ex) => console.log('street adding failed', ex))
     },
@@ -202,6 +197,7 @@ export default {
         .then(() => cb({
           fio: fio
         }))
+        .then(() => cb(fio))
         .catch((ex) => console.log('street edit failed', ex))
     }
   },
@@ -219,7 +215,7 @@ export default {
         })
       })
         .then(() => cb({
-          value: title
+          // value: title
         }))
         .catch((ex) => console.log('street adding failed', ex))
     },
