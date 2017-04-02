@@ -168,6 +168,10 @@ export default {
         },
         body: JSON.stringify(title)
       })
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json)
+        })
       // .then(() => cb(true))
       // .catch((ex) => console.log('house add failed', ex))
     },
@@ -196,12 +200,11 @@ export default {
           phone: phone
         })
       })
-      // delay(1000)
-      //   .then(() => cb({
-      //     fio: fio
-      //   }))
-        // .then(() => cb(fio))
-        .catch((ex) => console.log('street edit failed', ex))
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json)
+        })
+        .catch((ex) => console.log('editHouse edit failed', ex))
     }
   },
   tariff: {

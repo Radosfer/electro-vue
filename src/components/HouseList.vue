@@ -1,4 +1,4 @@
-<template xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<template xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col s12">
             <div class="card-panel">
@@ -18,74 +18,102 @@
                 </div>
 
                 <li class="collection-item" v-if="editMode">
-                    <form>
+                    <form @submit.prevent="validateBeforeSubmit">
                         <div class="row">
-
                             <div class="input-field col s12">
+                                <label for="house">Введите номер дома</label>
                                 <input
                                         id="house"
+                                        name="humHouse"
                                         type="text"
                                         class="validate"
                                         v-model="selectedTitle"
-                                        @keyup.esc="cancelEdit">
-                                <label for="house">Введите номер дома</label>
+                                        v-validate:humHouse.initial="'required'"
+                                        :class="{'input': true, 'is-danger': errors.has('humHouse') }">
+                                <span v-show="errors.has('humHouse')" class="help is-danger">{{ errors.first('humHouse') }}</span>
+
                             </div>
+                            <!--<span>Выберите улицу</span>-->
                             <div class="input-field col s12">
-                                <!--<label>Выберите улицу</label>-->
-                                <select class="browser-default" v-model="selectedStreetId">
-                                    <option disabled>Выберите улицу</option>
+
+                                <select class="browser-default"
+                                        v-model="selectedStreetId"
+                                        name="selStreet"
+                                        v-validate:selStreet.initial="'required'"
+                                        :class="{'input': true, 'is-danger': errors.has('selStreet') }">
+                                    <option value=""  disabled selected>Выберите улицу</option>
                                     <option v-for="p in streets" v-bind:value="p.id">
                                         {{p.title}}
                                     </option>
                                 </select>
-
-                                <span>Selected: {{ selectedStreetId }}</span>
+                                <span v-show="errors.has('selStreet')" class="help is-danger">{{ errors.first('selStreet') }}</span>
+                                <!--<span>Selected: {{ selectedStreetId }}</span>-->
 
                             </div>
                             <div class="input-field col s12">
-                                <select class="browser-default" v-model="selectedGroupId">
-                                    <option disabled>Выберите группу</option>
+                                <select class="browser-default"
+                                        v-model="selectedGroupId"
+                                        name="selGroup"
+                                        v-validate:selStreet.initial="'required'"
+                                        :class="{'input': true, 'is-danger': errors.has('selStreet') }">
+                                    <option value=""  disabled selected>Выберите группу</option>
                                     <option v-for="p in groups" v-bind:value="p.id">
                                         {{p.title}}
                                     </option>
                                 </select>
-                                <span>Selected: {{ selectedGroupId }}</span>
+                                <span v-show="errors.has('selGroup')" class="help is-danger">{{ errors.first('selGroup') }}</span>
+                                <!--<span>Selected: {{ selectedGroupId }}</span>-->
                             </div>
+
+
+
                             <div class="input-field col s12">
-                                <input id="houseKeeperName" type="text" class="validate" v-model="selectedMan">
                                 <label for="houseKeeperName">Введите фамилию, имя и отчество плательщика</label>
+                                <input id="houseKeeperName"
+                                       name="name"
+                                       v-model="selectedMan"
+                                       v-validate:name.initial="'required'"
+                                       :class="{'input': true, 'is-danger': errors.has('name') }"
+                                       type="text">
+                                <span v-show="errors.has('name')"
+                                      class="help is-danger">{{ errors.first('name') }}</span>
                             </div>
                             <div class="input-field col s12">
-                                <input id="houseKeeperTel" type="text" class="validate" v-model="selectedPhone">
-                                <label for="houseKeeperTel">Введите номер телефона плательщика</label>
+                                <label for="houseKeeperTel">Введите номер
+                                    телефона плательщика</label>
+                                <input id="houseKeeperTel"
+                                       name="numPhone"
+                                       type="text"
+                                       class="validate"
+                                       v-model="selectedPhone"
+                                       v-validate:numPhone.initial="'required'"
+                                       :class="{'input': true, 'is-danger': errors.has('numPhone') }">
+                                <span v-show="errors.has('numPhone')" class="help is-danger">{{ errors.first('numPhone') }}</span>
                             </div>
                             <div class="input-field col s12">
-                                <input id="startCounterValue" type="text" class="validate"
-                                       v-model="selectedStartCounterValue">
-                                <label for="startCounterValue">Введите начальное показание счетчика</label>
+                                <label for="startCounterValue">Введите начальное
+                                    показание счетчика</label>
+                                <input id="startCounterValue"
+                                       name="counterValue"
+                                       type="text"
+                                       class="validate"
+                                       v-model="selectedStartCounterValue"
+                                       v-validate:counterValue.initial="'required|numeric'"
+                                       :class="{'input': true, 'is-danger': errors.has('counterValue') }">
+                                <span v-show="errors.has('counterValue')" class="help is-danger">{{ errors.first('counterValue') }}</span>
                             </div>
                             <div class="input-field col s12">
-                                <!--<button class="btn waves-effect waves-light"-->
-                                <!--type="submit"-->
-                                <!--name="action"-->
-                                <!--@click="doneEdit">-->
-                                <!--Далее-->
-                                <!--<i class="material-icons right">send</i>-->
-                                <!--</button> -->
                                 <span class="left">
                                 <button class="btn waves-effect waves-light"
-                                        type="submit"
-                                        name="action"
                                         @click="cancelEdit">
                                     Отмена
                                     <i class="material-icons right"></i>
                                 </button>
                                 </span>
+
                                 <span class="right">
-                                <button class="btn waves-effect waves-light"
-                                        type="submit"
-                                        name="action"
-                                        @click="doneEdit">
+                                <button class="btn waves-effect waves-light button is-primary"
+                                        type="submit">
                                     Готово
                                     <i class="material-icons right">done_all</i>
                                 </button>
@@ -93,20 +121,12 @@
                             </div>
                         </div>
                     </form>
+
                     <!--<spinner :loaded="loaded"></spinner>-->
                 </li>
             </div>
-            <!--<select class="browser-default" v-model="selected">-->
-            <!--<option value="" disabled selected>Выберите улицу</option>-->
-            <!--<option v-for="p in streets" v-bind:value="p.id">-->
-            <!--{{p.title}}-->
-            <!--</option>-->
-            <!--</select>-->
-            <!--<span>Selected: {{ selected }}</span>-->
         </div>
-
     </div>
-
 </template>
 
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.0/vue.js"></script>-->
@@ -117,7 +137,17 @@
   import street from './street.vue'
   import group from './group.vue'
   import crud from '../mixin/crud'
+
+//  import Vue from 'vue'
+//  import VeeValidate, { Validator } from 'vee-validate'
+//  Vue.use(VeeValidate)
+//  Validator.extend('passphrase', {
+//    getMessage: field => 'Sorry dude, wrong pass phrase.',
+//    validate: value => value.toUpperCase() === 'Demogorgon'.toUpperCase()
+//  })
+
   export default {
+    name: 'basic-example',
     mixins: [crud],
     data () {
       return {
@@ -129,7 +159,12 @@
         selectedTitle: '',
         selectedMan: '',
         selectedPhone: '',
-        selectedStartCounterValue: ''
+        selectedStartCounterValue: '',
+        formSubmitted: false,
+        email: '',
+        name: '',
+        secret: '',
+        phone: ''
       }
     },
     computed: mapGetters({
@@ -154,7 +189,13 @@
       doneEdit (e) {
 //        const value = e.target.value.trim()
         // todo добавить проверку пустых полей
-        if (this.editMode) {
+        if (this.selectedTitle &&
+          this.selectedStreetId &&
+          this.selectedGroupId &&
+          this.selectedMan &&
+          this.selectedPhone &&
+          this.selectedStartCounterValue &&
+          this.editMode) {
           this.addHouse({
             title: this.selectedTitle,
             street_id: this.selectedStreetId,
@@ -178,9 +219,22 @@
       },
       selectGroupdd () {
 //        this.activeddg = !this.activeddg
+      },
+      validateBeforeSubmit (e) {
+        this.$validator.validateAll().then(() => {
+          // eslint-disable-next-line
+//          alert('From Submitted!')
+          this.doneEdit()
+        }).catch(() => {
+          // eslint-disable-next-line
+//          alert('Correct them errors!')
+        })
       }
     },
-    components: {Spinner, house, street, group}
+
+    components: {
+      Spinner, house, street, group
+    }
   }
 </script>
 
@@ -211,4 +265,14 @@
 
     }
 
+    span.is-danger {
+        color: #ff0000;
+    }
+
+    select.browser-default {
+        border-color: #26a69a;
+    }
+
+
 </style>
+
