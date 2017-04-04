@@ -52,6 +52,12 @@ const actions = {
       commit(types.HOUSE_ADD, house)
     })
   }
+  // addCounter ({commit}, data) {
+  //   commit(types.HOUSE_LOADED)
+  //   api.house.addCounter(data, house => {
+  //     commit(types.HOUSE_ADD, house)
+  //   })
+  // }
 }
 
 // mutations

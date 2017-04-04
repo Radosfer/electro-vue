@@ -6,15 +6,15 @@
                     Дома
                     <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons">add</i></a>
                 </h5>
-                <div class="row" v-show="loaded">
-                    <div class="col s6"
-                         v-if="!editMode"
-                         v-for="p in houses"
-                         :class="{active: p === current}"
-                         transition="fade">
+                <div class="row" v-show="loaded" >
+                <div class="col s6"
+                v-if="!editMode && !editMode2"
+                v-for="p in houses"
+                :class="{active: p === current}"
+                transition="fade">
 
-                        <house :house="p"></house>
-                    </div>
+                <house :house="p"></house>
+                </div>
                 </div>
 
                 <li class="collection-item" v-if="editMode">
@@ -41,7 +41,7 @@
                                         name="selStreet"
                                         v-validate:selStreet.initial="'required'"
                                         :class="{'input': true, 'is-danger': errors.has('selStreet') }">
-                                    <option value=""  disabled selected>Выберите улицу</option>
+                                    <option value="" disabled selected>Выберите улицу</option>
                                     <option v-for="p in streets" v-bind:value="p.id">
                                         {{p.title}}
                                     </option>
@@ -56,7 +56,7 @@
                                         name="selGroup"
                                         v-validate:selStreet.initial="'required'"
                                         :class="{'input': true, 'is-danger': errors.has('selStreet') }">
-                                    <option value=""  disabled selected>Выберите группу</option>
+                                    <option value="" disabled selected>Выберите группу</option>
                                     <option v-for="p in groups" v-bind:value="p.id">
                                         {{p.title}}
                                     </option>
@@ -64,7 +64,6 @@
                                 <span v-show="errors.has('selGroup')" class="help is-danger">{{ errors.first('selGroup') }}</span>
                                 <!--<span>Selected: {{ selectedGroupId }}</span>-->
                             </div>
-
 
 
                             <div class="input-field col s12">
@@ -90,18 +89,18 @@
                                        :class="{'input': true, 'is-danger': errors.has('numPhone') }">
                                 <span v-show="errors.has('numPhone')" class="help is-danger">{{ errors.first('numPhone') }}</span>
                             </div>
-                            <div class="input-field col s12">
-                                <label for="startCounterValue">Введите начальное
-                                    показание счетчика</label>
-                                <input id="startCounterValue"
-                                       name="counterValue"
-                                       type="text"
-                                       class="validate"
-                                       v-model="selectedStartCounterValue"
-                                       v-validate:counterValue.initial="'required|numeric'"
-                                       :class="{'input': true, 'is-danger': errors.has('counterValue') }">
-                                <span v-show="errors.has('counterValue')" class="help is-danger">{{ errors.first('counterValue') }}</span>
-                            </div>
+                            <!--<div class="input-field col s12">-->
+                            <!--<label for="startCounterValue">Введите начальное-->
+                            <!--показание счетчика</label>-->
+                            <!--<input id="startCounterValue"-->
+                            <!--name="counterValue"-->
+                            <!--type="text"-->
+                            <!--class="validate"-->
+                            <!--v-model="selectedStartCounterValue"-->
+                            <!--v-validate:counterValue.initial="'required|numeric'"-->
+                            <!--:class="{'input': true, 'is-danger': errors.has('counterValue') }">-->
+                            <!--<span v-show="errors.has('counterValue')" class="help is-danger">{{ errors.first('counterValue') }}</span>-->
+                            <!--</div>-->
                             <div class="input-field col s12">
                                 <span class="left">
                                 <button class="btn waves-effect waves-light"
@@ -113,9 +112,10 @@
 
                                 <span class="right">
                                 <button class="btn waves-effect waves-light button is-primary"
-                                        type="submit">
-                                    Готово
-                                    <i class="material-icons right">done_all</i>
+                                        type="submit"
+                                        @click="doEdit2()">
+                                    Далее
+                                    <i class="material-icons right">play_arrow</i>
                                 </button>
                                 </span>
                             </div>
@@ -124,6 +124,31 @@
 
                     <!--<spinner :loaded="loaded"></spinner>-->
                 </li>
+                <li class="collection-item" v-if="editMode2 && !editMode">
+                    <form @submit.prevent="validateBeforeSubmit2">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <label for="startCounterValue">Введите начальное
+                                    показание счетчика дома №{{this.selectedTitle}}</label>
+                                <input id="startCounterValue"
+                                       name="counterValue"
+                                       type="text"
+                                       class="validate"
+                                       v-model="selectedStartCounterValue"
+                                       v-validate:counterValue.initial="'required|numeric'"
+                                       :class="{'input': true, 'is-danger': errors.has('counterValue') }">
+                                <span v-show="errors.has('counterValue')" class="help is-danger">{{ errors.first('counterValue') }}</span>
+                            </div>
+                            <span class="right">
+                                <button class="btn waves-effect waves-light button is-primary">
+                                    Готово
+                                    <i class="material-icons right">done_all</i>
+                                </button>
+                                </span>
+                        </div>
+                    </form>
+                </li>
+
             </div>
         </div>
     </div>
@@ -132,26 +157,21 @@
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.0/vue.js"></script>-->
 <script type="text/babel">
   import {mapGetters, mapActions} from 'vuex'
+//  import api from '../../api/electro'
   import Spinner from './Spinner.vue'
   import house from './house.vue'
   import street from './street.vue'
   import group from './group.vue'
   import crud from '../mixin/crud'
 
-//  import Vue from 'vue'
-//  import VeeValidate, { Validator } from 'vee-validate'
-//  Vue.use(VeeValidate)
-//  Validator.extend('passphrase', {
-//    getMessage: field => 'Sorry dude, wrong pass phrase.',
-//    validate: value => value.toUpperCase() === 'Demogorgon'.toUpperCase()
-//  })
-
   export default {
-    name: 'basic-example',
+//    name: 'basic-example',
+//    props: ['house'],
     mixins: [crud],
     data () {
       return {
         editMode: false,
+        editMode2: false,
         activedds: false,
         activeddg: false,
         selectedStreetId: '',
@@ -175,16 +195,23 @@
       loaded: 'loadedHouse',
       loadedman: 'loadedMan',
       current: 'currentHouse',
-      currentman: 'currentMan'
+      currentman: 'currentMan',
+      counters: 'allCounters',
+      loadedcounter: 'loadedCounter',
+      currentcounter: 'currentCounter'
     }),
     methods: {
       ...mapActions([
         'selectHouse',
         'addHouse',
-        'addMan'
+        'addMan',
+        'addCounter'
       ]),
       doEdit () {
         this.editMode = !this.editMode
+      },
+      doEdit2 () {
+        this.editMode2 = !this.editMode2
       },
       doneEdit (e) {
 //        const value = e.target.value.trim()
@@ -194,7 +221,6 @@
           this.selectedGroupId &&
           this.selectedMan &&
           this.selectedPhone &&
-          this.selectedStartCounterValue &&
           this.editMode) {
           this.addHouse({
             title: this.selectedTitle,
@@ -202,9 +228,13 @@
             group_id: this.selectedGroupId,
             fio: this.selectedMan,
             phone: this.selectedPhone,
-            start_value: this.selectedStartCounterValue
+            start_value: '1'
           })
-//          this.addMan({
+//          this.addCounter({
+//            house_id: this.id,
+//            start_value: this.selectedStartCounterValue
+//          })
+//            this.addMan({
 //            fio: this.selectedMan,
 //            phone: this.selectedPhone
 //          })
@@ -225,6 +255,20 @@
           // eslint-disable-next-line
 //          alert('From Submitted!')
           this.doneEdit()
+        }).catch(() => {
+          // eslint-disable-next-line
+//          alert('Correct them errors!')
+        })
+      },
+      validateBeforeSubmit2 (e) {
+        this.$validator.validateAll().then(() => {
+          // eslint-disable-next-line
+//          alert('From Submitted!')
+          this.addCounter({
+            house_id: '1',
+            start_value: this.selectedStartCounterValue
+          })
+          this.editMode2 = false
         }).catch(() => {
           // eslint-disable-next-line
 //          alert('Correct them errors!')
@@ -270,7 +314,7 @@
     }
 
     select.browser-default {
-        border-color: #26a69a;
+        border-color: #9e9e9e;
     }
 
 

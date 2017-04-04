@@ -5,6 +5,7 @@ import 'whatwg-fetch'
 let _streets = []
 let _groups = []
 let _houses = []
+let hid = 0
 
 let baseUrl = 'http://electro.dev'
 
@@ -160,7 +161,7 @@ export default {
   },
   house: {
     addHouse (title, cb) {
-      console.log(title)
+      // console.log(title)
       fetch(baseUrl + '/houses', {
         method: 'POST',
         headers: {
@@ -171,18 +172,34 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           cb(json)
+          hid = json.id
         })
+
       // .then(() => cb(true))
       // .catch((ex) => console.log('house add failed', ex))
     },
     addMan (title, cb) {
-      console.log(title)
+      // console.log(title)
       fetch(baseUrl + '/men', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(title)
+      })
+    },
+    addCounter (data, cb) {
+      // console.log(data)
+      fetch(baseUrl + '/counters', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          house_id: hid,
+          created_at: Date(),
+          value: data.start_value
+        })
       })
     },
     editHouse (house, fio, phone, cb) {
