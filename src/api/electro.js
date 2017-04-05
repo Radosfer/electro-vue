@@ -249,15 +249,15 @@ export default {
     }
   },
   testimony: {
-    addHouseTestimony (house, cb) {
-      console.log(house)
+    addHouseTestimony (counters, house, cb) {
+      // console.log(house)
       fetch(baseUrl + '/indication', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          counter_id: house.houseId,
+          counter_id: counters[0].id,
           created_at: Date(),
           value: house.value
         })
@@ -269,7 +269,8 @@ export default {
     },
     filterCounters (json, house, cb) {
       var counters = json.filter((counter) => counter.house_id === house.houseId)
-      // console.log(house.houseId)
+      console.log(counters[0].id, house.value)
+      this.addHouseTestimony(counters, house)
       return cb(counters)
     },
     getCounters (house, cb) {
@@ -282,7 +283,7 @@ export default {
           _counters = json
           return this.filterCounters(json, house, cb)
         }).catch((ex) => console.log('houses parsing failed', ex))
-      this.addHouseTestimony(house)
+      // this.addHouseTestimony(counters[0].id, house.value)
     }
     // getHouseTestimony (cb) {
     //   fetch(baseUrl + '/site/price')
