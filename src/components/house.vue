@@ -7,7 +7,7 @@
             Дом №{{ house.title }}
             <i class="material-icons right teal-text">settings</i>
           </span>
-                <span v-show="!editMode">
+                <span v-show="!editMode && !editModeTm">
             <pair :data="streetPair" color="green"></pair>
             <pair :data="groupPair"></pair>
             <pair :data="ownerPair" color="blue"></pair>
@@ -16,24 +16,34 @@
             <pair :data="valuePair" color="red"></pair>
 
           </span>
-                <span v-if="editMode">
+
+                <span v-if="editMode && !editModeTm">
                 <input id="fioEdit"
                        class="edit"
                        :value="house.fio"
                        @keyup.enter="doneEditFioPhone"
                        @keyup.esc="cancelEdit"
                        v-model="newFio"
-                       placeholder="Введите фамилию, имя и отчество"
-                >
+                       placeholder="Введите фамилию, имя и отчество">
 
                 <input class="edit"
                        :value="house.phone"
                        v-model="newPhone"
                        @keyup.enter="doneEditFioPhone"
                        @keyup.esc="cancelEdit"
-                       placeholder="Введите номер телефона"
-                >
-           </span>
+                       placeholder="Введите номер телефона">
+                </span>
+
+                <span v-if="editModeTm">
+                <input id="AddTm"
+                       class="edit"
+                       @keyup.enter="doneAddTm"
+                       @keyup.esc="cancelEditTm"
+                       v-model="newTm"
+                       placeholder="Введите показание счетчика">
+
+                </span>
+
             </div>
             <div class="card-reveal">
           <span class="card-title grey-text text-darken-4">
@@ -44,6 +54,10 @@
             </div>
             <div class="card-action">
                 <a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>
+                <span class="right">
+                <a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>
+                <a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">payment</i></a>
+                </span>
             </div>
         </div>
 
@@ -60,8 +74,10 @@
     data () {
       return {
         editMode: false,
+        editModeTm: false,
         newFio: this.house.fio,
-        newPhone: this.house.phone
+        newPhone: this.house.phone,
+        newTm: 0
 
       }
     },
@@ -120,16 +136,29 @@
     methods: {
       ...mapActions([
         'selectHouse',
-        'editHouse'
+        'editHouse',
+        'addHouseTestimony'
       ]),
       doEdit () {
         this.editMode = !this.editMode
+      },
+      doEditTm () {
+        this.editModeTm = !this.editModeTm
       },
       doneEdit (e) {
         const value = e.target.value.trim()
         const {house} = this
         if (value && this.editMode) {
           this.editStreet({house, value})
+        }
+        this.cancelEdit()
+      },
+      doneAddTm (e) {
+        const value = this.newTm
+//        console.log(value)
+//        const {house} = this
+        if (value) {
+          this.addHouseTestimony(value)
         }
         this.cancelEdit()
       },
@@ -146,6 +175,7 @@
       },
       cancelEdit () {
         this.editMode = false
+        this.editModeTm = false
       }
 
     },

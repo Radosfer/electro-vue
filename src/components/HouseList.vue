@@ -228,7 +228,7 @@
             group_id: this.selectedGroupId,
             fio: this.selectedMan,
             phone: this.selectedPhone,
-            start_value: '1'
+            start_value: '0'
           })
 //          this.addCounter({
 //            house_id: this.id,
@@ -258,6 +258,7 @@
         }).catch(() => {
           // eslint-disable-next-line
 //          alert('Correct them errors!')
+          this.editMode2 = false
         })
       },
       validateBeforeSubmit2 (e) {

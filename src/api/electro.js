@@ -22,7 +22,7 @@ export default {
       if (_streets.length > 0) {
         return cb(_streets)
       }
-      fetch(baseUrl + '/streets')
+      fetch(baseUrl + '/street')
         .then((response) => response.json())
         .then((json) => {
           _streets = json
@@ -31,7 +31,7 @@ export default {
         .catch((ex) => console.log('street parsing failed', ex))
     },
     addStreet (title, cb) {
-      fetch(baseUrl + '/streets', {
+      fetch(baseUrl + '/street', {
         method: 'POST',
         // mode: 'cors',
         headers: {
@@ -46,7 +46,7 @@ export default {
         .catch((ex) => console.log('street adding failed', ex))
     },
     editStreet (street, title, cb) {
-      fetch(baseUrl + '/streets/' + street.id, {
+      fetch(baseUrl + '/street/' + street.id, {
         method: 'PUT',
         headers: {
           // 'Access-Control-Allow-Origin': '*',
@@ -71,7 +71,7 @@ export default {
       if (_houses.length > 0) {
         return this.filterHouses(_houses, street, cb)
       }
-      fetch(baseUrl + '/houses')
+      fetch(baseUrl + '/house')
         .then((response) => response.json())
         .then((json) => {
           _houses = json
@@ -79,7 +79,7 @@ export default {
         }).catch((ex) => console.log('houses parsing failed', ex))
     },
     deleteStreet (street, cb) {
-      fetch(baseUrl + '/streets/' + street.id, {
+      fetch(baseUrl + '/street/' + street.id, {
         method: 'DELETE'
       })
       // _streets.indexOf(street)
@@ -94,7 +94,7 @@ export default {
       if (_groups.length > 0) {
         return cb(_groups)
       }
-      fetch(baseUrl + '/groups')
+      fetch(baseUrl + '/group')
         .then((response) => response.json())
         .then((json) => {
           _groups = json
@@ -103,7 +103,7 @@ export default {
         .catch((ex) => console.log('groups parsing failed', ex))
     },
     addGroup (title, cb) {
-      fetch(baseUrl + '/groups', {
+      fetch(baseUrl + '/group', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -116,7 +116,7 @@ export default {
         .catch((ex) => console.log('street adding failed', ex))
     },
     editGroup (group, title, cb) {
-      fetch(baseUrl + '/groups/' + group.id, {
+      fetch(baseUrl + '/group/' + group.id, {
         method: 'PUT',
         headers: {
           // 'Access-Control-Allow-Origin': '*',
@@ -141,7 +141,7 @@ export default {
       if (_houses.length > 0) {
         return this.filterHouses(_houses, street, cb)
       }
-      fetch(baseUrl + '/houses')
+      fetch(baseUrl + '/house')
         .then((response) => response.json())
         .then((json) => {
           _houses = json
@@ -149,7 +149,7 @@ export default {
         }).catch((ex) => console.log('group parsing failed', ex))
     },
     deleteGroup (group, cb) {
-      fetch(baseUrl + '/groups/' + group.id, {
+      fetch(baseUrl + '/group/' + group.id, {
         method: 'DELETE'
       })
       // _streets.indexOf(street)
@@ -162,7 +162,7 @@ export default {
   house: {
     addHouse (title, cb) {
       // console.log(title)
-      fetch(baseUrl + '/houses', {
+      fetch(baseUrl + '/house', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -180,7 +180,7 @@ export default {
     },
     addMan (title, cb) {
       // console.log(title)
-      fetch(baseUrl + '/men', {
+      fetch(baseUrl + '/man', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -189,8 +189,7 @@ export default {
       })
     },
     addCounter (data, cb) {
-      // console.log(data)
-      fetch(baseUrl + '/counters', {
+      fetch(baseUrl + '/counter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -206,7 +205,7 @@ export default {
       // console.log(house)
       // console.log(fio)
       // console.log(phone)
-      fetch(baseUrl + '/houses/' + house.id, {
+      fetch(baseUrl + '/house/' + house.id, {
         method: 'PUT',
         headers: {
           // 'Access-Control-Allow-Origin': '*',
@@ -227,7 +226,7 @@ export default {
   tariff: {
     addTariff (title, cb) {
       // console.log(title)
-      fetch(baseUrl + '/prices', {
+      fetch(baseUrl + '/price', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -250,6 +249,34 @@ export default {
         })
         .catch((ex) => console.log('street parsing failed', ex))
     }
+  },
+  testimony: {
+    addHouseTestimony (value, cb) {
+      console.log(value)
+      fetch(baseUrl + '/indication', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          counter_id: 1,
+          created_at: Date(),
+          value: value
+        })
+      })
+        .then(() => cb({
+          // value: title
+        }))
+        .catch((ex) => console.log('street adding failed', ex))
+    }
+    // getHouseTestimony (cb) {
+    //   fetch(baseUrl + '/site/price')
+    //     .then((response) => response.json())
+    //     .then((json) => {
+    //       cb(json)
+    //     })
+    //     .catch((ex) => console.log('street parsing failed', ex))
+    // }
   },
   getStreetById (id) {
     let street = _streets.find((element) => {

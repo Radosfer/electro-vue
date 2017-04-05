@@ -9,6 +9,7 @@ import groups from './modules/groups'
 import mans from './modules/mans'
 import tariffs from './modules/tariffs'
 import counters from './modules/counters'
+import houseTestimony from './modules/houseTestimony'
 
 Vue.use(Vuex)
 
@@ -29,7 +30,8 @@ export default new Vuex.Store({
     groups,
     mans,
     tariffs,
-    counters
+    counters,
+    houseTestimony
   },
   strict: debug
   // plugins: debug ? [createLogger()] : []
