@@ -20,11 +20,25 @@ const getters = {
 
 // actions
 const actions = {
-  addHouseTestimony ({commit}, data) {
-    // console.log(data)
-    commit(types.HOUSE_TESTIMONY_LOADED)
-    api.testimony.addHouseTestimony(data, houseTestimony => {
-      commit(types.HOUSE_TESTIMONY_ADD, houseTestimony)
+  // addHouseTestimony ({commit}, data) {
+  //   console.log(data)
+  //   commit(types.HOUSE_TESTIMONY_LOADED)
+  //   api.testimony.addHouseTestimony(data, houseTestimony => {
+  //     commit(types.HOUSE_TESTIMONY_ADD, houseTestimony)
+  //   })
+  // },
+  // getCounters ({commit}, data) {
+  //   // console.log(data)
+  //   api.house.getCounters(data, houseTestimony => {
+  //     commit(types.HOUSE_TESTIMONY_RECEIVE, {houseTestimony})
+  //   })
+  // },
+  selectCounters ({commit}, houseTestimony) {
+    // console.log(houseTestimony)
+    commit(types.HOUSE_TESTIMONY_SELECT, {houseTestimony})
+    // commit(types.GROUP_SELECT, {})
+    api.testimony.getCounters(houseTestimony, counters => {
+      commit(types.HOUSE_TESTIMONY_RECEIVE, {counters})
     })
   }
 }
@@ -37,6 +51,13 @@ const mutations = {
   [types.HOUSE_TESTIMONY_ADD] (state, houseTestimony) {
     state.all.push(houseTestimony)
     state.loaded = true
+  },
+  [types.HOUSE_TESTIMONY_RECEIVE] (state, {houseTestimony}) {
+    state.all = houseTestimony
+    state.loaded = true
+  },
+  [types.HOUSE_TESTIMONY_SELECT] (state, {houseTestimony}) {
+    state.current = houseTestimony
   }
 }
 

@@ -23,6 +23,7 @@ const actions = {
     })
   },
   selectStreet ({commit}, street) {
+    // console.log(street)
     commit(types.STREET_SELECT, {street})
     commit(types.GROUP_SELECT, {})
     api.street.getHouses(street, houses => {

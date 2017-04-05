@@ -78,7 +78,6 @@
         newFio: this.house.fio,
         newPhone: this.house.phone,
         newTm: 0
-
       }
     },
     computed: {
@@ -137,7 +136,9 @@
       ...mapActions([
         'selectHouse',
         'editHouse',
-        'addHouseTestimony'
+        'addHouseTestimony',
+        'getCounters',
+        'selectCounters'
       ]),
       doEdit () {
         this.editMode = !this.editMode
@@ -155,10 +156,13 @@
       },
       doneAddTm (e) {
         const value = this.newTm
-//        console.log(value)
-//        const {house} = this
+        const {house} = this
+        const houseId = house.id
         if (value) {
-          this.addHouseTestimony(value)
+//          console.log(house.id, value)
+          this.selectCounters({houseId, value})
+
+//          this.addHouseTestimony(value)
         }
         this.cancelEdit()
       },

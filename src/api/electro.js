@@ -5,6 +5,7 @@ import 'whatwg-fetch'
 let _streets = []
 let _groups = []
 let _houses = []
+let _counters = []
 let hid = 0
 
 let baseUrl = 'http://electro.dev'
@@ -65,9 +66,11 @@ export default {
     },
     filterHouses (json, street, cb) {
       var houses = json.filter((house) => house.street_id === street.id)
+      // console.log(houses)
       return cb(houses)
     },
     getHouses (street, cb) {
+      // console.log(street)
       if (_houses.length > 0) {
         return this.filterHouses(_houses, street, cb)
       }
@@ -202,13 +205,9 @@ export default {
       })
     },
     editHouse (house, fio, phone, cb) {
-      // console.log(house)
-      // console.log(fio)
-      // console.log(phone)
       fetch(baseUrl + '/house/' + house.id, {
         method: 'PUT',
         headers: {
-          // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -225,7 +224,6 @@ export default {
   },
   tariff: {
     addTariff (title, cb) {
-      // console.log(title)
       fetch(baseUrl + '/price', {
         method: 'POST',
         headers: {
@@ -251,23 +249,40 @@ export default {
     }
   },
   testimony: {
-    addHouseTestimony (value, cb) {
-      console.log(value)
+    addHouseTestimony (house, cb) {
+      console.log(house)
       fetch(baseUrl + '/indication', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          counter_id: 1,
+          counter_id: house.houseId,
           created_at: Date(),
-          value: value
+          value: house.value
         })
       })
         .then(() => cb({
           // value: title
         }))
         .catch((ex) => console.log('street adding failed', ex))
+    },
+    filterCounters (json, house, cb) {
+      var counters = json.filter((counter) => counter.house_id === house.houseId)
+      // console.log(house.houseId)
+      return cb(counters)
+    },
+    getCounters (house, cb) {
+      if (_counters.length > 0) {
+        return this.filterCounters(_counters, house, cb)
+      }
+      fetch(baseUrl + '/counter')
+        .then((response) => response.json())
+        .then((json) => {
+          _counters = json
+          return this.filterCounters(json, house, cb)
+        }).catch((ex) => console.log('houses parsing failed', ex))
+      this.addHouseTestimony(house)
     }
     // getHouseTestimony (cb) {
     //   fetch(baseUrl + '/site/price')
