@@ -39,7 +39,7 @@
     },
     mounted: function () {
       api.tariff.getTariffs((price) => {
-        this.tariff = price
+        this.tariff = price.value
       })
     },
     methods: {

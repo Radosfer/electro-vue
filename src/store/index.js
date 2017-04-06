@@ -10,6 +10,7 @@ import mans from './modules/mans'
 import tariffs from './modules/tariffs'
 import counters from './modules/counters'
 import houseTestimony from './modules/houseTestimony'
+import pay from './modules/pay'
 
 Vue.use(Vuex)
 
@@ -31,7 +32,8 @@ export default new Vuex.Store({
     mans,
     tariffs,
     counters,
-    houseTestimony
+    houseTestimony,
+    pay
   },
   strict: debug
   // plugins: debug ? [createLogger()] : []

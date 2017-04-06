@@ -220,6 +220,21 @@ export default {
           cb(json)
         })
         .catch((ex) => console.log('editHouse edit failed', ex))
+    },
+    addPay (data, cb) {
+      // console.log(title)
+      fetch(baseUrl + '/pay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          house_id: data.houseId,
+          created_at: Date(),
+          price_id: data.pay,
+          amount: data.amount
+        })
+      })
     }
   },
   tariff: {
