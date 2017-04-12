@@ -35,32 +35,48 @@
                 </span>
 
                 <span v-if="editModeTm">
+                 <div class="input-field col s12">
                 <input id="AddTm"
-                       class="edit"
+                       type="text"
+                       class="validate"
                        @keyup.enter="doneAddTm"
                        @keyup.esc="cancelEditTm"
-                       v-model="newTm"
-                       placeholder="Введите показание счетчика">
+                       v-model="newTm">
+                     <label for="AddTm">Введите показание счетчика</label>
+                     </div>
 
                 </span>
 
                 <span v-if="editModePay">
-                <div class="input-field col s12">
-                    <input id="AddPay"
-                           type="text"
-                           class="validate"
-                           @keyup.enter="doneAddPay"
-                           @keyup.esc="cancelEditPay"
-                           v-model="newPay">
-                    <label for="AddPay">Введите сумму оплаты</label>
-                    <!--Текущий тариф: {{ tariff }}-->
-                </div>
-                                    <!--<span class="right bottom">-->
-                                <!--<button class="btn waves-effect waves-light button is-primary">-->
-                                    <!--Оплатить-->
-                                    <!--<i class="material-icons right">done</i>-->
-                                <!--</button>-->
-                                <!--</span>-->
+                    <payment></payment>
+
+
+                <!--<div class="input-field col s12">-->
+                    <!--<input id="AddPayWatt"-->
+                           <!--type="text"-->
+                           <!--class="validate"-->
+                           <!--@keyup.enter="doneAddPayWatt"-->
+                           <!--@keyup.esc="cancelEditPayWatt"-->
+                           <!--volume=123>-->
+                    <!--<label for="AddPayWatt">Кол-во кВт</label>-->
+                <!--</div>-->
+
+                <!--<div class="input-field col s12">-->
+                    <!--<input id="AddPay"-->
+                           <!--type="text"-->
+                           <!--class="validate"-->
+                           <!--@keyup.enter="doneAddPay"-->
+                           <!--@keyup.esc="cancelEditPay"-->
+                           <!--v-model="newPay">-->
+                    <!--<label for="AddPay">Введите сумму оплаты</label>-->
+                <!--</div>-->
+
+                    <!--<span class="right bottom">-->
+                    <!--<button class="btn waves-effect waves-light button is-primary">-->
+                    <!--Оплатить-->
+                    <!--<i class="material-icons right">done</i>-->
+                    <!--</button>-->
+                    <!--</span>-->
                 </span>
 
 
@@ -89,7 +105,8 @@
   import {mapActions} from 'vuex'
   import api from '../api/electro'
   import pair from './pair.vue'
-//  import tariff from './tariff.vue'
+  import payment from './payment.vue'
+  //  import tariff from './tariff.vue'
   export default{
     props: ['house'],
     data () {
@@ -99,9 +116,12 @@
         editModePay: false,
         newFio: this.house.fio,
         newPhone: this.house.phone,
-        newTm: 0,
+        newTm: '',
+        newPayWatt: '12',
         newPay: '',
-        tariff: 0
+
+        tariff: 0,
+        amount: ''
       }
     },
     computed: {
@@ -152,14 +172,18 @@
       valuePair () {
         return {
           name: 'Показания:',
-          value: 226
+          value: 123
         }
+      },
+      count: function () {
+        console.log(this.newPay)
+        return this.newPay
       }
     },
     mounted: function () {
       api.tariff.getTariffs((price) => {
         this.tariff = price.id
-        console.log(price.id)
+//        console.log(price.id)
       })
     },
     methods: {
@@ -173,12 +197,18 @@
       ]),
       doEdit () {
         this.editMode = !this.editMode
+        this.editModeTm = false
+        this.editModePay = false
       },
       doEditTm () {
         this.editModeTm = !this.editModeTm
+        this.editMode = false
+        this.editModePay = false
       },
       doEditPay () {
         this.editModePay = !this.editModePay
+        this.editModeTm = false
+        this.editMode = false
       },
       doneEdit (e) {
         const value = e.target.value.trim()
@@ -192,7 +222,7 @@
         const value = this.newTm
         const {house} = this
         const houseId = house.id
-        if (value) {
+        if (value && this.editModeTm) {
 //          console.log(house.id, value)
           this.selectCounters({houseId, value})
 
@@ -204,10 +234,9 @@
         const amount = this.newPay
         const {house} = this
         const houseId = house.id
-        const pay = this.tariff
-        if (amount) {
-          console.log(houseId, amount, pay)
-          this.addPay({houseId, amount, pay})
+        const priceId = this.tariff
+        if (amount && this.editModePay) {
+          this.addPay({houseId, amount, priceId})
         }
         this.cancelEdit()
       },
@@ -228,7 +257,7 @@
       }
 
     },
-    components: {pair}
+    components: {pair, payment}
   }
 
 </script>

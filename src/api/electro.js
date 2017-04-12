@@ -231,10 +231,15 @@ export default {
         body: JSON.stringify({
           house_id: data.houseId,
           created_at: Date(),
-          price_id: data.pay,
+          price_id: data.priceId,
           amount: data.amount
         })
       })
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json)
+          // console.log(json)
+        })
     }
   },
   tariff: {
@@ -265,8 +270,8 @@ export default {
   },
   testimony: {
     addHouseTestimony (counters, house, cb) {
-      // console.log(house)
-      fetch(baseUrl + '/indication', {
+      console.log(house.houseId)
+      fetch(baseUrl + '/site/indication', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -274,12 +279,17 @@ export default {
         body: JSON.stringify({
           counter_id: counters[0].id,
           created_at: Date(),
-          value: house.value
+          value: house.value,
+          houseId: house.houseId
         })
       })
-        .then(() => cb({
-          // value: title
-        }))
+        // .then((response) => {
+        //   console.log(response)
+        //   cb({
+        //     // value: title
+        //   })
+        // })
+        .then(() => cb(true))
         .catch((ex) => console.log('street adding failed', ex))
     },
     filterCounters (json, house, cb) {

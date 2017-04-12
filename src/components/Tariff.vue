@@ -1,9 +1,11 @@
 <template>
-    <div class="card-panel deep-purple lighten-2" >
-        Тариф: {{ tariff }} грн
+    <div class="card-panel" >
+        <span class="center">
+            <p>{{ tariff }} <small>грн/кВт</small></p>
+        </span>
         <span class="right">
         <a href="#!" class="green-text" @click="doEdit()"><i class="tiny material-icons">mode_edit</i></a>
-        </span>
+      </span>
         <!--<div class="input-field col s12" v-show="editMode">-->
             <input id="tariff"
                    type="text"
@@ -12,7 +14,8 @@
                    v-show="editMode"
                    v-focus="editMode"
                    @keyup.enter="doneEditTariff"
-                   @keyup.esc="cancelEdit">
+                   @keyup.esc="cancelEdit"
+                   v-on:focus="selectAll">
             <!--<label for="tariff">Введите тариф</label>-->
         <!--</div>-->
 
@@ -52,7 +55,18 @@
           this.addTariff(value)
         }
         this.cancelEdit()
+      },
+      selectAll: function (event) {
+        setTimeout(function () {
+          event.target.select()
+        }, 0)
       }
     }
   }
 </script>
+
+<style>
+    span p {
+        font-size: 20pt;
+    }
+</style>

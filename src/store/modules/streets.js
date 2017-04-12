@@ -40,7 +40,7 @@ const actions = {
       }
     }
   },
-  addStreet ({commit}, title) {
+  addStreet ({commit}, title, cb) {
     commit(types.STREET_LOADED)
     api.street.addStreet(title, street => {
       commit(types.STREET_ADD, street)

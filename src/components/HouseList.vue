@@ -228,7 +228,9 @@
             group_id: this.selectedGroupId,
             fio: this.selectedMan,
             phone: this.selectedPhone,
-            start_value: '0'
+            start_value: '0',
+            money: '0',
+            testimony: '0'
           })
 //          this.addCounter({
 //            house_id: this.id,
