@@ -223,7 +223,7 @@ export default {
     },
     addPay (data, cb) {
       // console.log(title)
-      fetch(baseUrl + '/pay', {
+      fetch(baseUrl + '/site/pay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

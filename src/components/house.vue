@@ -48,35 +48,36 @@
                 </span>
 
                 <span v-if="editModePay">
-                    <payment></payment>
+                    <!--<payment></payment>-->
+                    <div class="input-field col s12">
+            <i class="material-icons prefix"><h5>W</h5></i>
+            <input  id="AddPayWatt"
+                    type="text"
+                    placeholder="Кол-во кВт"
+                    ref="input"
+                    v-bind:value="value"
+                    v-on:input="updateValueWatt($event.target.value)"
+                    v-on:focus="selectAll"
+            >
+                        <!--<label for="AddPayWatt">Кол-во кВт</label>-->
+        </div>
+
+        <div class="input-field col s12">
+            <i class="material-icons prefix">&#8372</i>
+            <input  id="AddPay"
+                    type="text"
+                    placeholder="Введите сумму оплаты"
+                    ref="input1"
+                    v-bind:value="value1"
+                    v-on:input="updateValueMoney($event.target.value)"
+                    v-on:focus="selectAll"
+                    v-model="newPay"
+                    @keyup.enter="doneAddPay"
+            >
+            <!--<label for="AddPay">Введите сумму оплаты</label>-->
+        </div>
 
 
-                <!--<div class="input-field col s12">-->
-                    <!--<input id="AddPayWatt"-->
-                           <!--type="text"-->
-                           <!--class="validate"-->
-                           <!--@keyup.enter="doneAddPayWatt"-->
-                           <!--@keyup.esc="cancelEditPayWatt"-->
-                           <!--volume=123>-->
-                    <!--<label for="AddPayWatt">Кол-во кВт</label>-->
-                <!--</div>-->
-
-                <!--<div class="input-field col s12">-->
-                    <!--<input id="AddPay"-->
-                           <!--type="text"-->
-                           <!--class="validate"-->
-                           <!--@keyup.enter="doneAddPay"-->
-                           <!--@keyup.esc="cancelEditPay"-->
-                           <!--v-model="newPay">-->
-                    <!--<label for="AddPay">Введите сумму оплаты</label>-->
-                <!--</div>-->
-
-                    <!--<span class="right bottom">-->
-                    <!--<button class="btn waves-effect waves-light button is-primary">-->
-                    <!--Оплатить-->
-                    <!--<i class="material-icons right">done</i>-->
-                    <!--</button>-->
-                    <!--</span>-->
                 </span>
 
 
@@ -105,10 +106,9 @@
   import {mapActions} from 'vuex'
   import api from '../api/electro'
   import pair from './pair.vue'
-  import payment from './payment.vue'
   //  import tariff from './tariff.vue'
   export default{
-    props: ['house'],
+    props: ['value', 'value1', 'house'],
     data () {
       return {
         editMode: false,
@@ -176,7 +176,6 @@
         }
       },
       count: function () {
-        console.log(this.newPay)
         return this.newPay
       }
     },
@@ -251,13 +250,30 @@
         }
         this.cancelEdit()
       },
+      updateValueMoney: function (value) {
+        let cost = this.tariff
+        let valueMoney = value / cost
+        this.$refs.input.value = valueMoney
+        this.$emit('input1', Number(valueMoney))
+      },
+      updateValueWatt: function (value) {
+        let cost = this.tariff
+        let valueWatt = value * cost
+        this.$refs.input1.value = valueWatt
+        this.$emit('input', Number(valueWatt))
+      },
+      selectAll: function (event) {
+        setTimeout(function () {
+          event.target.select()
+        }, 0)
+      },
       cancelEdit () {
         this.editMode = false
         this.editModeTm = false
       }
 
     },
-    components: {pair, payment}
+    components: {pair}
   }
 
 </script>

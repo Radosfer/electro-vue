@@ -23,6 +23,8 @@
                     v-bind:value="value1"
                     v-on:input="updateValueMoney($event.target.value)"
                     v-on:focus="selectAll"
+                    v-model="newPay"
+                    @keyup.enter="doneAddPay"
             >
             <!--<label for="AddPay">Введите сумму оплаты</label>-->
         </div>
@@ -53,7 +55,7 @@
         tariff: 0
       }
     },
-    props: ['value', 'value1'],
+    props: ['value', 'value1', 'house'],
     mounted: function () {
       api.tariff.getTariffs((price) => {
         this.tariff = price.value
@@ -75,11 +77,21 @@
         this.$emit('input', Number(valueWatt))
       },
       selectAll: function (event) {
-        // Workaround for Safari bug
-        // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
         setTimeout(function () {
           event.target.select()
         }, 0)
+      },
+      doneAddPay (e) {
+        console.log(this.house)
+//        const amount = this.newPay
+//        const {house} = this.house
+//        console.log(this.house)
+//        const houseId = house.id
+//        const priceId = this.tariff
+//        if (amount && this.editModePay) {
+//          this.addPay({houseId, amount, priceId})
+//        }
+//        this.cancelEdit()
       }
     }
   }
