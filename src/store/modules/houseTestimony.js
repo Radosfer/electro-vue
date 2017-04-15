@@ -20,13 +20,14 @@ const getters = {
 
 // actions
 const actions = {
-  // addHouseTestimony ({commit}, data) {
-  //   console.log(data)
-  //   commit(types.HOUSE_TESTIMONY_LOADED)
-  //   api.testimony.addHouseTestimony(data, houseTestimony => {
-  //     commit(types.HOUSE_TESTIMONY_ADD, houseTestimony)
-  //   })
-  // },
+
+  addHouseTestimony ({commit}, data) {
+    console.log(data)
+    commit(types.HOUSE_LOADED)
+    api.testimony.addHouseTestimony(data, house => {
+      commit(types.HOUSE_EDITED, house)
+    })
+  },
   // getCounters ({commit}, data) {
   //   // console.log(data)
   //   api.house.getCounters(data, houseTestimony => {
@@ -58,6 +59,17 @@ const mutations = {
   },
   [types.HOUSE_TESTIMONY_SELECT] (state, {houseTestimony}) {
     state.current = houseTestimony
+  },
+  [types.HOUSE_LOADED] (state) {
+    state.loaded = false
+  },
+  [types.HOUSE_EDITED] (state, house) {
+    for (let i in state.all) {
+      if (state.all[i].id === house.id) {
+        state.all[i] = house
+      }
+    }
+    state.loaded = true
   }
 }
 

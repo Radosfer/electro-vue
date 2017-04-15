@@ -5,7 +5,6 @@ import 'whatwg-fetch'
 let _streets = []
 let _groups = []
 let _houses = []
-let _counters = []
 let hid = 0
 
 let baseUrl = 'http://electro.dev'
@@ -269,47 +268,47 @@ export default {
     }
   },
   testimony: {
-    addHouseTestimony (counters, house, cb) {
-      console.log(house.houseId)
+    addHouseTestimony (data, cb) {
+      console.log(data)
+      // console.log(data.value)
       fetch(baseUrl + '/site/indication', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          counter_id: counters[0].id,
+          // counter_id: counters[0].id,
           created_at: Date(),
-          value: house.value,
-          houseId: house.houseId
+          value: data.value,
+          houseId: data.houseId
         })
       })
-        // .then((response) => {
-        //   console.log(response)
-        //   cb({
-        //     // value: title
-        //   })
-        // })
-        .then(() => cb(true))
-        .catch((ex) => console.log('street adding failed', ex))
-    },
-    filterCounters (json, house, cb) {
-      var counters = json.filter((counter) => counter.house_id === house.houseId)
-      console.log(counters[0].id, house.value)
-      this.addHouseTestimony(counters, house)
-      return cb(counters)
-    },
-    getCounters (house, cb) {
-      if (_counters.length > 0) {
-        return this.filterCounters(_counters, house, cb)
-      }
-      fetch(baseUrl + '/counter')
+      // .then(() => cb(true))
         .then((response) => response.json())
         .then((json) => {
-          _counters = json
-          return this.filterCounters(json, house, cb)
-        }).catch((ex) => console.log('houses parsing failed', ex))
-      // this.addHouseTestimony(counters[0].id, house.value)
+          cb(json)
+          console.log(json)
+        })
+        .catch((ex) => console.log('street adding failed', ex))
     }
+    // filterCounters (json, house, cb) {
+    //   var counters = json.filter((counter) => counter.house_id === house.houseId)
+    //   console.log(counters[0].id, house.value)
+    //   this.addHouseTestimony(counters, house)
+    //   return cb(counters)
+    // },
+    // getCounters (house, cb) {
+    //   if (_counters.length > 0) {
+    //     return this.filterCounters(_counters, house, cb)
+    //   }
+    //   fetch(baseUrl + '/counter')
+    //     .then((response) => response.json())
+    //     .then((json) => {
+    //       _counters = json
+    //       return this.filterCounters(json, house, cb)
+    //     }).catch((ex) => console.log('houses parsing failed', ex))
+    //   // this.addHouseTestimony(counters[0].id, house.value)
+    // }
     // getHouseTestimony (cb) {
     //   fetch(baseUrl + '/site/price')
     //     .then((response) => response.json())

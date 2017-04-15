@@ -198,6 +198,7 @@
       currentman: 'currentMan',
       counters: 'allCounters',
       loadedcounter: 'loadedCounter',
+      houseTestimony: 'allHouseTestimony',
       currentcounter: 'currentCounter'
     }),
     methods: {

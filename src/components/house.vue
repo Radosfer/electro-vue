@@ -12,8 +12,11 @@
             <pair :data="groupPair"></pair>
             <pair :data="ownerPair" color="blue"></pair>
             <pair :data="phonePair"></pair>
+            <pair :data="valueLastIndication"></pair>
             <pair :data="lastPair"></pair>
             <pair :data="valuePair" color="red"></pair>
+            <pair :data="valuePay" color="red"></pair>
+
 
           </span>
 
@@ -40,41 +43,48 @@
                        type="text"
                        class="validate"
                        @keyup.enter="doneAddTm"
-                       @keyup.esc="cancelEditTm"
-                       v-model="newTm">
-                     <label for="AddTm">Введите показание счетчика</label>
+                       @keyup.esc="cancelEdit">
+                     <label for="AddTm">Введите показание счетчика  {{ house.last_indication }}</label>
                      </div>
-
+                    <div class="center">
+                    {{ house.last_indication }}
+                    </div>
                 </span>
+                <span v-if="validIndication">
+                    <div class="center red">
+                    Не менее {{ house.last_indication }}
+                    </div>
+                </span>
+
 
                 <span v-if="editModePay">
                     <!--<payment></payment>-->
-                    <div class="input-field col s12">
-            <i class="material-icons prefix"><h5>W</h5></i>
-            <input  id="AddPayWatt"
-                    type="text"
-                    placeholder="Кол-во кВт"
-                    ref="input"
-                    v-bind:value="value"
-                    v-on:input="updateValueWatt($event.target.value)"
-                    v-on:focus="selectAll"
+        <div class="input-field col s12">
+             <span class="left prefix">kW</span>
+            <input id="AddPayWatt"
+                   type="text"
+                   placeholder="Кол-во кВт"
+                   ref="input"
+                   v-bind:value="value"
+                   v-on:input="updateValueWatt($event.target.value)"
+                   v-on:focus="selectAll"
+                   @keyup.esc="cancelEdit"
             >
-                        <!--<label for="AddPayWatt">Кол-во кВт</label>-->
         </div>
 
         <div class="input-field col s12">
-            <i class="material-icons prefix">&#8372</i>
-            <input  id="AddPay"
-                    type="text"
-                    placeholder="Введите сумму оплаты"
-                    ref="input1"
-                    v-bind:value="value1"
-                    v-on:input="updateValueMoney($event.target.value)"
-                    v-on:focus="selectAll"
-                    v-model="newPay"
-                    @keyup.enter="doneAddPay"
+            <span class="center prefix">&#8372</span>
+
+            <input id="AddPay"
+                   type="text"
+                   placeholder="Введите сумму оплаты"
+                   ref="input1"
+                   v-bind:value="value1"
+                   v-on:input="updateValueMoney($event.target.value)"
+                   v-on:focus="selectAll"
+                   @keyup.enter="doneAddPay"
+                   @keyup.esc="cancelEdit"
             >
-            <!--<label for="AddPay">Введите сумму оплаты</label>-->
         </div>
 
 
@@ -96,10 +106,11 @@
                 <a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>
                 </span>
             </div>
+
         </div>
 
-
     </div>
+
 </template>
 
 <script type="text/babel">
@@ -114,14 +125,15 @@
         editMode: false,
         editModeTm: false,
         editModePay: false,
+        validIndication: false,
         newFio: this.house.fio,
         newPhone: this.house.phone,
         newTm: '',
         newPayWatt: '12',
         newPay: '',
-
         tariff: 0,
-        amount: ''
+        amount: '',
+        lastInd: this.house.last_indication
       }
     },
     computed: {
@@ -163,16 +175,28 @@
           value: this.house.phone
         }
       },
+      valueLastIndication () {
+        return {
+          name: 'Показания:',
+          value: this.house.last_indication
+        }
+      },
       lastPair () {
         return {
           name: 'Передача показаний:',
-          value: '12/12/2016'
+          value: '12g'
         }
       },
       valuePair () {
         return {
-          name: 'Показания:',
-          value: 123
+          name: 'Кол-во кВт:',
+          value: this.house.testimony
+        }
+      },
+      valuePay () {
+        return {
+          name: 'Счет:',
+          value: this.house.money
         }
       },
       count: function () {
@@ -181,7 +205,7 @@
     },
     mounted: function () {
       api.tariff.getTariffs((price) => {
-        this.tariff = price.id
+        this.tariff = price.value
 //        console.log(price.id)
       })
     },
@@ -198,16 +222,19 @@
         this.editMode = !this.editMode
         this.editModeTm = false
         this.editModePay = false
+        this.validIndication = false
       },
       doEditTm () {
         this.editModeTm = !this.editModeTm
         this.editMode = false
         this.editModePay = false
+        this.validIndication = false
       },
       doEditPay () {
         this.editModePay = !this.editModePay
         this.editModeTm = false
         this.editMode = false
+        this.validIndication = false
       },
       doneEdit (e) {
         const value = e.target.value.trim()
@@ -218,19 +245,23 @@
         this.cancelEdit()
       },
       doneAddTm (e) {
-        const value = this.newTm
+        const value = e.target.value.trim()
+//        const value = this.newTm
+        let lastIndication = this.house.last_indication
         const {house} = this
         const houseId = house.id
-        if (value && this.editModeTm) {
+        if ((value >= lastIndication) && this.editModeTm) {
 //          console.log(house.id, value)
-          this.selectCounters({houseId, value})
+//          this.selectCounters({houseId, value})
 
-//          this.addHouseTestimony(value)
+          this.addHouseTestimony({houseId, value})
+          this.cancelEdit()
+        } else {
+          this.validIndication = true
         }
-        this.cancelEdit()
       },
       doneAddPay (e) {
-        const amount = this.newPay
+        const amount = e.target.value.trim()
         const {house} = this
         const houseId = house.id
         const priceId = this.tariff
@@ -270,6 +301,8 @@
       cancelEdit () {
         this.editMode = false
         this.editModeTm = false
+        this.editModePay = false
+        this.validIndication = false
       }
 
     },
@@ -277,6 +310,7 @@
   }
 
 </script>
+
 
 <style>
     .card-action {

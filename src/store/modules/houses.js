@@ -24,22 +24,9 @@ const actions = {
     })
   },
   editHouse ({commit}, data) {
-    // for (let i in state.all) {
-    //   if (state.all[i].id === data.street.id) {
-    //     commit(types.HOUSE_LOADED)
-    //     api.editStreet(state.all[i], data.value, street => {
-    //       commit(types.HOUSE_EDITED, street)
-    //     })
-    //   }
-    // }
     for (let i in state.all) {
-      // console.log(data.phone)
-      // console.log(data.fio)
-      // console.log(data)
-
       if (state.all[i].id === data.house.id) {
         commit(types.HOUSE_LOADED)
-        // console.log(data)
         api.house.editHouse(state.all[i], data.fio, data.phone, house => {
           commit(types.HOUSE_EDITED, house)
         })

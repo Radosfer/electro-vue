@@ -21,9 +21,12 @@ const getters = {
 // actions
 const actions = {
   addPay ({commit}, data) {
-    commit(types.PAY_LOADED)
-    api.house.addPay(data, pay => {
-      commit(types.PAY_ADD, pay)
+    commit(types.HOUSE_LOADED)
+    // api.house.addPay(data, pay => {
+    //   commit(types.PAY_ADD, pay)
+    // })
+    api.house.addPay(data, house => {
+      commit(types.HOUSE_EDITED, house)
     })
   }
 }
@@ -35,6 +38,17 @@ const mutations = {
   },
   [types.PAY_ADD] (state, pay) {
     state.all.push(pay)
+    state.loaded = true
+  },
+  [types.HOUSE_LOADED] (state) {
+    state.loaded = false
+  },
+  [types.HOUSE_EDITED] (state, house) {
+    for (let i in state.all) {
+      if (state.all[i].id === house.id) {
+        state.all[i] = house
+      }
+    }
     state.loaded = true
   }
 }
