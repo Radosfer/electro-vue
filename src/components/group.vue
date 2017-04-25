@@ -1,8 +1,8 @@
 <template>
-  <div>
+    <div>
     <span v-show="!editMode">
       <a href="#!"
-         @click="selectGroup(group)">
+         @click="selectGroup(group), groupModeSet">
         {{ group.title }}
       </a>
       <span class="a right">
@@ -10,14 +10,14 @@
         <a href="#!" class="red-text" @click="doDelete(group)"><i class="tiny material-icons">delete</i></a>
       </span>
     </span>
-    <input class="edit"
-           v-show="editMode"
-           v-focus="editMode"
-           :value="group.title"
-           @keyup.enter="doneEdit"
-           @keyup.esc="cancelEdit"
-           @blur="doneEdit">
-  </div>
+        <input class="edit"
+               v-show="editMode"
+               v-focus="editMode"
+               :value="group.title"
+               @keyup.enter="doneEdit"
+               @keyup.esc="cancelEdit"
+               @blur="doneEdit">
+    </div>
 </template>
 
 <script type="text/babel">

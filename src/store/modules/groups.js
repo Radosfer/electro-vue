@@ -5,14 +5,18 @@ import * as types from '../mutation-types'
 const state = {
   all: [],
   loaded: false,
-  current: null
+  current: null,
+  groupMode: null,
+  currentTestimony: null
 }
 
 // getters
 const getters = {
   allGroups: state => state.all,
   loadedGroup: state => state.loaded,
-  currentGroup: state => state.current
+  currentGroup: state => state.current,
+  groupModeG: state => state.groupMode,
+  currentTestimony: state => state.currentTestimony
 }
 
 // actions
@@ -22,11 +26,21 @@ const actions = {
       commit(types.GROUPS_RECEIVE, {groups})
     })
   },
+  // getAllGroups ({commit}) {
+  //   api.group.getGroups(groups => {
+  //     commit(types.GROUPS_RECEIVE, {groups})
+  //   })
+  // },
   selectGroup ({commit}, group) {
     commit(types.GROUP_SELECT, {group})
     commit(types.STREET_SELECT, {})
+    // commit(types.GROUP_MODE_TRUE)
+    commit(types.GROUP_MODE, true, {group})
     api.group.getHouses(group, houses => {
       commit(types.HOUSES_RECEIVE, {houses})
+    })
+    api.group.getGroupTestimony(group.id, testimony => {
+      commit(types.GROUP_TESTIMONY_RECEIVE, testimony)
     })
   },
   editGroup ({commit}, data) {
@@ -43,6 +57,13 @@ const actions = {
     commit(types.GROUP_LOADED)
     api.group.addGroup(title, group => {
       commit(types.GROUP_ADD, group)
+    })
+  },
+  addGroupTestimony ({commit}, data) {
+    commit(types.GROUP_LOADED)
+    api.group.addGroupTestimony(data, testimony => {
+      commit(types.GROUP_TESTIMONY_ADD, testimony)
+      console.log(testimony)
     })
   },
   deleteGroup ({commit}, group) {
@@ -80,9 +101,21 @@ const mutations = {
     state.all.push(group)
     state.loaded = true
   },
+  [types.GROUP_TESTIMONY_ADD] (state, testimony) {
+    state.currentTestimony = testimony
+    state.loaded = true
+  },
+  [types.GROUP_TESTIMONY_RECEIVE] (state, testimony) {
+    state.currentTestimony = testimony
+  },
   [types.GROUP_DELETE] (state, i) {
     state.all.splice(i, 1)
     state.loaded = true
+  },
+  [types.GROUP_MODE] (state, mode) {
+    state.groupMode = mode
+    // state.curGroupId = group.id
+    // console.log(state.groupMode)
   }
 }
 

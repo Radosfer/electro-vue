@@ -74,6 +74,7 @@
     },
     created () {
       this.$store.dispatch('getAllStreets')
+//      this.groupModeOff()
     },
     components: {Spinner, street}
   }

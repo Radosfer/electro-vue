@@ -6,15 +6,55 @@
                     Дома
                     <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons">add</i></a>
                 </h5>
-                <div class="row" v-show="loaded" >
-                <div class="col s6"
-                v-if="!editMode && !editMode2"
-                v-for="p in houses"
-                :class="{active: p === current}"
-                transition="fade">
+                <div class="card-panel" v-show="groupMode">
+                    <table class="centered">
+                        <thead>
+                        <tr>
+                            <th>Показания по группе</th>
+                            <th>Показания общего счетчика</th>
+                        </tr>
+                        </thead>
 
-                <house :house="p"></house>
+                        <tbody>
+                        <tr>
+                            <td>{{count}}</td>
+                            <td><span v-if="!editGroupTestimony">
+                                {{currentTestimony}}
+                                <a href="#!" class="green-text right" @click="doEditGroupTestimony()"><i
+                                        class="tiny material-icons">add</i></a>
+                                </span>
+                                <div class="row">
+                                <span class="input-field col s12" v-if="editGroupTestimony">
+                                    <!--<label for="street">Введите новые показания</label>-->
+                                <input
+                                        id="street"
+                                        type="text"
+                                        class="validate"
+                                        v-focus="editGroupTestimony"
+                                        @keyup.enter="doneEditGroupTestimony"
+                                        @keyup.esc="doEditGroupTestimony"
+                                        placeholder="Введите новые показания">
+
+                                </span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div>
+
+                    </div>
                 </div>
+                <div class="row" v-show="loaded">
+                    <div class="col s6"
+                         v-if="!editMode && !editMode2"
+                         v-for="p in houses"
+                         :class="{active: p === current}"
+                         transition="fade">
+
+                        <house :house="p"></house>
+                    </div>
                 </div>
 
                 <li class="collection-item" v-if="editMode">
@@ -157,7 +197,7 @@
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.0/vue.js"></script>-->
 <script type="text/babel">
   import {mapGetters, mapActions} from 'vuex'
-//  import api from '../../api/electro'
+  //  import api from '../api/electro'
   import Spinner from './Spinner.vue'
   import house from './house.vue'
   import street from './street.vue'
@@ -166,12 +206,13 @@
 
   export default {
 //    name: 'basic-example',
-//    props: ['house'],
+//    props: ['testimony'],
     mixins: [crud],
     data () {
       return {
         editMode: false,
         editMode2: false,
+        editGroupTestimony: false,
         activedds: false,
         activeddg: false,
         selectedStreetId: '',
@@ -184,26 +225,49 @@
         email: '',
         name: '',
         secret: '',
-        phone: ''
+        phone: '',
+        currentGroupTestimony: ''
       }
     },
-    computed: mapGetters({
-      houses: 'allHouses',
-      groups: 'allGroups',
-      streets: 'allStreets',
-      mans: 'allMans',
-      loaded: 'loadedHouse',
-      loadedman: 'loadedMan',
-      current: 'currentHouse',
-      currentman: 'currentMan',
-      counters: 'allCounters',
-      loadedcounter: 'loadedCounter',
-      houseTestimony: 'allHouseTestimony',
-      currentcounter: 'currentCounter'
-    }),
+    computed: {
+      ...mapGetters({
+        houses: 'allHouses',
+        groups: 'allGroups',
+        streets: 'allStreets',
+        mans: 'allMans',
+        loaded: 'loadedHouse',
+        loadedman: 'loadedMan',
+        current: 'currentHouse',
+        currentman: 'currentMan',
+        counters: 'allCounters',
+        loadedcounter: 'loadedCounter',
+        houseTestimony: 'allHouseTestimony',
+        currentcounter: 'currentCounter',
+        groupMode: 'groupModeG',
+        currentGroup: 'currentGroup',
+        currentTestimony: 'currentTestimony'
+      }),
+      count: function () {
+        let sum = 0
+        for (let i = 0; i < this.houses.length; i++) {
+          sum = sum + this.houses[i].last_indication
+        }
+        return sum
+      }
+    },
+//    mounted: function () {
+//      const groupId = this.currentGroup.id
+//      api.group.getGroupTestimony(groupId, (testimony) => {
+//        this.currentGroupTestimony = testimony.value
+//        console.log(4)
+//      })
+//    },
     methods: {
       ...mapActions([
         'selectHouse',
+        'selectStreet',
+        'selectGroup',
+        'addGroupTestimony',
         'addHouse',
         'addMan',
         'addCounter'
@@ -213,6 +277,9 @@
       },
       doEdit2 () {
         this.editMode2 = !this.editMode2
+      },
+      doEditGroupTestimony () {
+        this.editGroupTestimony = !this.editGroupTestimony
       },
       doneEdit (e) {
 //        const value = e.target.value.trim()
@@ -243,6 +310,14 @@
 //          })
         }
         this.cancelEdit()
+      },
+      doneEditGroupTestimony (e) {
+        const value = e.target.value.trim()
+        const groupId = this.currentGroup.id
+        if (value && this.editGroupTestimony) {
+          this.addGroupTestimony({value, groupId})
+        }
+        this.editGroupTestimony = false
       },
       cancelEdit () {
         this.editMode = false

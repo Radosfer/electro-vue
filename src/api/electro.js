@@ -117,6 +117,43 @@ export default {
         .then(() => cb(true))
         .catch((ex) => console.log('street adding failed', ex))
     },
+    addGroupTestimony (data, cb) {
+      console.log(data)
+      fetch(baseUrl + '/testimony', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          group_id: data.groupId,
+          created_at: Date(),
+          value: data.value
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json.value)
+        })
+        // .then(() => cb(true))
+        .catch((ex) => console.log('street adding failed', ex))
+    },
+    getGroupTestimony (groupId, cb) {
+      fetch(baseUrl + '/site/testimony', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          group_id: groupId
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json.value)
+          // console.log(json)
+        })
+        .catch((ex) => console.log('street parsing failed', ex))
+    },
     editGroup (group, title, cb) {
       fetch(baseUrl + '/group/' + group.id, {
         method: 'PUT',
@@ -137,6 +174,7 @@ export default {
     },
     filterHouses (json, group, cb) {
       var houses = json.filter((house) => house.group_id === group.id)
+      // console.log(houses)
       return cb(houses)
     },
     getHouses (street, cb) {
@@ -147,6 +185,7 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           _houses = json
+          // console.log(json)
           return this.filterHouses(json, street, cb)
         }).catch((ex) => console.log('group parsing failed', ex))
     },
@@ -173,23 +212,24 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          cb(json)
           hid = json.id
+          _houses = []
+          cb(json)
         })
 
       // .then(() => cb(true))
       // .catch((ex) => console.log('house add failed', ex))
     },
-    addMan (title, cb) {
-      // console.log(title)
-      fetch(baseUrl + '/man', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(title)
-      })
-    },
+    // addMan (title, cb) {
+    //   // console.log(title)
+    //   fetch(baseUrl + '/man', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(title)
+    //   })
+    // },
     addCounter (data, cb) {
       fetch(baseUrl + '/counter', {
         method: 'POST',
@@ -202,6 +242,7 @@ export default {
           value: data.start_value
         })
       })
+      _houses = []
     },
     editHouse (house, fio, phone, cb) {
       fetch(baseUrl + '/house/' + house.id, {
@@ -216,6 +257,7 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
+          _houses = []
           cb(json)
         })
         .catch((ex) => console.log('editHouse edit failed', ex))
@@ -236,6 +278,7 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
+          _houses = []
           cb(json)
           // console.log(json)
         })
@@ -286,8 +329,9 @@ export default {
       // .then(() => cb(true))
         .then((response) => response.json())
         .then((json) => {
+          _houses = []
           cb(json)
-          console.log(json)
+          // console.log(json)
         })
         .catch((ex) => console.log('street adding failed', ex))
     }

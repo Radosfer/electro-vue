@@ -5,7 +5,7 @@
             <div class="card-content">
           <span class="card-title activator">
             Дом №{{ house.title }}
-            <i class="material-icons right teal-text">settings</i>
+            <i class="material-icons right teal-text green-text">history</i>
           </span>
                 <span v-show="!editMode && !editModeTm && !editModePay">
             <pair :data="streetPair" color="green"></pair>
@@ -21,33 +21,36 @@
           </span>
 
                 <span v-if="editMode && !editModeTm && !editModePay">
+                    <!--Изменить данные владельца-->
+                <label for="fioEdit">Изменить ФИО</label>
                 <input id="fioEdit"
                        class="edit"
                        :value="house.fio"
                        @keyup.enter="doneEditFioPhone"
                        @keyup.esc="cancelEdit"
-                       v-model="newFio"
-                       placeholder="Введите фамилию, имя и отчество">
-
-                <input class="edit"
+                       v-model="newFio">
+                <label for="phoneEdit">Изменить номер телефона</label>
+                <input id="phoneEdit"
+                       class="edit"
                        :value="house.phone"
                        v-model="newPhone"
                        @keyup.enter="doneEditFioPhone"
-                       @keyup.esc="cancelEdit"
-                       placeholder="Введите номер телефона">
+                       @keyup.esc="cancelEdit">
+
                 </span>
 
                 <span v-if="editModeTm">
+                    Новые показания
                  <div class="input-field col s12">
                 <input id="AddTm"
                        type="text"
                        class="validate"
                        @keyup.enter="doneAddTm"
                        @keyup.esc="cancelEdit">
-                     <label for="AddTm">Введите показание счетчика  {{ house.last_indication }}</label>
+                     <label for="AddTm">Последние показания  {{ house.last_indication }}</label>
                      </div>
                     <div class="center">
-                    {{ house.last_indication }}
+                    <!--{{ house.last_indication }}-->
                     </div>
                 </span>
                 <span v-if="validIndication">
@@ -59,25 +62,27 @@
 
                 <span v-if="editModePay">
                     <!--<payment></payment>-->
+                    Оплата
         <div class="input-field col s12">
-             <span class="left prefix">kW</span>
+
+             <!--<span class="left prefix">kW</span>-->
             <input id="AddPayWatt"
                    type="text"
-                   placeholder="Кол-во кВт"
                    ref="input"
                    v-bind:value="value"
                    v-on:input="updateValueWatt($event.target.value)"
                    v-on:focus="selectAll"
+                   @keyup.enter="doneAddPay"
                    @keyup.esc="cancelEdit"
             >
+            <label for="AddPayWatt">{{ house.testimony }} кВт</label>
         </div>
 
         <div class="input-field col s12">
-            <span class="center prefix">&#8372</span>
+            <!--<span class="center prefix">&#8372</span>-->
 
             <input id="AddPay"
                    type="text"
-                   placeholder="Введите сумму оплаты"
                    ref="input1"
                    v-bind:value="value1"
                    v-on:input="updateValueMoney($event.target.value)"
@@ -85,6 +90,7 @@
                    @keyup.enter="doneAddPay"
                    @keyup.esc="cancelEdit"
             >
+            <label for="AddPay">{{ house.money }} грн.</label>
         </div>
 
 
@@ -184,7 +190,7 @@
       lastPair () {
         return {
           name: 'Передача показаний:',
-          value: '12g'
+          value: this.house.created_at
         }
       },
       valuePair () {
@@ -261,7 +267,8 @@
         }
       },
       doneAddPay (e) {
-        const amount = e.target.value.trim()
+//        const amount = e.target.value.trim()
+        const amount = document.getElementById('AddPay').value.trim()
         const {house} = this
         const houseId = house.id
         const priceId = this.tariff

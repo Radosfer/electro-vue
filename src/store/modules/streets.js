@@ -1,11 +1,13 @@
 import api from '../../api/electro'
 import * as types from '../mutation-types'
+// import groupMode from '../modules/groups'
 
 // initial state
 const state = {
   all: [],
   loaded: false,
-  current: null
+  current: null,
+  groupMode: null
 }
 
 // getters
@@ -13,6 +15,7 @@ const getters = {
   allStreets: state => state.all,
   loadedStreet: state => state.loaded,
   currentStreet: state => state.current
+
 }
 
 // actions
@@ -26,6 +29,8 @@ const actions = {
     // console.log(street)
     commit(types.STREET_SELECT, {street})
     commit(types.GROUP_SELECT, {})
+    // commit(types.GROUP_MODE_FALSE)
+    commit(types.GROUP_MODE, false)
     api.street.getHouses(street, houses => {
       commit(types.HOUSES_RECEIVE, {houses})
     })
@@ -84,6 +89,16 @@ const mutations = {
   [types.STREET_DELETE] (state, i) {
     state.all.splice(i, 1)
     state.loaded = true
+  },
+  [types.GROUP_MODE_FALSE] (state) {
+    // groupMode.state.groupMode = false
+    state.groupMode = false
+    console.log(state.groupMode)
+  },
+  [types.GROUP_MODE_TRUE] (state, mode) {
+    // groupMode.state.groupMode = false
+    state.groupMode = mode
+    console.log(state.groupMode)
   }
 }
 

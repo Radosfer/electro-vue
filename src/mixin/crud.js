@@ -2,6 +2,7 @@ export default {
   data () {
     return {
       editMode: false
+      // groupMode: false
     }
   },
   methods: {
@@ -13,6 +14,12 @@ export default {
     },
     cancelEdit () {
       this.editMode = false
+    },
+    groupModeSet () {
+      this.groupMode = true
+    },
+    groupModeOff () {
+      this.groupMode = false
     }
   }
 }

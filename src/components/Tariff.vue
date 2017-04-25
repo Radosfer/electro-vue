@@ -1,22 +1,28 @@
 <template>
-    <div class="card-panel" >
-        <span class="center">
-            <p>{{ tariff }} <small>грн/кВт</small></p>
-        </span>
-        <span class="right">
+    <div class="card-panel tariff"
+         v-on:mouseover="mouseOver(tariff)"
+         v-on:mouseout="mouseOut()"
+         :class="{actions: tariff === actions}"
+         transition="fade">
+        <h4>
+            {{ tariff }} <small>грн/кВт</small>
+        </h4>
+
+        <div class="a right">
         <a href="#!" class="green-text" @click="doEdit()"><i class="tiny material-icons">mode_edit</i></a>
-      </span>
+      </div>
+
         <!--<div class="input-field col s12" v-show="editMode">-->
-            <input id="tariff"
-                   type="text"
-                   class="validate"
-                   v-model="tariff"
-                   v-show="editMode"
-                   v-focus="editMode"
-                   @keyup.enter="doneEditTariff"
-                   @keyup.esc="cancelEdit"
-                   v-on:focus="selectAll">
-            <!--<label for="tariff">Введите тариф</label>-->
+        <input id="tariff"
+               type="text"
+               class="validate"
+               v-model="tariff"
+               v-show="editMode"
+               v-focus="editMode"
+               @keyup.enter="doneEditTariff"
+               @keyup.esc="cancelEdit"
+               v-on:focus="selectAll">
+        <!--<label for="tariff">Введите тариф</label>-->
         <!--</div>-->
 
 
@@ -27,13 +33,14 @@
 <script type="text/babel">
   import {mapActions} from 'vuex'
   import crud from '../mixin/crud'
+  import over from '../mixin/mouse'
   import api from '../api/electro'
   //  import Spinner from './Spinner.vue'
   //  import house from './house.vue'
   //  import street from './street.vue'
   //  import group from './group.vue'
   export default {
-    mixins: [crud],
+    mixins: [over, crud],
     data () {
       return {
         editMode: false,
@@ -66,7 +73,7 @@
 </script>
 
 <style>
-    span p {
-        font-size: 20pt;
+    .tariff {
+        font-size: 10pt;
     }
 </style>
