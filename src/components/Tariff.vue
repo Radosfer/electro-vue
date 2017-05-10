@@ -11,7 +11,6 @@
         <div class="a right">
         <a href="#!" class="green-text" @click="doEdit()"><i class="tiny material-icons">mode_edit</i></a>
       </div>
-
         <!--<div class="input-field col s12" v-show="editMode">-->
         <input id="tariff"
                type="text"

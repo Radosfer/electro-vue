@@ -5,7 +5,7 @@
             <div class="card-content">
           <span class="card-title activator">
             Дом №{{ house.title }}
-            <i class="material-icons right teal-text green-text">history</i>
+            <i class="material-icons right teal-text green-text" @click="getHistoryHouse">history</i>
           </span>
                 <span v-show="!editMode && !editModeTm && !editModePay">
             <pair :data="streetPair" color="green"></pair>
@@ -103,7 +103,32 @@
             Дом №{{ house.title }}
             <i class="material-icons right teal-text">close</i>
           </span>
-                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                <!--<p>Here is some more information about this product that is only revealed once clicked on.</p>-->
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Оплата</th>
+                        <th>П/показания</th>
+                        <th>Тариф</th>
+                        <th>Счет($)</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr v-for="p in historyHouse">
+                            <td>{{p.date.slice(4, -25)}}</td>
+                            <td>{{p.pay}}</td>
+                            <td>{{p.testimony}}</td>
+                            <td>{{p.tariff}}</td>
+                            <td>{{p.money}}</td>
+
+                    </tr>
+                    </tbody>
+
+                </table>
+
+
             </div>
             <div class="card-action">
                 <a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>
@@ -120,7 +145,7 @@
 </template>
 
 <script type="text/babel">
-  import {mapActions} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
   import api from '../api/electro'
   import pair from './pair.vue'
   //  import tariff from './tariff.vue'
@@ -143,6 +168,9 @@
       }
     },
     computed: {
+      ...mapGetters({
+        historyHouse: 'historyHouse'
+      }),
       street () {
         return api
           .getStreetById(this.house.street_id)
@@ -222,7 +250,8 @@
         'addHouseTestimony',
         'getCounters',
         'selectCounters',
-        'addPay'
+        'addPay',
+        'getHistory'
       ]),
       doEdit () {
         this.editMode = !this.editMode
@@ -310,10 +339,22 @@
         this.editModeTm = false
         this.editModePay = false
         this.validIndication = false
+      },
+      getHistoryHouse () {
+        const {house} = this
+        console.log(house)
+        this.getHistory(house)
       }
 
     },
-    components: {pair}
+    components: {
+      pair
+//      p: {
+//        template: '#template_p',
+//        props: ['x']
+//        replace: false // you can remove this option if you add a <tr></tr> around you <td> elements in the template.
+//      }
+    }
   }
 
 </script>

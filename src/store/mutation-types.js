@@ -19,6 +19,8 @@ export const HOUSE_SELECT = 'HOUSE_SELECT'
 export const HOUSE_EDITED = 'HOUSE_EDITED'
 export const HOUSE_ADD = 'HOUSE_ADD'
 
+export const HISTORY_RECEIVE = 'HISTORY_RECEIVE'
+
 export const GROUPS_RECEIVE = 'GROUPS_RECEIVE'
 export const GROUP_LOADED = 'GROUP_LOADED'
 export const GROUP_SELECT = 'GROUP_SELECT'

@@ -220,16 +220,6 @@ export default {
       // .then(() => cb(true))
       // .catch((ex) => console.log('house add failed', ex))
     },
-    // addMan (title, cb) {
-    //   // console.log(title)
-    //   fetch(baseUrl + '/man', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(title)
-    //   })
-    // },
     addCounter (data, cb) {
       fetch(baseUrl + '/counter', {
         method: 'POST',
@@ -282,6 +272,24 @@ export default {
           cb(json)
           // console.log(json)
         })
+    },
+    getHistory (house, cb) {
+      console.log(house.id)
+      fetch(baseUrl + '/site/history', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          house_id: house.id
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json)
+          // console.log(json)
+        })
+        .catch((ex) => console.log('street parsing failed', ex))
     }
   },
   tariff: {

@@ -6,14 +6,16 @@ import * as types from '../mutation-types'
 const state = {
   all: [],
   loaded: false,
-  current: null
+  current: null,
+  history: null
 }
 
 // getters
 const getters = {
   allHouses: state => state.all,
   loadedHouse: state => state.loaded,
-  currentHouse: state => state.current
+  currentHouse: state => state.current,
+  historyHouse: state => state.history
 }
 
 // actions
@@ -21,7 +23,6 @@ const actions = {
   selectHouse ({commit}, house) {
     commit(types.HOUSE_SELECT, {house})
     api.getHouses(house, houses => {
-      // console.log(houses)
     })
   },
   editHouse ({commit}, data) {
@@ -39,13 +40,13 @@ const actions = {
     api.house.addHouse(title, house => {
       commit(types.HOUSE_ADD, house)
     })
+  },
+  getHistory ({commit}, data) {
+    api.house.getHistory(data, history => {
+      commit(types.HISTORY_RECEIVE, history)
+      console.log(history)
+    })
   }
-  // addCounter ({commit}, data) {
-  //   commit(types.HOUSE_LOADED)
-  //   api.house.addCounter(data, house => {
-  //     commit(types.HOUSE_ADD, house)
-  //   })
-  // }
 }
 
 // mutations
@@ -60,14 +61,6 @@ const mutations = {
   [types.HOUSE_SELECT] (state, {street}) {
     state.current = street
   },
-  // [types.HOUSE_EDITED] (state, street) {
-  //   for (let i in state.all) {
-  //     if (state.all[i].id === street.id) {
-  //       state.all[i] = street
-  //     }
-  //   }
-  //   state.loaded = true
-  // },
   [types.HOUSE_EDITED] (state, house) {
     for (let i in state.all) {
       if (state.all[i].id === house.id) {
@@ -79,6 +72,9 @@ const mutations = {
   [types.HOUSE_ADD] (state, street) {
     state.all.push(street)
     state.loaded = true
+  },
+  [types.HISTORY_RECEIVE] (state, history) {
+    state.history = history
   }
 }
 
