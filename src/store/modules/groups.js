@@ -66,6 +66,11 @@ const actions = {
       console.log(testimony)
     })
   },
+  addGroupCounter ({commit}, data) {
+    // commit(types.GROUP_LOADED)
+    api.group.addGroupCounter(data)
+  },
+
   deleteGroup ({commit}, group) {
     commit(types.GROUP_LOADED)
     api.group.deleteGroup(group, result => {

@@ -25,19 +25,20 @@
                 <label for="fioEdit">Изменить ФИО</label>
                 <input id="fioEdit"
                        class="edit"
-                       :value="house.fio"
+                       value="house.fio"
                        @keyup.enter="doneEditFioPhone"
                        @keyup.esc="cancelEdit"
-                       v-model="newFio">
+                       v-model="fio.newFio">
                 <label for="phoneEdit">Изменить номер телефона</label>
                 <input id="phoneEdit"
                        class="edit"
                        :value="house.phone"
-                       v-model="newPhone"
+                       v-model="fio.newPhone"
                        @keyup.enter="doneEditFioPhone"
                        @keyup.esc="cancelEdit">
 
                 </span>
+
 
                 <span v-if="editModeTm">
                     Новые показания
@@ -48,10 +49,18 @@
                        @keyup.enter="doneAddTm"
                        @keyup.esc="cancelEdit">
                      <label for="AddTm">Последние показания  {{ house.last_indication }}</label>
-                     </div>
-                    <div class="center">
-                    <!--{{ house.last_indication }}-->
-                    </div>
+                 </div>
+
+                 <div class="input-field col s12">
+
+                <input id="cntrEdit"
+                       type="text"
+                       class="validate"
+                       @keyup.enter="doneAddNewCounter"
+                       @keyup.esc="cancelEdit">
+                 <label for="cntrEdit">Начальные показания нового счетчика</label>
+                 </div>
+
                 </span>
                 <span v-if="validIndication">
                     <div class="center red">
@@ -109,23 +118,22 @@
                     <tr>
                         <th>Дата</th>
                         <th>Оплата</th>
-                        <th>П/показания</th>
+                        <th>Последние показания</th>
                         <th>Тариф</th>
-                        <th>Счет($)</th>
+                        <th>Счет (грн)</th>
                     </tr>
                     </thead>
 
                     <tbody>
                     <tr v-for="p in historyHouse">
-                            <td>{{p.date.slice(4, -25)}}</td>
-                            <td>{{p.pay}}</td>
-                            <td>{{p.testimony}}</td>
-                            <td>{{p.tariff}}</td>
-                            <td>{{p.money}}</td>
-
+                        <td>{{p.date.slice(4, -25)}}</td>
+                        <td>{{p.pay}}</td>
+                        <td>{{p.testimony}}</td>
+                        <td>{{p.tariff}}</td>
+                        <td>{{p.money}}</td>
                     </tr>
                     </tbody>
-
+                    Начальное показание счетчика {{}}
                 </table>
 
 
@@ -157,7 +165,7 @@
         editModeTm: false,
         editModePay: false,
         validIndication: false,
-        newFio: this.house.fio,
+//        newFio: '',
         newPhone: this.house.phone,
         newTm: '',
         newPayWatt: '12',
@@ -218,7 +226,8 @@
       lastPair () {
         return {
           name: 'Передача показаний:',
-          value: this.house.created_at
+//          value: this.house.created_at
+          value: 0
         }
       },
       valuePair () {
@@ -235,6 +244,13 @@
       },
       count: function () {
         return this.newPay
+      },
+      fio: function () {
+        return {
+          newFio: this.house.fio,
+          newPhone: this.house.phone
+
+        }
       }
     },
     mounted: function () {
@@ -251,6 +267,7 @@
         'getCounters',
         'selectCounters',
         'addPay',
+        'addNewCounter',
         'getHistory'
       ]),
       doEdit () {
@@ -295,6 +312,17 @@
           this.validIndication = true
         }
       },
+      doneAddNewCounter (e) {
+        const value = e.target.value.trim()
+        const {house} = this
+        const houseId = house.id
+        console.log(houseId, value)
+        this.addNewCounter({
+          house_id: houseId,
+          start_value: value
+        })
+        this.cancelEdit()
+      },
       doneAddPay (e) {
 //        const amount = e.target.value.trim()
         const amount = document.getElementById('AddPay').value.trim()
@@ -309,8 +337,9 @@
       doneEditFioPhone (e) {
         // todo добавить проверку пустых полей
         const {house} = this
-        const fio = this.newFio
-        const phone = this.newPhone
+        const fio = this.fio.newFio
+        const phone = this.fio.newPhone
+//        console.log(fio, phone)
 
         if (this.editMode) {
           this.editHouse({house, fio, phone})
@@ -364,5 +393,9 @@
     .card-action {
         color: #4d45f0;
         border-top-color: #bbc1b9
+    }
+
+    table {
+        font-size: 10px;
     }
 </style>

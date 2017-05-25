@@ -1,29 +1,26 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col s12">
-            <div class="card-panel">
-                <h5>
-                    Дома
-                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons">add</i></a>
-                </h5>
-                <div class="card-panel" v-show="groupMode">
-                    <table class="centered">
-                        <thead>
-                        <tr>
-                            <th>Показания по группе</th>
-                            <th>Показания общего счетчика</th>
-                        </tr>
-                        </thead>
 
-                        <tbody>
-                        <tr>
-                            <td>{{count}}</td>
-                            <td><span v-if="!editGroupTestimony">
+
+            <div class="card-panel" v-show="groupMode">
+                <table class="centered">
+                    <thead>
+                    <tr>
+                        <th>Израсходовано группой по частным счетчикам, кВт</th>
+                        <th>Израсходовано по общему счетчику группы, кВт</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>{{count}}</td>
+                        <td><span v-if="!editGroupTestimony">
                                 {{currentTestimony}}
                                 <a href="#!" class="green-text right" @click="doEditGroupTestimony()"><i
                                         class="tiny material-icons">add</i></a>
                                 </span>
-                                <div class="row">
+                            <div class="row">
                                 <span class="input-field col s12" v-if="editGroupTestimony">
                                     <!--<label for="street">Введите новые показания</label>-->
                                 <input
@@ -36,16 +33,35 @@
                                         placeholder="Введите новые показания">
 
                                 </span>
-                                </div>
+                            </div>
 
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <input
+                        type="text"
+                        class="validate"
+                        v-focus="editGroupTestimony"
+                        @keyup.enter="doneAddGroupCounter"
+                        @keyup.esc="doAddGroupCounter"
+                        placeholder="Введите стартовое показание нового счетчика группы">
 
-                    </div>
+
+                <div>
+
                 </div>
+            </div>
+
+
+
+
+            <div class="card-panel">
+                <h5>
+                    Дома
+                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons">add</i></a>
+                </h5>
+
                 <div class="row" v-show="loaded">
                     <div class="col s6"
                          v-if="!editMode && !editMode2"
@@ -250,7 +266,7 @@
       count: function () {
         let sum = 0
         for (let i = 0; i < this.houses.length; i++) {
-          sum = sum + this.houses[i].last_indication
+          sum = sum + this.houses[i].spent
         }
         return sum
       }
@@ -268,6 +284,7 @@
         'selectStreet',
         'selectGroup',
         'addGroupTestimony',
+        'addGroupCounter',
         'addHouse',
         'addMan',
         'addCounter'
@@ -298,7 +315,9 @@
             phone: this.selectedPhone,
             start_value: '0',
             money: '0',
-            testimony: '0'
+            testimony: '0',
+            last_indication: '0',
+            spent: '0'
           })
 //          this.addCounter({
 //            house_id: this.id,
@@ -318,6 +337,13 @@
           this.addGroupTestimony({value, groupId})
         }
         this.editGroupTestimony = false
+      },
+      doneAddGroupCounter (e) {
+        const value = e.target.value.trim()
+        const groupId = this.currentGroup.id
+        if (value) {
+          this.addGroupCounter({value, groupId})
+        }
       },
       cancelEdit () {
         this.editMode = false

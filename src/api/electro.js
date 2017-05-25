@@ -111,15 +111,16 @@ export default {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          title: title
+          title: title,
+          spent: 0
         })
       })
         .then(() => cb(true))
         .catch((ex) => console.log('street adding failed', ex))
     },
-    addGroupTestimony (data, cb) {
+    addGroupCounter (data, cb) {
       console.log(data)
-      fetch(baseUrl + '/testimony', {
+      fetch(baseUrl + '/site/group', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -132,7 +133,27 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          cb(json.value)
+          cb(json)
+        })
+        // .then(() => cb(true))
+        .catch((ex) => console.log('street adding failed', ex))
+    },
+    addGroupTestimony (data, cb) {
+      console.log(data)
+      fetch(baseUrl + '/site/group_testimony', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          group_id: data.groupId,
+          created_at: Date(),
+          value: data.value
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json.spent)
         })
         // .then(() => cb(true))
         .catch((ex) => console.log('street adding failed', ex))
@@ -202,7 +223,7 @@ export default {
   },
   house: {
     addHouse (title, cb) {
-      // console.log(title)
+      console.log(title)
       fetch(baseUrl + '/house', {
         method: 'POST',
         headers: {
@@ -221,7 +242,7 @@ export default {
       // .catch((ex) => console.log('house add failed', ex))
     },
     addCounter (data, cb) {
-      fetch(baseUrl + '/counter', {
+      fetch(baseUrl + '/site/counter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -229,10 +250,34 @@ export default {
         body: JSON.stringify({
           house_id: hid,
           created_at: Date(),
-          value: data.start_value
+          value: data.start_value,
+          finish_value: 0
         })
       })
       _houses = []
+    },
+    addNewCounter (data, cb) {
+      console.log(data)
+      fetch(baseUrl + '/site/counter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          house_id: data.house_id,
+          created_at: Date(),
+          value: data.start_value,
+          finish_value: 0
+        })
+      })
+
+        .then((response) => response.json())
+        .then((json) => {
+          _houses = []
+          cb(json)
+
+          console.log(json)
+        })
     },
     editHouse (house, fio, phone, cb) {
       fetch(baseUrl + '/house/' + house.id, {

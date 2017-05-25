@@ -62,15 +62,16 @@ const mutations = {
   },
   [types.HOUSE_LOADED] (state) {
     state.loaded = false
-  },
-  [types.HOUSE_EDITED] (state, house) {
-    for (let i in state.all) {
-      if (state.all[i].id === house.id) {
-        state.all[i] = house
-      }
-    }
-    state.loaded = true
   }
+  // [types.HOUSE_EDITED] (state, house) {
+  //   console.log('edit')
+  //   for (let i in state.all) {
+  //     if (state.all[i].id === house.id) {
+  //       state.all[i] = house
+  //     }
+  //   }
+  //   state.loaded = true
+  // }
 }
 
 export default {
