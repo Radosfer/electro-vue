@@ -7,6 +7,7 @@ const state = {
   loaded: false,
   current: null,
   groupMode: null,
+  groupLastIndication: null,
   currentTestimony: null
 }
 
@@ -16,6 +17,7 @@ const getters = {
   loadedGroup: state => state.loaded,
   currentGroup: state => state.current,
   groupModeG: state => state.groupMode,
+  groupLastIndication: state => state.groupLastIndication,
   currentTestimony: state => state.currentTestimony
 }
 
@@ -68,7 +70,9 @@ const actions = {
   },
   addGroupCounter ({commit}, data) {
     // commit(types.GROUP_LOADED)
-    api.group.addGroupCounter(data)
+    api.group.addGroupCounter(data, testimony => {
+      commit(types.GROUP_TESTIMONY_ADD, testimony)
+    })
   },
 
   deleteGroup ({commit}, group) {
@@ -107,11 +111,13 @@ const mutations = {
     state.loaded = true
   },
   [types.GROUP_TESTIMONY_ADD] (state, testimony) {
-    state.currentTestimony = testimony
+    state.currentTestimony = testimony.spent
+    state.groupLastIndication = testimony.last_indication
     state.loaded = true
   },
   [types.GROUP_TESTIMONY_RECEIVE] (state, testimony) {
-    state.currentTestimony = testimony
+    state.currentTestimony = testimony.spent
+    state.groupLastIndication = testimony.last_indication
   },
   [types.GROUP_DELETE] (state, i) {
     state.all.splice(i, 1)

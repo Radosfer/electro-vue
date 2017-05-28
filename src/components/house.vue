@@ -14,8 +14,8 @@
             <pair :data="phonePair"></pair>
             <pair :data="valueLastIndication"></pair>
             <pair :data="lastPair"></pair>
-            <pair :data="valuePair" color="red"></pair>
-            <pair :data="valuePay" color="red"></pair>
+            <pair :data="valuePair" :color="colorValue"></pair>
+            <pair :data="valuePay"  :color="colorValue"></pair>
 
 
           </span>
@@ -165,6 +165,8 @@
         editModeTm: false,
         editModePay: false,
         validIndication: false,
+//        colorValue: 'green',
+//        houseAccount: false,
 //        newFio: '',
         newPhone: this.house.phone,
         newTm: '',
@@ -250,6 +252,14 @@
           newFio: this.house.fio,
           newPhone: this.house.phone
 
+        }
+      },
+      colorValue: function () {
+        let money = this.house.money
+        if (money < 0) {
+          return 'red'
+        } else {
+          return 'green'
         }
       }
     },
@@ -389,7 +399,7 @@
 </script>
 
 
-<style>
+<style lang="scss" type="text/scss">
     .card-action {
         color: #4d45f0;
         border-top-color: #bbc1b9
@@ -397,5 +407,12 @@
 
     table {
         font-size: 10px;
+    }
+
+    .house-account-g {
+        color: green
+    }
+    .house-account-r {
+        color: red
     }
 </style>

@@ -112,7 +112,8 @@ export default {
         },
         body: JSON.stringify({
           title: title,
-          spent: 0
+          spent: 0,
+          last_indication: 0
         })
       })
         .then(() => cb(true))
@@ -153,10 +154,10 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          cb(json.spent)
+          cb(json)
         })
         // .then(() => cb(true))
-        .catch((ex) => console.log('street adding failed', ex))
+        .catch((ex) => console.log('street adding failed1', ex))
     },
     getGroupTestimony (groupId, cb) {
       fetch(baseUrl + '/site/testimony', {
@@ -170,7 +171,7 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          cb(json.value)
+          cb(json)
           // console.log(json)
         })
         .catch((ex) => console.log('street parsing failed', ex))

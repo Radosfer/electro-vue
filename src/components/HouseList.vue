@@ -15,24 +15,30 @@
                     <tbody>
                     <tr>
                         <td>{{count}}</td>
-                        <td><span v-if="!editGroupTestimony">
-                                {{currentTestimony}}
-                                <a href="#!" class="green-text right" @click="doEditGroupTestimony()"><i
-                                        class="tiny material-icons">add</i></a>
-                                </span>
+                        <td>
+                            <a href="#!" class="green-text right" @click="doEditGroupTestimony()"><i
+                                    class="tiny material-icons">add</i></a>
+                            <span v-if="!editGroupTestimony">
+                                {{groupSpent}}
+                            </span>
                             <div class="row">
                                 <span class="input-field col s12" v-if="editGroupTestimony">
-                                    <!--<label for="street">Введите новые показания</label>-->
+                                <label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>
                                 <input
-                                        id="street"
+                                        id="groupIndication"
                                         type="text"
                                         class="validate"
                                         v-focus="editGroupTestimony"
                                         @keyup.enter="doneEditGroupTestimony"
-                                        @keyup.esc="doEditGroupTestimony"
-                                        placeholder="Введите новые показания">
+                                        @keyup.esc="doEditGroupTestimony">
 
+                                <span v-if="validGroupIndication">
+                                    <div class="center red">
+                                    Не менее {{ groupLastIndication }}
+                                    </div>
                                 </span>
+                                </span>
+
                             </div>
 
                         </td>
@@ -42,7 +48,7 @@
                 <input
                         type="text"
                         class="validate"
-                        v-focus="editGroupTestimony"
+                        v-focus=""
                         @keyup.enter="doneAddGroupCounter"
                         @keyup.esc="doAddGroupCounter"
                         placeholder="Введите стартовое показание нового счетчика группы">
@@ -52,8 +58,6 @@
 
                 </div>
             </div>
-
-
 
 
             <div class="card-panel">
@@ -222,7 +226,7 @@
 
   export default {
 //    name: 'basic-example',
-//    props: ['testimony'],
+//    props: ['groups'],
     mixins: [crud],
     data () {
       return {
@@ -231,6 +235,7 @@
         editGroupTestimony: false,
         activedds: false,
         activeddg: false,
+        validGroupIndication: false,
         selectedStreetId: '',
         selectedGroupId: '',
         selectedTitle: '',
@@ -261,7 +266,8 @@
         currentcounter: 'currentCounter',
         groupMode: 'groupModeG',
         currentGroup: 'currentGroup',
-        currentTestimony: 'currentTestimony'
+        groupLastIndication: 'groupLastIndication',
+        groupSpent: 'currentTestimony'
       }),
       count: function () {
         let sum = 0
@@ -333,10 +339,15 @@
       doneEditGroupTestimony (e) {
         const value = e.target.value.trim()
         const groupId = this.currentGroup.id
-        if (value && this.editGroupTestimony) {
+        console.log(this)
+        let gli = this.groups[groupId - 1].last_indication
+        if ((value > gli) && this.editGroupTestimony) {
+          this.validGroupIndication = false
           this.addGroupTestimony({value, groupId})
+          this.editGroupTestimony = false
+        } else {
+          this.validGroupIndication = true
         }
-        this.editGroupTestimony = false
       },
       doneAddGroupCounter (e) {
         const value = e.target.value.trim()
