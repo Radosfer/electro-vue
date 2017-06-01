@@ -7,7 +7,7 @@
             Дом №{{ house.title }}
             <i class="material-icons right teal-text green-text" @click="getHistoryHouse">history</i>
           </span>
-                <span v-show="!editMode && !editModeTm && !editModePay">
+                <span v-show="!editAddCounter && !editMode && !editModeTm && !editModePay">
             <pair :data="streetPair" color="green"></pair>
             <pair :data="groupPair"></pair>
             <pair :data="ownerPair" color="blue"></pair>
@@ -15,7 +15,7 @@
             <pair :data="valueLastIndication"></pair>
             <pair :data="lastPair"></pair>
             <pair :data="valuePair" :color="colorValue"></pair>
-            <pair :data="valuePay"  :color="colorValue"></pair>
+            <pair :data="valuePay" :color="colorValue"></pair>
 
 
           </span>
@@ -39,6 +39,20 @@
 
                 </span>
 
+                <span v-if="editAddCounter">
+                    Добавление нового счетчика
+                  <div class="input-field col s12">
+
+                <input id="cntrEdit"
+                       type="text"
+                       class="validate"
+                       @keyup.enter="doneAddNewCounter"
+                       @keyup.esc="cancelEdit">
+                 <label for="cntrEdit">Начальные показания нового счетчика</label>
+                 </div>
+
+                </span>
+
 
                 <span v-if="editModeTm">
                     Новые показания
@@ -49,16 +63,6 @@
                        @keyup.enter="doneAddTm"
                        @keyup.esc="cancelEdit">
                      <label for="AddTm">Последние показания  {{ house.last_indication }}</label>
-                 </div>
-
-                 <div class="input-field col s12">
-
-                <input id="cntrEdit"
-                       type="text"
-                       class="validate"
-                       @keyup.enter="doneAddNewCounter"
-                       @keyup.esc="cancelEdit">
-                 <label for="cntrEdit">Начальные показания нового счетчика</label>
                  </div>
 
                 </span>
@@ -140,6 +144,8 @@
             </div>
             <div class="card-action">
                 <a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>
+                <a href="#!" class="grey-text" @click="doEditAddCounter()"><i
+                        class="material-icons">add_circle_outline</i></a>
                 <span class="right">
                 <a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>
                 <a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>
@@ -156,6 +162,7 @@
   import {mapGetters, mapActions} from 'vuex'
   import api from '../api/electro'
   import pair from './pair.vue'
+  import vswal from '../api/swal'
   //  import tariff from './tariff.vue'
   export default{
     props: ['value', 'value1', 'house'],
@@ -164,6 +171,7 @@
         editMode: false,
         editModeTm: false,
         editModePay: false,
+        editAddCounter: false,
         validIndication: false,
 //        colorValue: 'green',
 //        houseAccount: false,
@@ -285,15 +293,36 @@
         this.editModeTm = false
         this.editModePay = false
         this.validIndication = false
+        this.editAddCounter = false
+      },
+      doSwalEdit () {
+        vswal({
+          title: 'Вы уверены?',
+          text: 'Все данные по группе будут удалены',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#DD6B55',
+          confirmButtonText: 'Удалить',
+          cancelButtonText: 'Отмена'
+        })
       },
       doEditTm () {
         this.editModeTm = !this.editModeTm
         this.editMode = false
         this.editModePay = false
         this.validIndication = false
+        this.editAddCounter = false
       },
       doEditPay () {
         this.editModePay = !this.editModePay
+        this.editModeTm = false
+        this.editMode = false
+        this.validIndication = false
+        this.editAddCounter = false
+      },
+      doEditAddCounter () {
+        this.editAddCounter = !this.editAddCounter
+        this.editModePay = false
         this.editModeTm = false
         this.editMode = false
         this.validIndication = false
@@ -308,8 +337,10 @@
       },
       doneAddTm (e) {
         const value = e.target.value.trim()
+//        console.log(value)
 //        const value = this.newTm
         let lastIndication = this.house.last_indication
+        console.log(value, lastIndication)
         const {house} = this
         const houseId = house.id
         if ((value >= lastIndication) && this.editModeTm) {
@@ -319,6 +350,7 @@
           this.addHouseTestimony({houseId, value})
           this.cancelEdit()
         } else {
+          console.log(value, lastIndication)
           this.validIndication = true
         }
       },
@@ -378,6 +410,7 @@
         this.editModeTm = false
         this.editModePay = false
         this.validIndication = false
+        this.editAddCounter = false
       },
       getHistoryHouse () {
         const {house} = this
@@ -412,6 +445,7 @@
     .house-account-g {
         color: green
     }
+
     .house-account-r {
         color: red
     }

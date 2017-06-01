@@ -4,7 +4,8 @@
 
 
             <div class="card-panel" v-show="groupMode">
-                <table class="centered">
+                <span v-if="!editAddGroupCounter && !editGroupTestimony">
+                <table class="centered striped">
                     <thead>
                     <tr>
                         <th>Израсходовано группой по частным счетчикам, кВт</th>
@@ -16,13 +17,47 @@
                     <tr>
                         <td>{{count}}</td>
                         <td>
-                            <a href="#!" class="green-text right" @click="doEditGroupTestimony()"><i
-                                    class="tiny material-icons">add</i></a>
-                            <span v-if="!editGroupTestimony">
+                            <!--<span v-if="!editGroupTestimony">-->
                                 {{groupSpent}}
-                            </span>
-                            <div class="row">
-                                <span class="input-field col s12" v-if="editGroupTestimony">
+                            <!--</span>-->
+                            <!--<div class="row">-->
+                                <!--<span class="input-field col s12" v-if="editGroupTestimony">-->
+                                <!--<label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>-->
+                                <!--<input-->
+                                        <!--id="groupIndication"-->
+                                        <!--type="text"-->
+                                        <!--class="validate"-->
+                                        <!--v-focus="editGroupTestimony"-->
+                                        <!--@keyup.enter="doneEditGroupTestimony"-->
+                                        <!--@keyup.esc="doEditGroupTestimony">-->
+
+                                <!--<span v-if="validGroupIndication">-->
+                                    <!--<div class="center red">-->
+                                    <!--Не менее {{ groupLastIndication }}-->
+                                    <!--</div>-->
+                                <!--</span>-->
+                                <!--</span>-->
+
+                            <!--</div>-->
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </span>
+
+                <span v-if="editAddGroupCounter">
+                    <label for="groupAddCntr">Введите стартовое показание нового счетчика группы</label>
+                <input
+                        id="groupAddCntr"
+                        type="text"
+                        class="validate"
+                        v-focus="editAddGroupCounter"
+                        @keyup.enter="doneAddGroupCounter"
+                        @keyup.esc="doEditGroupCounter">
+                </span>
+
+                <span v-if="editGroupTestimony">
                                 <label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>
                                 <input
                                         id="groupIndication"
@@ -38,25 +73,10 @@
                                     </div>
                                 </span>
                                 </span>
-
-                            </div>
-
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <input
-                        type="text"
-                        class="validate"
-                        v-focus=""
-                        @keyup.enter="doneAddGroupCounter"
-                        @keyup.esc="doAddGroupCounter"
-                        placeholder="Введите стартовое показание нового счетчика группы">
-
-
-                <div>
-
-                </div>
+                <a href="#!" class="grey-text" @click="doEditGroupCounter()"><i
+                        class="material-icons">add_circle_outline</i></a>
+                <a href="#!" class="green-text right" @click="doEditGroupTestimony()"><i
+                        class="material-icons">publish</i></a>
             </div>
 
 
@@ -233,6 +253,7 @@
         editMode: false,
         editMode2: false,
         editGroupTestimony: false,
+        editAddGroupCounter: false,
         activedds: false,
         activeddg: false,
         validGroupIndication: false,
@@ -298,11 +319,16 @@
       doEdit () {
         this.editMode = !this.editMode
       },
+      doEditGroupCounter () {
+        this.editAddGroupCounter = !this.editAddGroupCounter
+        this.editGroupTestimony = false
+      },
       doEdit2 () {
         this.editMode2 = !this.editMode2
       },
       doEditGroupTestimony () {
         this.editGroupTestimony = !this.editGroupTestimony
+        this.editAddGroupCounter = false
       },
       doneEdit (e) {
 //        const value = e.target.value.trim()
@@ -339,8 +365,8 @@
       doneEditGroupTestimony (e) {
         const value = e.target.value.trim()
         const groupId = this.currentGroup.id
-        console.log(this)
-        let gli = this.groups[groupId - 1].last_indication
+        console.log(this.currentGroup)
+        let gli = this.currentGroup.last_indication
         if ((value > gli) && this.editGroupTestimony) {
           this.validGroupIndication = false
           this.addGroupTestimony({value, groupId})
@@ -358,6 +384,8 @@
       },
       cancelEdit () {
         this.editMode = false
+        this.editAddGroupCounter = false
+        this.editGroupTestimony = false
       },
       selectStreetdd () {
 //        this.activedds = !this.activedds

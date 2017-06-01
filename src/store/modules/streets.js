@@ -22,6 +22,7 @@ const getters = {
 const actions = {
   getAllStreets ({commit}) {
     api.street.getStreets(streets => {
+      console.log(streets)
       commit(types.STREETS_RECEIVE, {streets})
     })
   },

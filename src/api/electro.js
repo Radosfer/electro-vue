@@ -27,6 +27,7 @@ export default {
         .then((json) => {
           _streets = json
           cb(json)
+          console.log(_streets)
         })
         .catch((ex) => console.log('street parsing failed', ex))
     },
@@ -42,7 +43,12 @@ export default {
           title: title
         })
       })
-        .then(() => cb(true))
+        .then((response) => response.json())
+        .then((json) => {
+          _streets = json
+          cb(json)
+        })
+        // .then(() => cb(true))
         .catch((ex) => console.log('street adding failed', ex))
     },
     editStreet (street, title, cb) {
@@ -116,7 +122,12 @@ export default {
           last_indication: 0
         })
       })
-        .then(() => cb(true))
+        .then((response) => response.json())
+        .then((json) => {
+          _groups = json
+          cb(json)
+        })
+        // .then(() => cb(true))
         .catch((ex) => console.log('street adding failed', ex))
     },
     addGroupCounter (data, cb) {
