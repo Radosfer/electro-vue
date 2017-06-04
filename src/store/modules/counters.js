@@ -18,9 +18,9 @@ const getters = {
 // actions
 const actions = {
   addCounter ({commit}, data) {
-    commit(types.COUNTER_LOADED)
+    commit(types.HOUSE_LOADED)
     api.house.addCounter(data, counter => {
-      commit(types.COUNTER_ADD, counter)
+      commit(types.HOUSE_EDITED, counter)
     })
   },
   addNewCounter ({commit}, data) {

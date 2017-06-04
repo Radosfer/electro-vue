@@ -26,12 +26,13 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           _streets = json
+          console.log(json)
           cb(json)
-          console.log(_streets)
         })
-        .catch((ex) => console.log('street parsing failed', ex))
+        .catch((ex) => console.log('ошибка получения списка улиц', ex))
     },
     addStreet (title, cb) {
+      console.log(title)
       fetch(baseUrl + '/street', {
         method: 'POST',
         // mode: 'cors',
@@ -46,10 +47,11 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           _streets = json
+          console.log(json)
           cb(json)
         })
         // .then(() => cb(true))
-        .catch((ex) => console.log('street adding failed', ex))
+        .catch((ex) => console.log('ошибка добавления улиц', ex))
     },
     editStreet (street, title, cb) {
       fetch(baseUrl + '/street/' + street.id, {
@@ -67,7 +69,7 @@ export default {
           id: street.id,
           title: title
         }))
-        .catch((ex) => console.log('street edit failed', ex))
+        .catch((ex) => console.log('ошибка редактирования улиц', ex))
     },
     filterHouses (json, street, cb) {
       var houses = json.filter((house) => house.street_id === street.id)
@@ -84,7 +86,7 @@ export default {
         .then((json) => {
           _houses = json
           return this.filterHouses(json, street, cb)
-        }).catch((ex) => console.log('houses parsing failed', ex))
+        }).catch((ex) => console.log('ошибка получения списка домов данной улицы', ex))
     },
     deleteStreet (street, cb) {
       fetch(baseUrl + '/street/' + street.id, {
@@ -94,7 +96,7 @@ export default {
       // new list of streets
       // delay(1000)
         .then(() => cb(true))
-        .catch((ex) => console.log('street delete failed', ex))
+        .catch((ex) => console.log('ошибка удаления улиц', ex))
     }
   },
   group: {
@@ -108,7 +110,7 @@ export default {
           _groups = json
           cb(json)
         })
-        .catch((ex) => console.log('groups parsing failed', ex))
+        .catch((ex) => console.log('ошибка получения списка групп', ex))
     },
     addGroup (title, cb) {
       fetch(baseUrl + '/group', {
@@ -128,7 +130,7 @@ export default {
           cb(json)
         })
         // .then(() => cb(true))
-        .catch((ex) => console.log('street adding failed', ex))
+        .catch((ex) => console.log('ошибка добавления групп', ex))
     },
     addGroupCounter (data, cb) {
       console.log(data)
@@ -148,7 +150,7 @@ export default {
           cb(json)
         })
         // .then(() => cb(true))
-        .catch((ex) => console.log('street adding failed', ex))
+        .catch((ex) => console.log('ошибка добавления счетчика группы', ex))
     },
     addGroupTestimony (data, cb) {
       console.log(data)
@@ -168,7 +170,7 @@ export default {
           cb(json)
         })
         // .then(() => cb(true))
-        .catch((ex) => console.log('street adding failed1', ex))
+        .catch((ex) => console.log('ошибка добавления показаний счетчика группы', ex))
     },
     getGroupTestimony (groupId, cb) {
       fetch(baseUrl + '/site/testimony', {
@@ -185,7 +187,7 @@ export default {
           cb(json)
           // console.log(json)
         })
-        .catch((ex) => console.log('street parsing failed', ex))
+        .catch((ex) => console.log('ошибка получения показаний счетчика группы', ex))
     },
     editGroup (group, title, cb) {
       fetch(baseUrl + '/group/' + group.id, {
@@ -203,7 +205,7 @@ export default {
           id: group.id,
           title: title
         }))
-        .catch((ex) => console.log('group edit failed', ex))
+        .catch((ex) => console.log('ошибка редактирования группы', ex))
     },
     filterHouses (json, group, cb) {
       var houses = json.filter((house) => house.group_id === group.id)
@@ -220,7 +222,7 @@ export default {
           _houses = json
           // console.log(json)
           return this.filterHouses(json, street, cb)
-        }).catch((ex) => console.log('group parsing failed', ex))
+        }).catch((ex) => console.log('ошибка получения списка домов данной группы', ex))
     },
     deleteGroup (group, cb) {
       fetch(baseUrl + '/group/' + group.id, {
@@ -230,7 +232,7 @@ export default {
       // new list of streets
       // delay(1000)
         .then(() => cb(true))
-        .catch((ex) => console.log('group delete failed', ex))
+        .catch((ex) => console.log('ошибка удаления группы', ex))
     }
   },
   house: {
@@ -251,7 +253,7 @@ export default {
         })
 
       // .then(() => cb(true))
-      // .catch((ex) => console.log('house add failed', ex))
+      .catch((ex) => console.log('ошибка добавления нового дома', ex))
     },
     addCounter (data, cb) {
       fetch(baseUrl + '/site/counter', {
@@ -266,7 +268,14 @@ export default {
           finish_value: 0
         })
       })
-      _houses = []
+      // _houses = []
+        .then((response) => response.json())
+        .then((json) => {
+          _houses = []
+          cb(json)
+          console.log(json)
+        })
+        .catch((ex) => console.log('ошибка добавления первого счетчика дома', ex))
     },
     addNewCounter (data, cb) {
       console.log(data)
@@ -290,6 +299,7 @@ export default {
 
           console.log(json)
         })
+        .catch((ex) => console.log('ошибка добавления нового счетчика дома', ex))
     },
     editHouse (house, fio, phone, cb) {
       fetch(baseUrl + '/house/' + house.id, {
@@ -307,7 +317,7 @@ export default {
           _houses = []
           cb(json)
         })
-        .catch((ex) => console.log('editHouse edit failed', ex))
+        .catch((ex) => console.log('ошибка редактирования дома', ex))
     },
     addPay (data, cb) {
       // console.log(title)
@@ -329,6 +339,7 @@ export default {
           cb(json)
           // console.log(json)
         })
+        .catch((ex) => console.log('ошибка выполения оплаты показаний', ex))
     },
     getHistory (house, cb) {
       console.log(house.id)
@@ -346,7 +357,7 @@ export default {
           cb(json)
           // console.log(json)
         })
-        .catch((ex) => console.log('street parsing failed', ex))
+        .catch((ex) => console.log('ошибка получения истории', ex))
     }
   },
   tariff: {
@@ -364,7 +375,7 @@ export default {
         .then(() => cb({
           // value: title
         }))
-        .catch((ex) => console.log('street adding failed', ex))
+        .catch((ex) => console.log('ошибка добавления тарифа', ex))
     },
     getTariffs (cb) {
       fetch(baseUrl + '/site/price')
@@ -372,7 +383,7 @@ export default {
         .then((json) => {
           cb(json)
         })
-        .catch((ex) => console.log('street parsing failed', ex))
+        .catch((ex) => console.log('ошибка получения тарифа', ex))
     }
   },
   testimony: {
@@ -396,9 +407,9 @@ export default {
         .then((json) => {
           _houses = []
           cb(json)
-          // console.log(json)
+          console.log(json)
         })
-        .catch((ex) => console.log('street adding failed', ex))
+        .catch((ex) => console.log('ошибка добавления показаний счетчика дома', ex))
     }
     // filterCounters (json, house, cb) {
     //   var counters = json.filter((counter) => counter.house_id === house.houseId)
@@ -449,6 +460,7 @@ export default {
       title: ''
     }
   }
+
   // getHouseById (id) {
   //   let house = _houses.find((element) => {
   //     return element.id === id

@@ -5,7 +5,7 @@
 
             <div class="card-panel" v-show="groupMode">
                 <span v-if="!editAddGroupCounter && !editGroupTestimony">
-                <table class="centered striped">
+                <table class="centered">
                     <thead>
                     <tr>
                         <th>Израсходовано группой по частным счетчикам, кВт</th>
@@ -21,22 +21,22 @@
                                 {{groupSpent}}
                             <!--</span>-->
                             <!--<div class="row">-->
-                                <!--<span class="input-field col s12" v-if="editGroupTestimony">-->
-                                <!--<label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>-->
-                                <!--<input-->
-                                        <!--id="groupIndication"-->
-                                        <!--type="text"-->
-                                        <!--class="validate"-->
-                                        <!--v-focus="editGroupTestimony"-->
-                                        <!--@keyup.enter="doneEditGroupTestimony"-->
-                                        <!--@keyup.esc="doEditGroupTestimony">-->
+                            <!--<span class="input-field col s12" v-if="editGroupTestimony">-->
+                            <!--<label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>-->
+                            <!--<input-->
+                            <!--id="groupIndication"-->
+                            <!--type="text"-->
+                            <!--class="validate"-->
+                            <!--v-focus="editGroupTestimony"-->
+                            <!--@keyup.enter="doneEditGroupTestimony"-->
+                            <!--@keyup.esc="doEditGroupTestimony">-->
 
-                                <!--<span v-if="validGroupIndication">-->
-                                    <!--<div class="center red">-->
-                                    <!--Не менее {{ groupLastIndication }}-->
-                                    <!--</div>-->
-                                <!--</span>-->
-                                <!--</span>-->
+                            <!--<span v-if="validGroupIndication">-->
+                            <!--<div class="center red">-->
+                            <!--Не менее {{ groupLastIndication }}-->
+                            <!--</div>-->
+                            <!--</span>-->
+                            <!--</span>-->
 
                             <!--</div>-->
 
@@ -54,8 +54,14 @@
                         class="validate"
                         v-focus="editAddGroupCounter"
                         @keyup.enter="doneAddGroupCounter"
-                        @keyup.esc="doEditGroupCounter">
+                        @keyup.esc="cancelEdit()">
                 </span>
+                <span v-if="validNewGroupCounterValue">
+                    <div class="center red">
+                    Только число
+                    </div>
+                </span>
+
 
                 <span v-if="editGroupTestimony">
                                 <label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>
@@ -257,6 +263,7 @@
         activedds: false,
         activeddg: false,
         validGroupIndication: false,
+        validNewGroupCounterValue: false,
         selectedStreetId: '',
         selectedGroupId: '',
         selectedTitle: '',
@@ -293,7 +300,7 @@
       count: function () {
         let sum = 0
         for (let i = 0; i < this.houses.length; i++) {
-          sum = sum + this.houses[i].spent
+          sum = sum + Number(this.houses[i].spent)
         }
         return sum
       }
@@ -322,6 +329,8 @@
       doEditGroupCounter () {
         this.editAddGroupCounter = !this.editAddGroupCounter
         this.editGroupTestimony = false
+        this.validNewGroupCounterValue = false
+        this.validGroupIndication = false
       },
       doEdit2 () {
         this.editMode2 = !this.editMode2
@@ -329,6 +338,8 @@
       doEditGroupTestimony () {
         this.editGroupTestimony = !this.editGroupTestimony
         this.editAddGroupCounter = false
+        this.validNewGroupCounterValue = false
+        this.validGroupIndication = false
       },
       doneEdit (e) {
 //        const value = e.target.value.trim()
@@ -360,17 +371,20 @@
 //            phone: this.selectedPhone
 //          })
         }
-        this.cancelEdit()
+//        this.cancelEdit()
+        this.editMode = false
       },
       doneEditGroupTestimony (e) {
-        const value = e.target.value.trim()
+        const value = Number(e.target.value.trim())
         const groupId = this.currentGroup.id
-        console.log(this.currentGroup)
-        let gli = this.currentGroup.last_indication
-        if ((value > gli) && this.editGroupTestimony) {
+//        let gli = this.currentGroup.last_indication
+//        let gli = groupLastIndication
+        console.log(value, this.groupLastIndication)
+        if ((value > this.groupLastIndication) && this.editGroupTestimony) {
           this.validGroupIndication = false
           this.addGroupTestimony({value, groupId})
           this.editGroupTestimony = false
+          this.cancelEdit()
         } else {
           this.validGroupIndication = true
         }
@@ -378,14 +392,26 @@
       doneAddGroupCounter (e) {
         const value = e.target.value.trim()
         const groupId = this.currentGroup.id
-        if (value) {
+        if ((value >= 0) && (value !== '')) {
           this.addGroupCounter({value, groupId})
+          this.cancelEdit()
+        } else {
+          this.validNewGroupCounterValue = true
         }
       },
       cancelEdit () {
         this.editMode = false
+//        this.editMode2 = false
         this.editAddGroupCounter = false
         this.editGroupTestimony = false
+        this.validNewGroupCounterValue = false
+        this.validGroupIndication = false
+        this.selectedTitle = ''
+        this.selectedStreetId = ''
+        this.selectedGroupId = ''
+        this.selectedPhone = ''
+        this.selectedMan = ''
+        this.selectedStartCounterValue = ''
       },
       selectStreetdd () {
 //        this.activedds = !this.activedds

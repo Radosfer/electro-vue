@@ -66,7 +66,7 @@
         if (value && this.editMode) {
           this.addStreet(value)
 //          this.addStreet(value, function (street) {
-//            console.log(street)
+          console.log(value)
 //          })
         }
         this.cancelEdit()

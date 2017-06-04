@@ -13,7 +13,7 @@
             <pair :data="ownerPair" color="blue"></pair>
             <pair :data="phonePair"></pair>
             <pair :data="valueLastIndication"></pair>
-            <pair :data="lastPair"></pair>
+                    <!--<pair :data="lastPair"></pair>-->
             <pair :data="valuePair" :color="colorValue"></pair>
             <pair :data="valuePay" :color="colorValue"></pair>
 
@@ -41,8 +41,7 @@
 
                 <span v-if="editAddCounter">
                     Добавление нового счетчика
-                  <div class="input-field col s12">
-
+                <div class="input-field col s12">
                 <input id="cntrEdit"
                        type="text"
                        class="validate"
@@ -50,7 +49,11 @@
                        @keyup.esc="cancelEdit">
                  <label for="cntrEdit">Начальные показания нового счетчика</label>
                  </div>
-
+                </span>
+                <span v-if="validNewCounterValue">
+                    <div class="center red">
+                    Только число
+                    </div>
                 </span>
 
 
@@ -137,9 +140,7 @@
                         <td>{{p.money}}</td>
                     </tr>
                     </tbody>
-                    Начальное показание счетчика {{}}
                 </table>
-
 
             </div>
             <div class="card-action">
@@ -163,7 +164,6 @@
   import api from '../api/electro'
   import pair from './pair.vue'
   import vswal from '../api/swal'
-  //  import tariff from './tariff.vue'
   export default{
     props: ['value', 'value1', 'house'],
     data () {
@@ -173,6 +173,7 @@
         editModePay: false,
         editAddCounter: false,
         validIndication: false,
+        validNewCounterValue: false,
 //        colorValue: 'green',
 //        houseAccount: false,
 //        newFio: '',
@@ -293,6 +294,7 @@
         this.editModeTm = false
         this.editModePay = false
         this.validIndication = false
+        this.validNewCounterValue = false
         this.editAddCounter = false
       },
       doSwalEdit () {
@@ -311,6 +313,7 @@
         this.editMode = false
         this.editModePay = false
         this.validIndication = false
+        this.validNewCounterValue = false
         this.editAddCounter = false
       },
       doEditPay () {
@@ -318,6 +321,7 @@
         this.editModeTm = false
         this.editMode = false
         this.validIndication = false
+        this.validNewCounterValue = false
         this.editAddCounter = false
       },
       doEditAddCounter () {
@@ -326,6 +330,7 @@
         this.editModeTm = false
         this.editMode = false
         this.validIndication = false
+        this.validNewCounterValue = false
       },
       doneEdit (e) {
         const value = e.target.value.trim()
@@ -336,14 +341,14 @@
         this.cancelEdit()
       },
       doneAddTm (e) {
-        const value = e.target.value.trim()
-//        console.log(value)
+        let value = Number(e.target.value.trim())
+        console.log(value)
 //        const value = this.newTm
-        let lastIndication = this.house.last_indication
+        let lastIndication = Number(this.house.last_indication)
         console.log(value, lastIndication)
         const {house} = this
         const houseId = house.id
-        if ((value >= lastIndication) && this.editModeTm) {
+        if (value >= lastIndication && this.editModeTm) {
 //          console.log(house.id, value)
 //          this.selectCounters({houseId, value})
 
@@ -359,11 +364,16 @@
         const {house} = this
         const houseId = house.id
         console.log(houseId, value)
-        this.addNewCounter({
-          house_id: houseId,
-          start_value: value
-        })
-        this.cancelEdit()
+        if ((value >= 0) && (value !== '')) {
+          this.validNewCounterValue = false
+          this.addNewCounter({
+            house_id: houseId,
+            start_value: value
+          })
+          this.cancelEdit()
+        } else {
+          this.validNewCounterValue = true
+        }
       },
       doneAddPay (e) {
 //        const amount = e.target.value.trim()
@@ -410,6 +420,7 @@
         this.editModeTm = false
         this.editModePay = false
         this.validIndication = false
+        this.validNewCounterValue = false
         this.editAddCounter = false
       },
       getHistoryHouse () {
