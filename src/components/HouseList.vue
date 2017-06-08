@@ -15,38 +15,14 @@
 
                     <tbody>
                     <tr>
-                        <td>{{count}}</td>
-                        <td>
-                            <!--<span v-if="!editGroupTestimony">-->
-                                {{groupSpent}}
-                            <!--</span>-->
-                            <!--<div class="row">-->
-                            <!--<span class="input-field col s12" v-if="editGroupTestimony">-->
-                            <!--<label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>-->
-                            <!--<input-->
-                            <!--id="groupIndication"-->
-                            <!--type="text"-->
-                            <!--class="validate"-->
-                            <!--v-focus="editGroupTestimony"-->
-                            <!--@keyup.enter="doneEditGroupTestimony"-->
-                            <!--@keyup.esc="doEditGroupTestimony">-->
-
-                            <!--<span v-if="validGroupIndication">-->
-                            <!--<div class="center red">-->
-                            <!--Не менее {{ groupLastIndication }}-->
-                            <!--</div>-->
-                            <!--</span>-->
-                            <!--</span>-->
-
-                            <!--</div>-->
-
-                        </td>
+                        <td>{{count1}}</td>
+                        <td>{{groupSpent}}</td>
                     </tr>
                     </tbody>
                 </table>
                 </span>
 
-                <span v-if="editAddGroupCounter">
+            <span v-if="editAddGroupCounter">
                     <label for="groupAddCntr">Введите стартовое показание нового счетчика группы</label>
                 <input
                         id="groupAddCntr"
@@ -295,7 +271,8 @@
         groupMode: 'groupModeG',
         currentGroup: 'currentGroup',
         groupLastIndication: 'groupLastIndication',
-        groupSpent: 'currentTestimony'
+        groupSpent: 'currentTestimony',
+        count1: 'count'
       }),
       count: function () {
         let sum = 0

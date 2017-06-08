@@ -7,7 +7,8 @@ const state = {
   all: [],
   loaded: false,
   current: null,
-  history: null
+  history: null,
+  countG: null
 }
 
 // getters
@@ -15,7 +16,8 @@ const getters = {
   allHouses: state => state.all,
   loadedHouse: state => state.loaded,
   currentHouse: state => state.current,
-  historyHouse: state => state.history
+  historyHouse: state => state.history,
+  count: state => state.countG
 }
 
 // actions
@@ -57,6 +59,19 @@ const mutations = {
   [types.HOUSES_RECEIVE] (state, {houses}) {
     state.all = houses
     state.loaded = true
+  },
+  // [types.GROUP_CALC_COUNT] (state, {houses}) {
+  //   state.all = houses
+  //   state.countG = null
+  //   for (let i in state.all) {
+  //     state.countG = state.countG + houses[i].spent
+  //   }
+  // },
+  [types.GROUP_CALC_COUNT] (state) {
+    state.countG = null
+    for (let i in state.all) {
+      state.countG = state.countG + state.all[i].spent
+    }
   },
   [types.HOUSE_SELECT] (state, {street}) {
     state.current = street

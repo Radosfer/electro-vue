@@ -26,6 +26,10 @@ const actions = {
     commit(types.HOUSE_LOADED)
     api.testimony.addHouseTestimony(data, house => {
       commit(types.HOUSE_EDITED, house)
+      commit(types.GROUP_CALC_COUNT)
+      // api.group.getHouses(data.groupId, houses => {
+      //   commit(types.HOUSES_RECEIVE, {houses})
+      // })
       // if (!house.error) {
       //
       //   console.log(house)

@@ -39,11 +39,16 @@ const actions = {
     // commit(types.GROUP_MODE_TRUE)
     commit(types.GROUP_MODE, true, {group})
     api.group.getHouses(group, houses => {
+      console.log(group)
       commit(types.HOUSES_RECEIVE, {houses})
+      commit(types.GROUP_CALC_COUNT)
     })
     api.group.getGroupTestimony(group.id, testimony => {
       commit(types.GROUP_TESTIMONY_RECEIVE, testimony)
     })
+  },
+  calcCountG ({commit}) {
+    commit(types.GROUP_CALC_COUNT)
   },
   editGroup ({commit}, data) {
     for (let i in state.all) {

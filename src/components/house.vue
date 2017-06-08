@@ -120,6 +120,7 @@
             <i class="material-icons right teal-text">close</i>
           </span>
                 <!--<p>Here is some more information about this product that is only revealed once clicked on.</p>-->
+                <div id="tableGroup">
                 <table>
                     <thead>
                     <tr>
@@ -133,15 +134,15 @@
 
                     <tbody>
                     <tr v-for="p in historyHouse">
-                        <td>{{p.date.slice(4, -25)}}</td>
+                        <td>{{p.date.slice(4, -25)}} </td>
                         <td>{{p.pay}}</td>
-                        <td>{{p.testimony}}</td>
+                        <td>{{p.testimony}}, ({{p.start_indication}})</td>
                         <td>{{p.tariff}}</td>
                         <td>{{p.money}}</td>
                     </tr>
                     </tbody>
                 </table>
-
+                </div>
             </div>
             <div class="card-action">
                 <a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>
@@ -342,17 +343,18 @@
       },
       doneAddTm (e) {
         let value = Number(e.target.value.trim())
-        console.log(value)
+//        console.log(value)
 //        const value = this.newTm
         let lastIndication = Number(this.house.last_indication)
-        console.log(value, lastIndication)
+//        console.log(value, lastIndication)
         const {house} = this
         const houseId = house.id
+        const groupId = house.group_id
         if (value >= lastIndication && this.editModeTm) {
-//          console.log(house.id, value)
+          console.log({house})
 //          this.selectCounters({houseId, value})
 
-          this.addHouseTestimony({houseId, value})
+          this.addHouseTestimony({houseId, value, groupId})
           this.cancelEdit()
         } else {
           console.log(value, lastIndication)
@@ -449,7 +451,7 @@
         border-top-color: #bbc1b9
     }
 
-    table {
+    #tableGroup {
         font-size: 10px;
     }
 

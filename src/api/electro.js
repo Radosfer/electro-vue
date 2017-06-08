@@ -1,6 +1,7 @@
 /* global fetch */
 
 import 'whatwg-fetch'
+// import vswal from '../api/swal'
 
 let _streets = []
 let _groups = []
@@ -15,6 +16,18 @@ let delay = function (ms) {
   })
 }
 
+let doSwal = function (mes) {
+  swal({
+    title: 'Ошибка',
+    text: mes,
+    type: 'error',
+    // showCancelButton: true,
+    confirmButtonColor: '#ff0000',
+    confirmButtonText: 'OK'
+    // cancelButtonText: 'Отмена'
+  })
+}
+
 export default {
   delay,
   street: {
@@ -26,7 +39,7 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           _streets = json
-          console.log(json)
+          console.log('streets', json)
           cb(json)
         })
         .catch((ex) => console.log('ошибка получения списка улиц', ex))
@@ -108,6 +121,7 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           _groups = json
+          console.log('groups', json)
           cb(json)
         })
         .catch((ex) => console.log('ошибка получения списка групп', ex))
@@ -167,7 +181,13 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          cb(json)
+          // cb(json)
+          if (json.hasOwnProperty('error')) {
+            doSwal(json.error)
+            cb(_groups)
+          } else {
+            cb(json)
+          }
         })
         // .then(() => cb(true))
         .catch((ex) => console.log('ошибка добавления показаний счетчика группы', ex))
@@ -252,8 +272,8 @@ export default {
           cb(json)
         })
 
-      // .then(() => cb(true))
-      .catch((ex) => console.log('ошибка добавления нового дома', ex))
+        // .then(() => cb(true))
+        .catch((ex) => console.log('ошибка добавления нового дома', ex))
     },
     addCounter (data, cb) {
       fetch(baseUrl + '/site/counter', {
@@ -362,6 +382,7 @@ export default {
   },
   tariff: {
     addTariff (title, cb) {
+      console.log(title)
       fetch(baseUrl + '/price', {
         method: 'POST',
         headers: {
@@ -381,7 +402,11 @@ export default {
       fetch(baseUrl + '/site/price')
         .then((response) => response.json())
         .then((json) => {
+          // if (json.hasOwnProperty('error')) {
+          //   doSwal(json.error)
+          // } else {
           cb(json)
+          // }
         })
         .catch((ex) => console.log('ошибка получения тарифа', ex))
     }
@@ -405,38 +430,39 @@ export default {
       // .then(() => cb(true))
         .then((response) => response.json())
         .then((json) => {
-          _houses = []
-          cb(json)
-          console.log(json)
+          if (json.hasOwnProperty('error')) {
+            doSwal(json.error)
+          } else {
+            _houses = []
+            cb(json)
+          }
+          //   swal({
+          //     title: 'Ошибка',
+          //     text: json.error,
+          //     type: 'input',
+          //     showCancelButton: true,
+          //     confirmButtonColor: '#DD6B55',
+          //     confirmButtonText: 'Yes, delete it!',
+          //     closeOnConfirm: false,
+          //     animation: 'slide-from-top',
+          //     inputPlaceholder: 'Write something'
+          //   },
+          //     function (inputValue) {
+          //       if (inputValue === false) return false
+          //       if (inputValue === '') {
+          //         swal.showInputError('You need to write something!')
+          //         return false
+          //       }
+          //       swal('Nice!', 'You wrote: ' + inputValue, 'success')
+          //     }
+          //   )
+          // } else {
+          //   _houses = []
+          //   cb(json)
+          // }
         })
         .catch((ex) => console.log('ошибка добавления показаний счетчика дома', ex))
     }
-    // filterCounters (json, house, cb) {
-    //   var counters = json.filter((counter) => counter.house_id === house.houseId)
-    //   console.log(counters[0].id, house.value)
-    //   this.addHouseTestimony(counters, house)
-    //   return cb(counters)
-    // },
-    // getCounters (house, cb) {
-    //   if (_counters.length > 0) {
-    //     return this.filterCounters(_counters, house, cb)
-    //   }
-    //   fetch(baseUrl + '/counter')
-    //     .then((response) => response.json())
-    //     .then((json) => {
-    //       _counters = json
-    //       return this.filterCounters(json, house, cb)
-    //     }).catch((ex) => console.log('houses parsing failed', ex))
-    //   // this.addHouseTestimony(counters[0].id, house.value)
-    // }
-    // getHouseTestimony (cb) {
-    //   fetch(baseUrl + '/site/price')
-    //     .then((response) => response.json())
-    //     .then((json) => {
-    //       cb(json)
-    //     })
-    //     .catch((ex) => console.log('street parsing failed', ex))
-    // }
   },
   getStreetById (id) {
     let street = _streets.find((element) => {
@@ -460,7 +486,6 @@ export default {
       title: ''
     }
   }
-
   // getHouseById (id) {
   //   let house = _houses.find((element) => {
   //     return element.id === id
