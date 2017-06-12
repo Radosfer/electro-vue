@@ -35,7 +35,7 @@ export default {
       if (_streets.length > 0) {
         return cb(_streets)
       }
-      fetch(baseUrl + '/street')
+      fetch(baseUrl + '/site/get_street')
         .then((response) => response.json())
         .then((json) => {
           _streets = json
@@ -59,7 +59,7 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          _streets = json
+          // _streets = json
           console.log(json)
           cb(json)
         })
@@ -86,7 +86,7 @@ export default {
     },
     filterHouses (json, street, cb) {
       var houses = json.filter((house) => house.street_id === street.id)
-      // console.log(houses)
+      console.log(houses)
       return cb(houses)
     },
     getHouses (street, cb) {
@@ -94,10 +94,12 @@ export default {
       if (_houses.length > 0) {
         return this.filterHouses(_houses, street, cb)
       }
-      fetch(baseUrl + '/house')
+      // fetch(baseUrl + '/house')
+      fetch(baseUrl + '/site/house')
         .then((response) => response.json())
         .then((json) => {
           _houses = json
+          console.log(_houses)
           return this.filterHouses(json, street, cb)
         }).catch((ex) => console.log('ошибка получения списка домов данной улицы', ex))
     },
@@ -117,7 +119,7 @@ export default {
       if (_groups.length > 0) {
         return cb(_groups)
       }
-      fetch(baseUrl + '/group')
+      fetch(baseUrl + '/site/get_group')
         .then((response) => response.json())
         .then((json) => {
           _groups = json
@@ -140,7 +142,7 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          _groups = json
+          // _groups = json
           cb(json)
         })
         // .then(() => cb(true))
@@ -236,7 +238,8 @@ export default {
       if (_houses.length > 0) {
         return this.filterHouses(_houses, street, cb)
       }
-      fetch(baseUrl + '/house')
+      // fetch(baseUrl + '/house')
+      fetch(baseUrl + '/site/house')
         .then((response) => response.json())
         .then((json) => {
           _houses = json
@@ -465,6 +468,7 @@ export default {
     }
   },
   getStreetById (id) {
+    console.log('getStreetById', _streets)
     let street = _streets.find((element) => {
       return element.id === id
     })

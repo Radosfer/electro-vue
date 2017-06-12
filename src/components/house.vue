@@ -136,7 +136,7 @@
                     <tr v-for="p in historyHouse">
                         <td>{{p.date.slice(4, -25)}} </td>
                         <td>{{p.pay}}</td>
-                        <td>{{p.testimony}}, ({{p.start_indication}})</td>
+                        <td>{{p.testimony}} ({{p.start_indication}})</td>
                         <td>{{p.tariff}}</td>
                         <td>{{p.money}}</td>
                     </tr>
