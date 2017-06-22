@@ -1,66 +1,61 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col s12">
-
-
             <div class="card-panel" v-show="groupMode">
                 <span v-if="!editAddGroupCounter && !editGroupTestimony">
-                <table class="centered">
-                    <thead>
-                    <tr>
-                        <th>Израсходовано группой по частным счетчикам, кВт</th>
-                        <th>Израсходовано по общему счетчику группы, кВт</th>
-                    </tr>
-                    </thead>
+                    <table class="centered">
+                        <thead>
+                        <tr>
+                            <th>Израсходовано группой по частным счетчикам, кВт</th>
+                            <th>Израсходовано по общему счетчику группы, кВт</th>
+                        </tr>
+                        </thead>
 
-                    <tbody>
-                    <tr>
-                        <td>{{count1}}</td>
-                        <td>{{groupSpent}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                        <tbody>
+                        <tr>
+                            <td>{{count1}}</td>
+                            <td>{{groupSpent}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </span>
 
-            <span v-if="editAddGroupCounter">
+                <span v-if="editAddGroupCounter">
                     <label for="groupAddCntr">Введите стартовое показание нового счетчика группы</label>
-                <input
-                        id="groupAddCntr"
-                        type="text"
-                        class="validate"
-                        v-focus="editAddGroupCounter"
-                        @keyup.enter="doneAddGroupCounter"
-                        @keyup.esc="cancelEdit()">
+                    <input id="groupAddCntr"
+                           type="text"
+                           class="validate"
+                           v-focus="editAddGroupCounter"
+                           @keyup.enter="doneAddGroupCounter"
+                           @keyup.esc="cancelEdit()">
                 </span>
+
                 <span v-if="validNewGroupCounterValue">
                     <div class="center red">
-                    Только число
+                        Только число
                     </div>
                 </span>
 
-
                 <span v-if="editGroupTestimony">
-                                <label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>
-                                <input
-                                        id="groupIndication"
-                                        type="text"
-                                        class="validate"
-                                        v-focus="editGroupTestimony"
-                                        @keyup.enter="doneEditGroupTestimony"
-                                        @keyup.esc="doEditGroupTestimony">
+                    <label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>
+                    <input id="groupIndication"
+                           type="text"
+                           class="validate"
+                           v-focus="editGroupTestimony"
+                           @keyup.enter="doneEditGroupTestimony"
+                           @keyup.esc="doEditGroupTestimony">
 
-                                <span v-if="validGroupIndication">
-                                    <div class="center red">
-                                    Не менее {{ groupLastIndication }}
-                                    </div>
-                                </span>
-                                </span>
+                    <span v-if="validGroupIndication">
+                        <div class="center red">
+                            Не менее {{ groupLastIndication }}
+                        </div>
+                    </span>
+                </span>
                 <a href="#!" class="grey-text" @click="doEditGroupCounter()"><i
                         class="material-icons">add_circle_outline</i></a>
                 <a href="#!" class="green-text right" @click="doEditGroupTestimony()"><i
                         class="material-icons">publish</i></a>
             </div>
-
 
             <div class="card-panel">
                 <h5>
@@ -74,7 +69,6 @@
                          v-for="p in houses"
                          :class="{active: p === current}"
                          transition="fade">
-
                         <house :house="p"></house>
                     </div>
                 </div>
@@ -84,20 +78,17 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <label for="house">Введите номер дома</label>
-                                <input
-                                        id="house"
-                                        name="humHouse"
-                                        type="text"
-                                        class="validate"
-                                        v-model="selectedTitle"
-                                        v-validate:humHouse.initial="'required'"
-                                        :class="{'input': true, 'is-danger': errors.has('humHouse') }">
+                                <input id="house"
+                                       name="humHouse"
+                                       type="text"
+                                       class="validate"
+                                       v-model="selectedTitle"
+                                       v-validate:humHouse.initial="'required'"
+                                       :class="{'input': true, 'is-danger': errors.has('humHouse') }">
                                 <span v-show="errors.has('humHouse')" class="help is-danger">{{ errors.first('humHouse') }}</span>
-
                             </div>
-                            <!--<span>Выберите улицу</span>-->
-                            <div class="input-field col s12">
 
+                            <div class="input-field col s12">
                                 <select class="browser-default"
                                         v-model="selectedStreetId"
                                         name="selStreet"
@@ -109,9 +100,8 @@
                                     </option>
                                 </select>
                                 <span v-show="errors.has('selStreet')" class="help is-danger">{{ errors.first('selStreet') }}</span>
-                                <!--<span>Selected: {{ selectedStreetId }}</span>-->
-
                             </div>
+
                             <div class="input-field col s12">
                                 <select class="browser-default"
                                         v-model="selectedGroupId"
@@ -124,9 +114,7 @@
                                     </option>
                                 </select>
                                 <span v-show="errors.has('selGroup')" class="help is-danger">{{ errors.first('selGroup') }}</span>
-                                <!--<span>Selected: {{ selectedGroupId }}</span>-->
                             </div>
-
 
                             <div class="input-field col s12">
                                 <label for="houseKeeperName">Введите фамилию, имя и отчество плательщика</label>
@@ -139,9 +127,9 @@
                                 <span v-show="errors.has('name')"
                                       class="help is-danger">{{ errors.first('name') }}</span>
                             </div>
+
                             <div class="input-field col s12">
-                                <label for="houseKeeperTel">Введите номер
-                                    телефона плательщика</label>
+                                <label for="houseKeeperTel">Введите номер телефона плательщика</label>
                                 <input id="houseKeeperTel"
                                        name="numPhone"
                                        type="text"
@@ -151,27 +139,14 @@
                                        :class="{'input': true, 'is-danger': errors.has('numPhone') }">
                                 <span v-show="errors.has('numPhone')" class="help is-danger">{{ errors.first('numPhone') }}</span>
                             </div>
-                            <!--<div class="input-field col s12">-->
-                            <!--<label for="startCounterValue">Введите начальное-->
-                            <!--показание счетчика</label>-->
-                            <!--<input id="startCounterValue"-->
-                            <!--name="counterValue"-->
-                            <!--type="text"-->
-                            <!--class="validate"-->
-                            <!--v-model="selectedStartCounterValue"-->
-                            <!--v-validate:counterValue.initial="'required|numeric'"-->
-                            <!--:class="{'input': true, 'is-danger': errors.has('counterValue') }">-->
-                            <!--<span v-show="errors.has('counterValue')" class="help is-danger">{{ errors.first('counterValue') }}</span>-->
-                            <!--</div>-->
+
                             <div class="input-field col s12">
                                 <span class="left">
-                                <button class="btn waves-effect waves-light"
-                                        @click="cancelEdit">
+                                <button class="btn waves-effect waves-light" @click="cancelEdit">
                                     Отмена
                                     <i class="material-icons right"></i>
                                 </button>
                                 </span>
-
                                 <span class="right">
                                 <button class="btn waves-effect waves-light button is-primary"
                                         type="submit"
@@ -181,10 +156,9 @@
                                 </button>
                                 </span>
                             </div>
+
                         </div>
                     </form>
-
-                    <!--<spinner :loaded="loaded"></spinner>-->
                 </li>
                 <li class="collection-item" v-if="editMode2 && !editMode">
                     <form @submit.prevent="validateBeforeSubmit2">
@@ -210,7 +184,6 @@
                         </div>
                     </form>
                 </li>
-
             </div>
         </div>
     </div>
@@ -219,7 +192,6 @@
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.0/vue.js"></script>-->
 <script type="text/babel">
   import {mapGetters, mapActions} from 'vuex'
-  //  import api from '../api/electro'
   import Spinner from './Spinner.vue'
   import house from './house.vue'
   import street from './street.vue'
@@ -227,8 +199,6 @@
   import crud from '../mixin/crud'
 
   export default {
-//    name: 'basic-example',
-//    props: ['groups'],
     mixins: [crud],
     data () {
       return {
@@ -236,8 +206,6 @@
         editMode2: false,
         editGroupTestimony: false,
         editAddGroupCounter: false,
-        activedds: false,
-        activeddg: false,
         validGroupIndication: false,
         validNewGroupCounterValue: false,
         selectedStreetId: '',
@@ -282,13 +250,6 @@
         return sum
       }
     },
-//    mounted: function () {
-//      const groupId = this.currentGroup.id
-//      api.group.getGroupTestimony(groupId, (testimony) => {
-//        this.currentGroupTestimony = testimony.value
-//        console.log(4)
-//      })
-//    },
     methods: {
       ...mapActions([
         'selectHouse',
@@ -298,7 +259,8 @@
         'addGroupCounter',
         'addHouse',
         'addMan',
-        'addCounter'
+        'addCounter',
+        'addTariff'
       ]),
       doEdit () {
         this.editMode = !this.editMode
@@ -319,7 +281,6 @@
         this.validGroupIndication = false
       },
       doneEdit (e) {
-//        const value = e.target.value.trim()
         // todo добавить проверку пустых полей
         if (this.selectedTitle &&
           this.selectedStreetId &&
@@ -339,24 +300,12 @@
             last_indication: '0',
             spent: '0'
           })
-//          this.addCounter({
-//            house_id: this.id,
-//            start_value: this.selectedStartCounterValue
-//          })
-//            this.addMan({
-//            fio: this.selectedMan,
-//            phone: this.selectedPhone
-//          })
         }
-//        this.cancelEdit()
         this.editMode = false
       },
       doneEditGroupTestimony (e) {
         const value = Number(e.target.value.trim())
         const groupId = this.currentGroup.id
-//        let gli = this.currentGroup.last_indication
-//        let gli = groupLastIndication
-        console.log(value, this.groupLastIndication)
         if ((value > this.groupLastIndication) && this.editGroupTestimony) {
           this.validGroupIndication = false
           this.addGroupTestimony({value, groupId})
@@ -378,7 +327,6 @@
       },
       cancelEdit () {
         this.editMode = false
-//        this.editMode2 = false
         this.editAddGroupCounter = false
         this.editGroupTestimony = false
         this.validNewGroupCounterValue = false
@@ -390,26 +338,17 @@
         this.selectedMan = ''
         this.selectedStartCounterValue = ''
       },
-      selectStreetdd () {
-//        this.activedds = !this.activedds
-      },
-      selectGroupdd () {
-//        this.activeddg = !this.activeddg
-      },
       validateBeforeSubmit (e) {
         this.$validator.validateAll().then(() => {
-          // eslint-disable-next-line
 //          alert('From Submitted!')
           this.doneEdit()
         }).catch(() => {
-          // eslint-disable-next-line
 //          alert('Correct them errors!')
           this.editMode2 = false
         })
       },
       validateBeforeSubmit2 (e) {
         this.$validator.validateAll().then(() => {
-          // eslint-disable-next-line
 //          alert('From Submitted!')
           this.addCounter({
             house_id: '1',
@@ -417,12 +356,10 @@
           })
           this.editMode2 = false
         }).catch(() => {
-          // eslint-disable-next-line
 //          alert('Correct them errors!')
         })
       }
     },
-
     components: {
       Spinner, house, street, group
     }
@@ -463,7 +400,5 @@
     select.browser-default {
         border-color: #9e9e9e;
     }
-
-
 </style>
 

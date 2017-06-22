@@ -28,18 +28,11 @@ const actions = {
       commit(types.GROUPS_RECEIVE, {groups})
     })
   },
-  // getAllGroups ({commit}) {
-  //   api.group.getGroups(groups => {
-  //     commit(types.GROUPS_RECEIVE, {groups})
-  //   })
-  // },
   selectGroup ({commit}, group) {
     commit(types.GROUP_SELECT, {group})
     commit(types.STREET_SELECT, {})
-    // commit(types.GROUP_MODE_TRUE)
     commit(types.GROUP_MODE, true, {group})
     api.group.getHouses(group, houses => {
-      console.log(group)
       commit(types.HOUSES_RECEIVE, {houses})
       commit(types.GROUP_CALC_COUNT)
     })
@@ -70,11 +63,9 @@ const actions = {
     commit(types.GROUP_LOADED)
     api.group.addGroupTestimony(data, testimony => {
       commit(types.GROUP_TESTIMONY_ADD, testimony)
-      console.log(testimony)
     })
   },
   addGroupCounter ({commit}, data) {
-    // commit(types.GROUP_LOADED)
     api.group.addGroupCounter(data, testimony => {
       commit(types.GROUP_TESTIMONY_ADD, testimony)
     })
@@ -130,8 +121,6 @@ const mutations = {
   },
   [types.GROUP_MODE] (state, mode) {
     state.groupMode = mode
-    // state.curGroupId = group.id
-    // console.log(state.groupMode)
   }
 }
 

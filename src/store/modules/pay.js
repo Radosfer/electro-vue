@@ -22,9 +22,6 @@ const getters = {
 const actions = {
   addPay ({commit}, data) {
     commit(types.HOUSE_LOADED)
-    // api.house.addPay(data, pay => {
-    //   commit(types.PAY_ADD, pay)
-    // })
     api.house.addPay(data, house => {
       commit(types.HOUSE_EDITED, house)
     })

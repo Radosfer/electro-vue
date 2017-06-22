@@ -24,10 +24,8 @@ const actions = {
     })
   },
   addNewCounter ({commit}, data) {
-    // console.log(data)
     commit(types.HOUSE_LOADED)
     api.house.addNewCounter(data, house => {
-      // console.log(data)
       commit(types.HOUSE_EDITED, house)
     })
   }

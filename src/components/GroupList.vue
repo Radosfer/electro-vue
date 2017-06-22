@@ -66,7 +66,6 @@
     },
     created () {
       this.$store.dispatch('getAllGroups')
-//      this.groupModeSet
     },
     components: {Spinner, group}
   }

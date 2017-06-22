@@ -1,163 +1,166 @@
 <template>
     <div>
-
         <div class="card small z-depth-2 hoverable">
             <div class="card-content">
-          <span class="card-title activator">
-            Дом №{{ house.title }}
-            <i class="material-icons right teal-text green-text" @click="getHistoryHouse">history</i>
-          </span>
+                <span class="card-title activator">
+                    Дом №{{ house.title }}
+                    <i class="material-icons right teal-text green-text" @click="getHistoryHouse">history</i>
+                </span>
                 <span v-show="!editAddCounter && !editMode && !editModeTm && !editModePay">
-            <pair :data="streetPair" color="green"></pair>
-            <pair :data="groupPair"></pair>
-            <pair :data="ownerPair" color="blue"></pair>
-            <pair :data="phonePair"></pair>
-            <pair :data="valueLastIndication"></pair>
-                    <!--<pair :data="lastPair"></pair>-->
-            <pair :data="valuePair" :color="colorValue"></pair>
-            <pair :data="valuePay" :color="colorValue"></pair>
-
-
-          </span>
+                    <pair :data="streetPair" color="green"></pair>
+                    <pair :data="groupPair"></pair>
+                    <pair :data="ownerPair" color="blue"></pair>
+                    <pair :data="phonePair"></pair>
+                    <pair :data="valueLastIndication"></pair>
+                    <pair :data="valuePair" :color="colorValue"></pair>
+                    <pair :data="valuePay" :color="colorValue"></pair>
+                </span>
 
                 <span v-if="editMode && !editModeTm && !editModePay">
-                    <!--Изменить данные владельца-->
-                <label for="fioEdit">Изменить ФИО</label>
-                <input id="fioEdit"
-                       class="edit"
-                       value="house.fio"
-                       @keyup.enter="doneEditFioPhone"
-                       @keyup.esc="cancelEdit"
-                       v-model="fio.newFio">
-                <label for="phoneEdit">Изменить номер телефона</label>
-                <input id="phoneEdit"
-                       class="edit"
-                       :value="house.phone"
-                       v-model="fio.newPhone"
-                       @keyup.enter="doneEditFioPhone"
-                       @keyup.esc="cancelEdit">
-
+                    <label for="fioEdit">Изменить ФИО</label>
+                        <input id="fioEdit"
+                               class="edit"
+                               value="house.fio"
+                               @keyup.enter="doneEditFioPhone"
+                               @keyup.esc="cancelEdit"
+                               v-model="fio.newFio">
+                        <label for="phoneEdit">Изменить номер телефона</label>
+                    <input id="phoneEdit"
+                           class="edit"
+                           :value="house.phone"
+                           v-model="fio.newPhone"
+                           @keyup.enter="doneEditFioPhone"
+                           @keyup.esc="cancelEdit">
                 </span>
 
                 <span v-if="editAddCounter">
                     Добавление нового счетчика
-                <div class="input-field col s12">
-                <input id="cntrEdit"
-                       type="text"
-                       class="validate"
-                       @keyup.enter="doneAddNewCounter"
-                       @keyup.esc="cancelEdit">
-                 <label for="cntrEdit">Начальные показания нового счетчика</label>
-                 </div>
+                    <div class="input-field col s12">
+                        <input id="cntrEdit"
+                               type="text"
+                               class="validate"
+                               @keyup.enter="doneAddNewCounter"
+                               @keyup.esc="cancelEdit">
+                         <label for="cntrEdit">Начальные показания нового счетчика</label>
+                     </div>
                 </span>
                 <span v-if="validNewCounterValue">
                     <div class="center red">
-                    Только число
+                        Только число
                     </div>
                 </span>
-
 
                 <span v-if="editModeTm">
                     Новые показания
-                 <div class="input-field col s12">
-                <input id="AddTm"
-                       type="text"
-                       class="validate"
-                       @keyup.enter="doneAddTm"
-                       @keyup.esc="cancelEdit">
-                     <label for="AddTm">Последние показания  {{ house.last_indication }}</label>
-                 </div>
-
+                    <div class="input-field col s12">
+                        <input id="AddTm"
+                               type="text"
+                               class="validate"
+                               @keyup.enter="doneAddTm"
+                               @keyup.esc="cancelEdit">
+                         <label for="AddTm">Последние показания  {{ house.last_indication }}</label>
+                     </div>
                 </span>
                 <span v-if="validIndication">
                     <div class="center red">
-                    Не менее {{ house.last_indication }}
+                        Не менее {{ house.last_indication }}
                     </div>
                 </span>
 
-
                 <span v-if="editModePay">
-                    <!--<payment></payment>-->
                     Оплата
-        <div class="input-field col s12">
-
-             <!--<span class="left prefix">kW</span>-->
-            <input id="AddPayWatt"
-                   type="text"
-                   ref="input"
-                   v-bind:value="value"
-                   v-on:input="updateValueWatt($event.target.value)"
-                   v-on:focus="selectAll"
-                   @keyup.enter="doneAddPay"
-                   @keyup.esc="cancelEdit"
-            >
-            <label for="AddPayWatt">{{ house.testimony }} кВт</label>
-        </div>
-
-        <div class="input-field col s12">
-            <!--<span class="center prefix">&#8372</span>-->
-
-            <input id="AddPay"
-                   type="text"
-                   ref="input1"
-                   v-bind:value="value1"
-                   v-on:input="updateValueMoney($event.target.value)"
-                   v-on:focus="selectAll"
-                   @keyup.enter="doneAddPay"
-                   @keyup.esc="cancelEdit"
-            >
-            <label for="AddPay">{{ house.money }} грн.</label>
-        </div>
-
-
+                    <div class="input-field col s12">
+                        <input id="AddPayWatt"
+                               type="text"
+                               ref="input"
+                               v-bind:value="value"
+                               v-on:input="updateValueWatt($event.target.value)"
+                               v-on:focus="selectAll"
+                               @keyup.enter="doneAddPay"
+                               @keyup.esc="cancelEdit">
+                        <label for="AddPayWatt">{{ house.testimony }} кВт</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="AddPay"
+                               type="text"
+                               ref="input1"
+                               v-bind:value="value1"
+                               v-on:input="updateValueMoney($event.target.value)"
+                               v-on:focus="selectAll"
+                               @keyup.enter="doneAddPay"
+                               @keyup.esc="cancelEdit">
+                        <label for="AddPay">{{ house.money }} грн.</label>
+                    </div>
                 </span>
-
-
             </div>
-            <div class="card-reveal">
-          <span class="card-title grey-text text-darken-4">
-            Дом №{{ house.title }}
-            <i class="material-icons right teal-text">close</i>
-          </span>
-                <!--<p>Here is some more information about this product that is only revealed once clicked on.</p>-->
-                <div id="tableGroup">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Дата</th>
-                        <th>Оплата</th>
-                        <th>Последние показания</th>
-                        <th>Тариф</th>
-                        <th>Счет (грн)</th>
-                    </tr>
-                    </thead>
 
-                    <tbody>
-                    <tr v-for="p in historyHouse">
-                        <td>{{p.date.slice(4, -25)}} </td>
-                        <td>{{p.pay}}</td>
-                        <td>{{p.testimony}} ({{p.start_indication}})</td>
-                        <td>{{p.tariff}}</td>
-                        <td>{{p.money}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">
+                    Дом №{{ house.title }}
+                    <i class="material-icons right teal-text">close</i>
+                </span>
+                <div id="tableGroup">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Оплата</th>
+                            <th>Последние показания</th>
+                            <th>Тариф</th>
+                            <th>Счет (грн)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="p in historyHouse">
+                            <td>{{p.date.slice(4, -25)}}</td>
+                            <td>{{p.pay}}</td>
+                            <td>{{p.testimony}} ({{p.start_indication}})</td>
+                            <td>{{p.tariff}}</td>
+                            <td>{{p.money}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
             <div class="card-action">
-                <a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>
-                <a href="#!" class="grey-text" @click="doEditAddCounter()"><i
-                        class="material-icons">add_circle_outline</i></a>
-                <span class="right">
-                <a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>
-                <a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>
-                </span>
+                <!--<a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>-->
+                <!--<a href="#!" class="grey-text" @click="doEditAddCounter()"><i-->
+                <!--class="material-icons">add_circle_outline</i></a>-->
+                <!--<span class="right">-->
+                <!--<a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>-->
+                <!--<a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>-->
+                <!--</span>-->
+                <div class="fixed-action-btn horizontal right" style="position: absolute; ">
+                    <a class="btn-floating btn-small ">
+                        <i class="material-icons">menu</i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="btn-floating green" @click="doEdit()">
+                                <i class="material-icons">mode_edit</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn-floating grey" @click="doEditAddCounter()">
+                                <i class="material-icons">add_circle_outline</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn-floating green" @click="doEditTm()">
+                                <i class="material-icons">publish</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn-floating green" @click="doEditPay()">
+                                <i class="material-icons">payment</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-
         </div>
-
     </div>
-
 </template>
 
 <script type="text/babel">
@@ -175,12 +178,7 @@
         editAddCounter: false,
         validIndication: false,
         validNewCounterValue: false,
-//        colorValue: 'green',
-//        houseAccount: false,
-//        newFio: '',
         newPhone: this.house.phone,
-        newTm: '',
-        newPayWatt: '12',
         newPay: '',
         tariff: 0,
         amount: '',
@@ -189,7 +187,8 @@
     },
     computed: {
       ...mapGetters({
-        historyHouse: 'historyHouse'
+        historyHouse: 'historyHouse',
+        currentTariff: 'currentTariff'
       }),
       street () {
         return api
@@ -235,13 +234,6 @@
           value: this.house.last_indication
         }
       },
-      lastPair () {
-        return {
-          name: 'Передача показаний:',
-//          value: this.house.created_at
-          value: 0
-        }
-      },
       valuePair () {
         return {
           name: 'Кол-во кВт:',
@@ -261,7 +253,6 @@
         return {
           newFio: this.house.fio,
           newPhone: this.house.phone
-
         }
       },
       colorValue: function () {
@@ -276,7 +267,6 @@
     mounted: function () {
       api.tariff.getTariffs((price) => {
         this.tariff = price.value
-//        console.log(price.id)
       })
     },
     methods: {
@@ -288,6 +278,8 @@
         'selectCounters',
         'addPay',
         'addNewCounter',
+        'addTariff',
+        'getAllTariffs',
         'getHistory'
       ]),
       doEdit () {
@@ -318,6 +310,7 @@
         this.editAddCounter = false
       },
       doEditPay () {
+        this.getAllTariffs()
         this.editModePay = !this.editModePay
         this.editModeTm = false
         this.editMode = false
@@ -343,21 +336,14 @@
       },
       doneAddTm (e) {
         let value = Number(e.target.value.trim())
-//        console.log(value)
-//        const value = this.newTm
         let lastIndication = Number(this.house.last_indication)
-//        console.log(value, lastIndication)
         const {house} = this
         const houseId = house.id
         const groupId = house.group_id
         if (value >= lastIndication && this.editModeTm) {
-          console.log({house})
-//          this.selectCounters({houseId, value})
-
           this.addHouseTestimony({houseId, value, groupId})
           this.cancelEdit()
         } else {
-          console.log(value, lastIndication)
           this.validIndication = true
         }
       },
@@ -365,7 +351,6 @@
         const value = e.target.value.trim()
         const {house} = this
         const houseId = house.id
-        console.log(houseId, value)
         if ((value >= 0) && (value !== '')) {
           this.validNewCounterValue = false
           this.addNewCounter({
@@ -377,37 +362,34 @@
           this.validNewCounterValue = true
         }
       },
-      doneAddPay (e) {
-//        const amount = e.target.value.trim()
+      doneAddPay () {
         const amount = document.getElementById('AddPay').value.trim()
         const {house} = this
         const houseId = house.id
-        const priceId = this.tariff
+        const priceId = this.currentTariff
         if (amount && this.editModePay) {
           this.addPay({houseId, amount, priceId})
         }
         this.cancelEdit()
       },
-      doneEditFioPhone (e) {
+      doneEditFioPhone () {
         // todo добавить проверку пустых полей
         const {house} = this
         const fio = this.fio.newFio
         const phone = this.fio.newPhone
-//        console.log(fio, phone)
-
         if (this.editMode) {
           this.editHouse({house, fio, phone})
         }
         this.cancelEdit()
       },
       updateValueMoney: function (value) {
-        let cost = this.tariff
+        let cost = this.currentTariff
         let valueMoney = value / cost
         this.$refs.input.value = valueMoney
         this.$emit('input1', Number(valueMoney))
       },
       updateValueWatt: function (value) {
-        let cost = this.tariff
+        let cost = this.currentTariff
         let valueWatt = value * cost
         this.$refs.input1.value = valueWatt
         this.$emit('input', Number(valueWatt))
@@ -427,21 +409,11 @@
       },
       getHistoryHouse () {
         const {house} = this
-        console.log(house)
         this.getHistory(house)
       }
-
     },
-    components: {
-      pair
-//      p: {
-//        template: '#template_p',
-//        props: ['x']
-//        replace: false // you can remove this option if you add a <tr></tr> around you <td> elements in the template.
-//      }
-    }
+    components: {pair}
   }
-
 </script>
 
 
@@ -453,13 +425,5 @@
 
     #tableGroup {
         font-size: 10px;
-    }
-
-    .house-account-g {
-        color: green
-    }
-
-    .house-account-r {
-        color: red
     }
 </style>

@@ -2,7 +2,6 @@ export default {
   data () {
     return {
       editMode: false
-      // groupMode: false
     }
   },
   methods: {
@@ -10,7 +9,7 @@ export default {
       this.editMode = !this.editMode
     },
     doneEdit (e) {
-      // WRITE SELF
+      //
     },
     cancelEdit () {
       this.editMode = false

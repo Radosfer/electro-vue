@@ -9,10 +9,10 @@
                 <tariff></tariff>
                 <street-list></street-list>
                 <group-list></group-list>
-                <!--<a class="btn tooltipped" data-position="top" data-delay="50" data-tooltip="I am tooltip">Hover me!</a>-->
             </div>
             <div class="col s9">
                 <house-list></house-list>
+
             </div>
         </div>
     </div>
@@ -37,7 +37,6 @@
     .a {
         display: none;
     }
-
     .actions {
 
     .a {

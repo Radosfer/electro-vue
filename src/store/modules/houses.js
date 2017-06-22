@@ -1,6 +1,5 @@
 import api from '../../api/electro'
 import * as types from '../mutation-types'
-// import Vue from 'vue'
 
 // initial state
 const state = {
@@ -46,7 +45,6 @@ const actions = {
   getHistory ({commit}, data) {
     api.house.getHistory(data, history => {
       commit(types.HISTORY_RECEIVE, history)
-      console.log(history)
     })
   }
 }
@@ -60,13 +58,6 @@ const mutations = {
     state.all = houses
     state.loaded = true
   },
-  // [types.GROUP_CALC_COUNT] (state, {houses}) {
-  //   state.all = houses
-  //   state.countG = null
-  //   for (let i in state.all) {
-  //     state.countG = state.countG + houses[i].spent
-  //   }
-  // },
   [types.GROUP_CALC_COUNT] (state) {
     state.countG = null
     for (let i in state.all) {

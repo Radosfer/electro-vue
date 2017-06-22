@@ -13,45 +13,27 @@ const state = {
 
 // getters
 const getters = {
-  allHouseTestimony: state => state.all,
-  loadedHouseTestimony: state => state.loaded,
-  currentHouseTestimony: state => state.current
+  allHouseTestimony: state => state.all
+  // loadedHouseTestimony: state => state.loaded,
+  // currentHouseTestimony: state => state.current
 }
 
 // actions
 const actions = {
 
   addHouseTestimony ({commit}, data) {
-    console.log(data)
     commit(types.HOUSE_LOADED)
     api.testimony.addHouseTestimony(data, house => {
       commit(types.HOUSE_EDITED, house)
       commit(types.GROUP_CALC_COUNT)
-      // api.group.getHouses(data.groupId, houses => {
-      //   commit(types.HOUSES_RECEIVE, {houses})
-      // })
-      // if (!house.error) {
-      //
-      //   console.log(house)
-      // } else {
-      //   console.log(house)
-      // }
-    })
-  },
-  // getCounters ({commit}, data) {
-  //   // console.log(data)
-  //   api.house.getCounters(data, houseTestimony => {
-  //     commit(types.HOUSE_TESTIMONY_RECEIVE, {houseTestimony})
-  //   })
-  // },
-  selectCounters ({commit}, houseTestimony) {
-    // console.log(houseTestimony)
-    commit(types.HOUSE_TESTIMONY_SELECT, {houseTestimony})
-    // commit(types.GROUP_SELECT, {})
-    api.testimony.getCounters(houseTestimony, counters => {
-      commit(types.HOUSE_TESTIMONY_RECEIVE, {counters})
     })
   }
+  // selectCounters ({commit}, houseTestimony) {
+  //   commit(types.HOUSE_TESTIMONY_SELECT, {houseTestimony})
+  //   api.testimony.getCounters(houseTestimony, counters => {
+  //     commit(types.HOUSE_TESTIMONY_RECEIVE, {counters})
+  //   })
+  // }
 }
 
 // mutations
@@ -73,15 +55,6 @@ const mutations = {
   [types.HOUSE_LOADED] (state) {
     state.loaded = false
   }
-  // [types.HOUSE_EDITED] (state, house) {
-  //   console.log('edit')
-  //   for (let i in state.all) {
-  //     if (state.all[i].id === house.id) {
-  //       state.all[i] = house
-  //     }
-  //   }
-  //   state.loaded = true
-  // }
 }
 
 export default {

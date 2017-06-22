@@ -21,10 +21,8 @@ let doSwal = function (mes) {
     title: 'Ошибка',
     text: mes,
     type: 'error',
-    // showCancelButton: true,
     confirmButtonColor: '#ff0000',
     confirmButtonText: 'OK'
-    // cancelButtonText: 'Отмена'
   })
 }
 
@@ -48,9 +46,7 @@ export default {
       console.log(title)
       fetch(baseUrl + '/street', {
         method: 'POST',
-        // mode: 'cors',
         headers: {
-          // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -59,25 +55,21 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          // _streets = json
           console.log(json)
           cb(json)
         })
-        // .then(() => cb(true))
-        .catch((ex) => console.log('ошибка добавления улиц', ex))
+        .catch((ex) => console.log('ошибка добавления новой улицы', ex))
     },
     editStreet (street, title, cb) {
       fetch(baseUrl + '/street/' + street.id, {
         method: 'PUT',
         headers: {
-          // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           title: title
         })
       })
-      // delay(1000)
         .then(() => cb({
           id: street.id,
           title: title
@@ -90,7 +82,6 @@ export default {
       return cb(houses)
     },
     getHouses (street, cb) {
-      // console.log(street)
       if (_houses.length > 0) {
         return this.filterHouses(_houses, street, cb)
       }
@@ -107,9 +98,6 @@ export default {
       fetch(baseUrl + '/street/' + street.id, {
         method: 'DELETE'
       })
-      // _streets.indexOf(street)
-      // new list of streets
-      // delay(1000)
         .then(() => cb(true))
         .catch((ex) => console.log('ошибка удаления улиц', ex))
     }
@@ -142,14 +130,11 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
-          // _groups = json
           cb(json)
         })
-        // .then(() => cb(true))
-        .catch((ex) => console.log('ошибка добавления групп', ex))
+        .catch((ex) => console.log('ошибка добавления новой группы', ex))
     },
     addGroupCounter (data, cb) {
-      console.log(data)
       fetch(baseUrl + '/site/group', {
         method: 'POST',
         headers: {
@@ -165,11 +150,9 @@ export default {
         .then((json) => {
           cb(json)
         })
-        // .then(() => cb(true))
-        .catch((ex) => console.log('ошибка добавления счетчика группы', ex))
+        .catch((ex) => console.log('ошибка добавления нового счетчика группы', ex))
     },
     addGroupTestimony (data, cb) {
-      console.log(data)
       fetch(baseUrl + '/site/group_testimony', {
         method: 'POST',
         headers: {
@@ -207,7 +190,6 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           cb(json)
-          // console.log(json)
         })
         .catch((ex) => console.log('ошибка получения показаний счетчика группы', ex))
     },
@@ -215,14 +197,12 @@ export default {
       fetch(baseUrl + '/group/' + group.id, {
         method: 'PUT',
         headers: {
-          // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           title: title
         })
       })
-      // delay(1000)
         .then(() => cb({
           id: group.id,
           title: title
@@ -231,7 +211,6 @@ export default {
     },
     filterHouses (json, group, cb) {
       var houses = json.filter((house) => house.group_id === group.id)
-      // console.log(houses)
       return cb(houses)
     },
     getHouses (street, cb) {
@@ -243,7 +222,6 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           _houses = json
-          // console.log(json)
           return this.filterHouses(json, street, cb)
         }).catch((ex) => console.log('ошибка получения списка домов данной группы', ex))
     },
@@ -251,9 +229,6 @@ export default {
       fetch(baseUrl + '/group/' + group.id, {
         method: 'DELETE'
       })
-      // _streets.indexOf(street)
-      // new list of streets
-      // delay(1000)
         .then(() => cb(true))
         .catch((ex) => console.log('ошибка удаления группы', ex))
     }
@@ -274,8 +249,6 @@ export default {
           _houses = []
           cb(json)
         })
-
-        // .then(() => cb(true))
         .catch((ex) => console.log('ошибка добавления нового дома', ex))
     },
     addCounter (data, cb) {
@@ -291,17 +264,14 @@ export default {
           finish_value: 0
         })
       })
-      // _houses = []
         .then((response) => response.json())
         .then((json) => {
           _houses = []
           cb(json)
-          console.log(json)
         })
         .catch((ex) => console.log('ошибка добавления первого счетчика дома', ex))
     },
     addNewCounter (data, cb) {
-      console.log(data)
       fetch(baseUrl + '/site/counter', {
         method: 'POST',
         headers: {
@@ -314,13 +284,10 @@ export default {
           finish_value: 0
         })
       })
-
         .then((response) => response.json())
         .then((json) => {
           _houses = []
           cb(json)
-
-          console.log(json)
         })
         .catch((ex) => console.log('ошибка добавления нового счетчика дома', ex))
     },
@@ -343,7 +310,6 @@ export default {
         .catch((ex) => console.log('ошибка редактирования дома', ex))
     },
     addPay (data, cb) {
-      // console.log(title)
       fetch(baseUrl + '/site/pay', {
         method: 'POST',
         headers: {
@@ -360,12 +326,10 @@ export default {
         .then((json) => {
           _houses = []
           cb(json)
-          // console.log(json)
         })
         .catch((ex) => console.log('ошибка выполения оплаты показаний', ex))
     },
     getHistory (house, cb) {
-      console.log(house.id)
       fetch(baseUrl + '/site/history', {
         method: 'POST',
         headers: {
@@ -378,7 +342,6 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           cb(json)
-          // console.log(json)
         })
         .catch((ex) => console.log('ошибка получения истории', ex))
     }
@@ -386,7 +349,7 @@ export default {
   tariff: {
     addTariff (title, cb) {
       console.log(title)
-      fetch(baseUrl + '/price', {
+      fetch(baseUrl + '/site/add_price', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -396,41 +359,42 @@ export default {
           value: title
         })
       })
-        .then(() => cb({
-          // value: title
-        }))
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json)
+        })
         .catch((ex) => console.log('ошибка добавления тарифа', ex))
     },
     getTariffs (cb) {
       fetch(baseUrl + '/site/price')
         .then((response) => response.json())
         .then((json) => {
-          // if (json.hasOwnProperty('error')) {
-          //   doSwal(json.error)
-          // } else {
           cb(json)
-          // }
         })
         .catch((ex) => console.log('ошибка получения тарифа', ex))
+    },
+    getHouses (cb) {
+      fetch(baseUrl + '/site/house')
+        .then((response) => response.json())
+        .then((json) => {
+          cb(json)
+        }).catch((ex) => console.log('ошибка получения списка домов', ex))
     }
   },
   testimony: {
     addHouseTestimony (data, cb) {
       console.log(data)
-      // console.log(data.value)
       fetch(baseUrl + '/site/indication', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          // counter_id: counters[0].id,
           created_at: Date(),
           value: data.value,
           houseId: data.houseId
         })
       })
-      // .then(() => cb(true))
         .then((response) => response.json())
         .then((json) => {
           if (json.hasOwnProperty('error')) {
@@ -439,30 +403,6 @@ export default {
             _houses = []
             cb(json)
           }
-          //   swal({
-          //     title: 'Ошибка',
-          //     text: json.error,
-          //     type: 'input',
-          //     showCancelButton: true,
-          //     confirmButtonColor: '#DD6B55',
-          //     confirmButtonText: 'Yes, delete it!',
-          //     closeOnConfirm: false,
-          //     animation: 'slide-from-top',
-          //     inputPlaceholder: 'Write something'
-          //   },
-          //     function (inputValue) {
-          //       if (inputValue === false) return false
-          //       if (inputValue === '') {
-          //         swal.showInputError('You need to write something!')
-          //         return false
-          //       }
-          //       swal('Nice!', 'You wrote: ' + inputValue, 'success')
-          //     }
-          //   )
-          // } else {
-          //   _houses = []
-          //   cb(json)
-          // }
         })
         .catch((ex) => console.log('ошибка добавления показаний счетчика дома', ex))
     }

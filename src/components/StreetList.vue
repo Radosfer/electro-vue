@@ -7,27 +7,25 @@
                     <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons">add</i></a>
                 </h5>
             </li>
-            <li
-                    class="collection-item"
-                    v-if="!editMode"
-                    v-for="p in streets"
-                    v-on:mouseover="mouseOver(p)"
-                    v-on:mouseout="mouseOut()"
-                    :class="{active: p === current, actions: p === actions}"
-                    transition="fade">
+            <li class="collection-item"
+                v-if="!editMode"
+                v-for="p in streets"
+                v-on:mouseover="mouseOver(p)"
+                v-on:mouseout="mouseOut()"
+                :class="{active: p === current, actions: p === actions}"
+                transition="fade">
                 <street :street="p"></street>
             </li>
             <li class="collection-item" v-if="editMode">
                 <form>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input
-                                    id="street"
-                                    type="text"
-                                    class="validate"
-                                    v-focus="editMode"
-                                    @keyup.enter="doneEdit"
-                                    @keyup.esc="cancelEdit">
+                            <input id="street"
+                                   type="text"
+                                   class="validate"
+                                   v-focus="editMode"
+                                   @keyup.enter="doneEdit"
+                                   @keyup.esc="cancelEdit">
                             <label for="street">Название</label>
                         </div>
                     </div>
@@ -46,11 +44,6 @@
   import crud from '../mixin/crud'
   export default {
     mixins: [over, crud],
-    // data () {
-    //   return {
-    //     editMode: false
-    //   }
-    // },
     computed: mapGetters({
       streets: 'allStreets',
       loaded: 'loadedStreet',
@@ -65,16 +58,12 @@
         const value = e.target.value.trim()
         if (value && this.editMode) {
           this.addStreet(value)
-//          this.addStreet(value, function (street) {
-          console.log(value)
-//          })
         }
         this.cancelEdit()
       }
     },
     created () {
       this.$store.dispatch('getAllStreets')
-//      this.groupModeOff()
     },
     components: {Spinner, street}
   }

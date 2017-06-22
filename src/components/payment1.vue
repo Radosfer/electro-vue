@@ -1,53 +1,35 @@
 <template>
     <div>
-
         <div class="input-field col s12">
             <i class="material-icons prefix"><h5>W</h5></i>
-            <input  id="AddPayWatt"
-                    type="text"
-                    placeholder="Кол-во кВт"
-                    ref="input"
-                    v-bind:value="value"
-                    v-on:input="updateValueWatt($event.target.value)"
-                    v-on:focus="selectAll"
-            >
-            <!--<label for="AddPayWatt">Кол-во кВт</label>-->
+            <input id="AddPayWatt"
+                   type="text"
+                   placeholder="Кол-во кВт"
+                   ref="input"
+                   v-bind:value="value"
+                   v-on:input="updateValueWatt($event.target.value)"
+                   v-on:focus="selectAll">
         </div>
 
         <div class="input-field col s12">
             <i class="material-icons prefix">&#8372</i>
-            <input  id="AddPay"
-                    type="text"
-                    placeholder="Введите сумму оплаты"
-                    ref="input1"
-                    v-bind:value="value1"
-                    v-on:input="updateValueMoney($event.target.value)"
-                    v-on:focus="selectAll"
-                    v-model="newPay"
-                    @keyup.enter="doneAddPay"
-            >
-            <!--<label for="AddPay">Введите сумму оплаты</label>-->
+            <input id="AddPay"
+                   type="text"
+                   placeholder="Введите сумму оплаты"
+                   ref="input1"
+                   v-bind:value="value1"
+                   v-on:input="updateValueMoney($event.target.value)"
+                   v-on:focus="selectAll"
+                   v-model="newPay"
+                   @keyup.enter="doneAddPay">
         </div>
-
-        <!--<div class="input-field col s12">-->
-        <!--<input id="AddPay"-->
-        <!--type="text"-->
-        <!--class="validate"-->
-        <!--@keyup.enter="doneAddPay"-->
-        <!--@keyup.esc="cancelEditPay"-->
-        <!--v-model="newPay">-->
-        <!--<label for="AddPay">Введите сумму оплаты</label>-->
-        <!--</div>-->
-
     </div>
-
 </template>
 
 <script type="text/babel">
   import {mapActions} from 'vuex'
   import api from '../api/electro'
   export default{
-//    props: ['payment'],
     data () {
       return {
         newPay: '',

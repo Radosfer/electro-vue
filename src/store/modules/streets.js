@@ -22,15 +22,12 @@ const getters = {
 const actions = {
   getAllStreets ({commit}) {
     api.street.getStreets(streets => {
-      console.log(streets)
       commit(types.STREETS_RECEIVE, {streets})
     })
   },
   selectStreet ({commit}, street) {
-    // console.log(street)
     commit(types.STREET_SELECT, {street})
     commit(types.GROUP_SELECT, {})
-    // commit(types.GROUP_MODE_FALSE)
     commit(types.GROUP_MODE, false)
     api.street.getHouses(street, houses => {
       commit(types.HOUSES_RECEIVE, {houses})
@@ -92,12 +89,10 @@ const mutations = {
     state.loaded = true
   },
   [types.GROUP_MODE_FALSE] (state) {
-    // groupMode.state.groupMode = false
     state.groupMode = false
     console.log(state.groupMode)
   },
   [types.GROUP_MODE_TRUE] (state, mode) {
-    // groupMode.state.groupMode = false
     state.groupMode = mode
     console.log(state.groupMode)
   }

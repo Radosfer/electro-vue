@@ -13,8 +13,8 @@ const state = {
 
 // getters
 const getters = {
-  allTariffs: state => state.all,
-  loadedTariff: state => state.loaded,
+  // allTariffs: state => state.all,
+  // loadedTariff: state => state.loaded,
   currentTariff: state => state.current
 }
 
@@ -25,28 +25,13 @@ const actions = {
       commit(types.TARIFFS_RECEIVE, {tariffs})
     })
   },
-  // selectTariff ({commit}, street) {
-  //   commit(types.STREET_SELECT, {street})
-  //   commit(types.GROUP_SELECT, {})
-  //   api.tariff.getHouses(street, houses => {
-  //     commit(types.HOUSES_RECEIVE, {houses})
-  //   })
-  // },
-  // editTariff ({commit}, data) {
-  //   for (let i in state.all) {
-  //     if (state.all[i].id === data.street.id) {
-  //       commit(types.STREET_LOADED)
-  //       api.tariff.editStreet(state.all[i], data.value, street => {
-  //         commit(types.STREET_EDITED, street)
-  //       })
-  //     }
-  //   }
-  // },
   addTariff ({commit}, title) {
-    // console.log(title)
     commit(types.TARIFF_LOADED)
     api.tariff.addTariff(title, tariff => {
       commit(types.TARIFF_ADD, tariff)
+    })
+    api.tariff.getHouses(houses => {
+      commit(types.HOUSES_RECEIVE, {houses})
     })
   }
 }
@@ -58,10 +43,11 @@ const mutations = {
   },
   [types.TARIFFS_RECEIVE] (state, {tariffs}) {
     state.all = tariffs
+    state.current = tariffs.value
     state.loaded = true
   },
-  [types.TARIFF_SELECT] (state, {tariff}) {
-    state.current = tariff
+  [types.TARIFF_SELECT] (state, {tariffs}) {
+    state.current = tariffs
   },
   [types.TARIFF_EDITED] (state, tariff) {
     for (let i in state.all) {
@@ -73,12 +59,9 @@ const mutations = {
   },
   [types.TARIFF_ADD] (state, tariff) {
     state.all.push(tariff)
+    state.current = tariff.value
     state.loaded = true
   }
-  // [types.TARIFF_DELETE] (state, i) {
-  //   state.all.splice(i, 1)
-  //   state.loaded = true
-  // }
 }
 
 export default {
