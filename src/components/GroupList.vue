@@ -4,7 +4,7 @@
             <li class="collection-header">
                 <h5>
                     Группы
-                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons">add</i></a>
+                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons" title="Добавить новую группу">add</i></a>
                 </h5>
             </li>
             <li

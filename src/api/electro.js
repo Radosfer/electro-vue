@@ -43,7 +43,6 @@ export default {
         .catch((ex) => console.log('ошибка получения списка улиц', ex))
     },
     addStreet (title, cb) {
-      console.log(title)
       fetch(baseUrl + '/street', {
         method: 'POST',
         headers: {
@@ -78,7 +77,6 @@ export default {
     },
     filterHouses (json, street, cb) {
       var houses = json.filter((house) => house.street_id === street.id)
-      console.log(houses)
       return cb(houses)
     },
     getHouses (street, cb) {
@@ -89,8 +87,7 @@ export default {
       fetch(baseUrl + '/site/house')
         .then((response) => response.json())
         .then((json) => {
-          _houses = json
-          console.log(_houses)
+          // _houses = json
           return this.filterHouses(json, street, cb)
         }).catch((ex) => console.log('ошибка получения списка домов данной улицы', ex))
     },
@@ -221,7 +218,7 @@ export default {
       fetch(baseUrl + '/site/house')
         .then((response) => response.json())
         .then((json) => {
-          _houses = json
+          // _houses = json
           return this.filterHouses(json, street, cb)
         }).catch((ex) => console.log('ошибка получения списка домов данной группы', ex))
     },
@@ -235,7 +232,6 @@ export default {
   },
   house: {
     addHouse (title, cb) {
-      console.log(title)
       fetch(baseUrl + '/house', {
         method: 'POST',
         headers: {
@@ -348,7 +344,6 @@ export default {
   },
   tariff: {
     addTariff (title, cb) {
-      console.log(title)
       fetch(baseUrl + '/site/add_price', {
         method: 'POST',
         headers: {
@@ -383,7 +378,6 @@ export default {
   },
   testimony: {
     addHouseTestimony (data, cb) {
-      console.log(data)
       fetch(baseUrl + '/site/indication', {
         method: 'POST',
         headers: {

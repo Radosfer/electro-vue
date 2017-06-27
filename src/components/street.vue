@@ -6,8 +6,8 @@
         {{ street.title }}
       </a>
       <span class="a right">
-        <a href="#!" class="green-text" @click="doEdit()"><i class="tiny material-icons">mode_edit</i></a>
-        <a href="#!" class="red-text" @click="doDelete(street)"><i class="tiny material-icons">delete</i></a>
+        <a href="#!" class="green-text" @click="doEdit()"><i class="tiny material-icons" title="Редактировать">mode_edit</i></a>
+        <!--<a href="#!" class="red-text" @click="doDelete(street)"><i class="tiny material-icons">delete</i></a>-->
       </span>
     </span>
         <input class="edit"

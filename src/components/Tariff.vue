@@ -11,7 +11,7 @@
 
         <div class="a right">
             <a href="#!" class="green-text" @click="doEdit()">
-                <i class="tiny material-icons">mode_edit</i>
+                <i class="tiny material-icons" title="Ввести новый тариф">mode_edit</i>
             </a>
         </div>
         <input id="tariff"

@@ -4,7 +4,7 @@
             <div class="card-content">
                 <span class="card-title activator">
                     Дом №{{ house.title }}
-                    <i class="material-icons right teal-text green-text" @click="getHistoryHouse">history</i>
+                    <i class="material-icons right teal-text green-text" @click="getHistoryHouse" title="Посмотреть историю">history</i>
                 </span>
                 <span v-show="!editAddCounter && !editMode && !editModeTm && !editModePay">
                     <pair :data="streetPair" color="green"></pair>
@@ -123,7 +123,7 @@
                 </div>
             </div>
 
-            <div class="card-action">
+            <!--<div class="card-action">-->
                 <!--<a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>-->
                 <!--<a href="#!" class="grey-text" @click="doEditAddCounter()"><i-->
                 <!--class="material-icons">add_circle_outline</i></a>-->
@@ -131,34 +131,34 @@
                 <!--<a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>-->
                 <!--<a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>-->
                 <!--</span>-->
-                <div class="fixed-action-btn horizontal right" style="position: absolute; ">
+                <div class="fixed-action-btn horizontal right" style="position: absolute; " title="Меню">
                     <a class="btn-floating btn-small ">
                         <i class="material-icons">menu</i>
                     </a>
                     <ul>
                         <li>
-                            <a class="btn-floating green" @click="doEdit()">
+                            <a class="btn-floating green" @click="doEdit()" title="Редактировать">
                                 <i class="material-icons">mode_edit</i>
                             </a>
                         </li>
                         <li>
-                            <a class="btn-floating grey" @click="doEditAddCounter()">
+                            <a class="btn-floating grey" @click="doEditAddCounter()" title="Добавить новый счетчик">
                                 <i class="material-icons">add_circle_outline</i>
                             </a>
                         </li>
                         <li>
-                            <a class="btn-floating green" @click="doEditTm()">
+                            <a class="btn-floating green" @click="doEditTm()" title="Ввести новые показания">
                                 <i class="material-icons">publish</i>
                             </a>
                         </li>
                         <li>
-                            <a class="btn-floating green" @click="doEditPay()">
+                            <a class="btn-floating green" @click="doEditPay()" title="Оплатить">
                                 <i class="material-icons">payment</i>
                             </a>
                         </li>
                     </ul>
                 </div>
-            </div>
+            <!--</div>-->
         </div>
     </div>
 </template>
@@ -266,7 +266,8 @@
     },
     mounted: function () {
       api.tariff.getTariffs((price) => {
-        this.tariff = price.value
+//        this.tariff = price.value
+        this.tariff = this.currentTariff
       })
     },
     methods: {

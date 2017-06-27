@@ -13,8 +13,6 @@ const state = {
 
 // getters
 const getters = {
-  // allTariffs: state => state.all,
-  // loadedTariff: state => state.loaded,
   currentTariff: state => state.current
 }
 
@@ -29,9 +27,11 @@ const actions = {
     commit(types.TARIFF_LOADED)
     api.tariff.addTariff(title, tariff => {
       commit(types.TARIFF_ADD, tariff)
-    })
-    api.tariff.getHouses(houses => {
-      commit(types.HOUSES_RECEIVE, {houses})
+      commit(types.STREET_SELECT, {})
+      commit(types.GROUP_SELECT, {})
+      api.tariff.getHouses(houses => {
+        commit(types.HOUSES_RECEIVE, {})
+      })
     })
   }
 }
@@ -61,6 +61,8 @@ const mutations = {
     state.all.push(tariff)
     state.current = tariff.value
     state.loaded = true
+    state.currentSt = tariff.value
+    state.currentGr = tariff.value
   }
 }
 

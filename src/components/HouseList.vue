@@ -60,7 +60,7 @@
             <div class="card-panel">
                 <h5>
                     Дома
-                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons">add</i></a>
+                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons" title="Добавить новый дом">add</i></a>
                 </h5>
 
                 <div class="row" v-show="loaded">
