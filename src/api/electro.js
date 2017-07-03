@@ -356,6 +356,7 @@ export default {
       })
         .then((response) => response.json())
         .then((json) => {
+          console.log(json)
           cb(json)
         })
         .catch((ex) => console.log('ошибка добавления тарифа', ex))

@@ -2,9 +2,9 @@
     <div>
         <div class="card small z-depth-2 hoverable">
             <div class="card-content">
-                <span class="card-title activator">
+                <span class="card-title activator" @click="getHistoryHouse">
                     Дом №{{ house.title }}
-                    <i class="material-icons right teal-text green-text" @click="getHistoryHouse" title="Посмотреть историю">history</i>
+                    <i class="material-icons right teal-text green-text" title="Посмотреть историю">history</i>
                 </span>
                 <span v-show="!editAddCounter && !editMode && !editModeTm && !editModePay">
                     <pair :data="streetPair" color="green"></pair>
@@ -131,8 +131,8 @@
                 <!--<a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>-->
                 <!--<a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>-->
                 <!--</span>-->
-                <div class="fixed-action-btn horizontal right" style="position: absolute; " title="Меню">
-                    <a class="btn-floating btn-small ">
+                <div class="fixed-action-btn horizontal" style="position: absolute; " title="Меню">
+                    <a class="btn-floating">
                         <i class="material-icons">menu</i>
                     </a>
                     <ul>

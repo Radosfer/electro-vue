@@ -31,6 +31,7 @@ const actions = {
       commit(types.GROUP_SELECT, {})
       api.tariff.getHouses(houses => {
         commit(types.HOUSES_RECEIVE, {})
+        commit(types.GROUP_MODE, false)
       })
     })
   }
@@ -58,7 +59,7 @@ const mutations = {
     state.loaded = true
   },
   [types.TARIFF_ADD] (state, tariff) {
-    state.all.push(tariff)
+    // state.all.push(tariff)
     state.current = tariff.value
     state.loaded = true
     state.currentSt = tariff.value
