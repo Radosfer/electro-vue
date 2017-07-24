@@ -1,9 +1,10 @@
 <template>
     <div id="app">
-        <h1 class="header">
-            <i class="medium material-icons teal-text">trending_up</i>
-            Electra
-        </h1>
+        <!--<h1 class="header">-->
+            <!--<i class="medium material-icons teal-text">trending_up</i>-->
+            <!--Electra-->
+        <!--</h1>-->
+        <span></span>
         <div class="row">
             <div class="col s3">
                 <tariff></tariff>

@@ -6,7 +6,7 @@
                     Дом №{{ house.title }}
                     <i class="material-icons right teal-text green-text" title="Посмотреть историю">history</i>
                 </span>
-                <span v-show="!editAddCounter && !editMode && !editModeTm && !editModePay">
+                <span v-show="!editAddCounter && !editMode && !editModeTm && !editModePay && !editDeposit">
                     <pair :data="streetPair" color="green"></pair>
                     <pair :data="groupPair"></pair>
                     <pair :data="ownerPair" color="blue"></pair>
@@ -16,7 +16,7 @@
                     <pair :data="valuePay" :color="colorValue"></pair>
                 </span>
 
-                <span v-if="editMode && !editModeTm && !editModePay">
+                <span v-if="editMode && !editModeTm && !editModePay && !editDeposit">
                     <label for="fioEdit">Изменить ФИО</label>
                         <input id="fioEdit"
                                class="edit"
@@ -24,13 +24,59 @@
                                @keyup.enter="doneEditFioPhone"
                                @keyup.esc="cancelEdit"
                                v-model="fio.newFio">
-                        <label for="phoneEdit">Изменить номер телефона</label>
-                    <input id="phoneEdit"
-                           class="edit"
-                           :value="house.phone"
-                           v-model="fio.newPhone"
-                           @keyup.enter="doneEditFioPhone"
-                           @keyup.esc="cancelEdit">
+                    <label for="phoneEdit">Изменить номер телефона</label>
+                         <input id="phoneEdit"
+                                class="edit"
+                                :value="house.phone"
+                                v-model="fio.newPhone"
+                                @keyup.enter="doneEditFioPhone"
+                                @keyup.esc="cancelEdit">
+                </span>
+
+                <span v-if="!editMode && !editModeTm && !editModePay && editDeposit">
+                    <div class="col s6">
+                        Сделать взнос
+                        <div class="input-field col s12">
+                            <textarea id="depPurp"
+                                      placeholder="Назначение">
+                            </textarea>
+                        </div>
+                        <div class="input-field col s12">
+                                <input id="depSum"
+                                       class="edit"
+                                       @keyup.enter="doneAddDeposit"
+                                       @keyup.esc="cancelEdit"
+                                       placeholder="Сумма">
+                        </div>
+                        <!--<button class="btn waves-effect waves-light button is-primary"-->
+                                <!--@click="doneAddDeposit">-->
+                                    <!--Готово-->
+                                    <!--<i class="material-icons right">arrow_upward</i>-->
+                        <!--</button>-->
+                    </div>
+                    <div class="col s6">
+                         <div id="tableDeposits">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Сумма</th>
+                                    <th>Назначение</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="p in deposits">
+                                    <td>{{p.date.slice(4, -25)}}</td>
+                                    <td>{{p.amount}}</td>
+                                    <td>{{p.purpose}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+
                 </span>
 
                 <span v-if="editAddCounter">
@@ -77,8 +123,8 @@
                                v-on:input="updateValueWatt($event.target.value)"
                                v-on:focus="selectAll"
                                @keyup.enter="doneAddPay"
-                               @keyup.esc="cancelEdit">
-                        <label for="AddPayWatt">{{ house.testimony }} кВт</label>
+                               @keyup.esc="cancelEdit"
+                               :placeholder="house.testimony + ' кВт'">
                     </div>
                     <div class="input-field col s12">
                         <input id="AddPay"
@@ -88,8 +134,8 @@
                                v-on:input="updateValueMoney($event.target.value)"
                                v-on:focus="selectAll"
                                @keyup.enter="doneAddPay"
-                               @keyup.esc="cancelEdit">
-                        <label for="AddPay">{{ house.money }} грн.</label>
+                               @keyup.esc="cancelEdit"
+                               :placeholder="house.money + currency">
                     </div>
                 </span>
             </div>
@@ -105,7 +151,7 @@
                         <tr>
                             <th>Дата</th>
                             <th>Оплата</th>
-                            <th>Последние показания</th>
+                            <th>Последние показания (стартовые)</th>
                             <th>Тариф</th>
                             <th>Счет (грн)</th>
                         </tr>
@@ -123,41 +169,47 @@
                 </div>
             </div>
 
+
             <!--<div class="card-action">-->
-                <!--<a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>-->
-                <!--<a href="#!" class="grey-text" @click="doEditAddCounter()"><i-->
-                <!--class="material-icons">add_circle_outline</i></a>-->
-                <!--<span class="right">-->
-                <!--<a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>-->
-                <!--<a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>-->
-                <!--</span>-->
-                <div class="fixed-action-btn horizontal" style="position: absolute; " title="Меню">
-                    <a class="btn-floating">
-                        <i class="material-icons">menu</i>
-                    </a>
-                    <ul>
-                        <li>
-                            <a class="btn-floating green" @click="doEdit()" title="Редактировать">
-                                <i class="material-icons">mode_edit</i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="btn-floating grey" @click="doEditAddCounter()" title="Добавить новый счетчик">
-                                <i class="material-icons">add_circle_outline</i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="btn-floating green" @click="doEditTm()" title="Ввести новые показания">
-                                <i class="material-icons">publish</i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="btn-floating green" @click="doEditPay()" title="Оплатить">
-                                <i class="material-icons">payment</i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <!--<a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>-->
+            <!--<a href="#!" class="grey-text" @click="doEditAddCounter()"><i-->
+            <!--class="material-icons">add_circle_outline</i></a>-->
+            <!--<span class="right">-->
+            <!--<a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>-->
+            <!--<a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>-->
+            <!--</span>-->
+            <div class="fixed-action-btn horizontal click-to-toggle" style="position: absolute; " title="Меню">
+                <a class="btn-floating btn-large">
+                    <i class="material-icons">menu</i>
+                </a>
+                <ul>
+                    <li>
+                        <a class="btn-floating grey" @click="doEditDeposit()" title="Взнос">
+                            <i class="material-icons">monetization_on</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn-floating green" @click="doEdit()" title="Редактировать">
+                            <i class="material-icons">mode_edit</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn-floating grey" @click="doEditAddCounter()" title="Добавить новый счетчик">
+                            <i class="material-icons">add_circle_outline</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn-floating green" @click="doEditTm()" title="Ввести новые показания">
+                            <i class="material-icons">publish</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn-floating green" @click="doEditPay()" title="Оплатить">
+                            <i class="material-icons">payment</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <!--</div>-->
         </div>
     </div>
@@ -176,6 +228,7 @@
         editModeTm: false,
         editModePay: false,
         editAddCounter: false,
+        editDeposit: false,
         validIndication: false,
         validNewCounterValue: false,
         newPhone: this.house.phone,
@@ -188,8 +241,12 @@
     computed: {
       ...mapGetters({
         historyHouse: 'historyHouse',
+        deposits: 'allDeposits',
         currentTariff: 'currentTariff'
       }),
+      currency () {
+        return window.currency
+      },
       street () {
         return api
           .getStreetById(this.house.street_id)
@@ -278,6 +335,8 @@
         'getCounters',
         'selectCounters',
         'addPay',
+        'addDeposit',
+        'getDeposit',
         'addNewCounter',
         'addTariff',
         'getAllTariffs',
@@ -290,6 +349,7 @@
         this.validIndication = false
         this.validNewCounterValue = false
         this.editAddCounter = false
+        this.editDeposit = false
       },
       doSwalEdit () {
         vswal({
@@ -309,6 +369,7 @@
         this.validIndication = false
         this.validNewCounterValue = false
         this.editAddCounter = false
+        this.editDeposit = false
       },
       doEditPay () {
         this.getAllTariffs()
@@ -318,9 +379,23 @@
         this.validIndication = false
         this.validNewCounterValue = false
         this.editAddCounter = false
+        this.editDeposit = false
       },
       doEditAddCounter () {
         this.editAddCounter = !this.editAddCounter
+        this.editModePay = false
+        this.editModeTm = false
+        this.editMode = false
+        this.validIndication = false
+        this.validNewCounterValue = false
+        this.editDeposit = false
+      },
+      doEditDeposit () {
+        const {house} = this
+        const houseId = house.id
+        this.getDeposit({houseId})
+        this.editDeposit = !this.editDeposit
+        this.editAddCounter = false
         this.editModePay = false
         this.editModeTm = false
         this.editMode = false
@@ -364,7 +439,8 @@
         }
       },
       doneAddPay () {
-        const amount = document.getElementById('AddPay').value.trim()
+        let amount = Number(document.getElementById('AddPay').value.trim())
+//        amount = parseFloat(amount.replace(',', '.'))
         const {house} = this
         const houseId = house.id
         const priceId = this.currentTariff
@@ -372,6 +448,16 @@
           this.addPay({houseId, amount, priceId})
         }
         this.cancelEdit()
+      },
+      doneAddDeposit () {
+        let amount = document.getElementById('depSum').value.trim()
+        let purpose = document.getElementById('depPurp').value.trim()
+        const {house} = this
+        const houseId = house.id
+        if (amount && purpose && this.editDeposit) {
+          this.addDeposit({houseId, amount, purpose})
+        }
+//        this.cancelEdit()
       },
       doneEditFioPhone () {
         // todo добавить проверку пустых полей
@@ -384,16 +470,30 @@
         this.cancelEdit()
       },
       updateValueMoney: function (value) {
+        value = parseFloat(value.replace(',', '.')).toFixed(2)
         let cost = this.currentTariff
-        let valueMoney = value / cost
-        this.$refs.input.value = valueMoney
-        this.$emit('input1', Number(valueMoney))
+        let valueMoney = (value * 100) / (cost * 100)
+        console.log(value, cost, valueMoney)
+        if (!valueMoney) {
+          this.$refs.input.value = 0
+        } else {
+//          this.$refs.input.value = valueMoney.toFixed(0)
+          this.$refs.input.value = Math.floor(valueMoney)
+          this.$emit('input1', Number(valueMoney))
+        }
+//        this.$emit('input1', Number(valueMoney))
       },
       updateValueWatt: function (value) {
+        value = parseFloat(value.replace(',', '.')).toFixed(0)
         let cost = this.currentTariff
         let valueWatt = value * cost
-        this.$refs.input1.value = valueWatt
-        this.$emit('input', Number(valueWatt))
+        if (!valueWatt) {
+          this.$refs.input1.value = 0
+        } else {
+          this.$refs.input1.value = valueWatt.toFixed(2)
+          this.$emit('input', Number(valueWatt))
+        }
+//        this.$emit('input', Number(valueWatt))
       },
       selectAll: function (event) {
         setTimeout(function () {
@@ -407,6 +507,7 @@
         this.validIndication = false
         this.validNewCounterValue = false
         this.editAddCounter = false
+        this.editDeposit = false
       },
       getHistoryHouse () {
         const {house} = this
@@ -425,6 +526,9 @@
     }
 
     #tableGroup {
+        font-size: 10px;
+    }
+    #tableDeposits {
         font-size: 10px;
     }
 </style>

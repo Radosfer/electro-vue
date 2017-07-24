@@ -8,14 +8,6 @@ let _groups = []
 let _houses = []
 let hid = 0
 
-let baseUrl = 'http://electro.dev'
-
-let delay = function (ms) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, ms)
-  })
-}
-
 let doSwal = function (mes) {
   swal({
     title: 'Ошибка',
@@ -26,14 +18,17 @@ let doSwal = function (mes) {
   })
 }
 
+let elFetch = function (url, options) {
+  return fetch(window.baseUrl + url + '?token=' + window.AUTH_USER, options)
+}
+
 export default {
-  delay,
   street: {
     getStreets (cb) {
       if (_streets.length > 0) {
         return cb(_streets)
       }
-      fetch(baseUrl + '/site/get_street')
+      elFetch('/site/get_street')
         .then((response) => response.json())
         .then((json) => {
           _streets = json
@@ -43,7 +38,7 @@ export default {
         .catch((ex) => console.log('ошибка получения списка улиц', ex))
     },
     addStreet (title, cb) {
-      fetch(baseUrl + '/street', {
+      elFetch('/street', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -60,7 +55,7 @@ export default {
         .catch((ex) => console.log('ошибка добавления новой улицы', ex))
     },
     editStreet (street, title, cb) {
-      fetch(baseUrl + '/street/' + street.id, {
+      elFetch('/street/' + street.id, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -83,8 +78,8 @@ export default {
       if (_houses.length > 0) {
         return this.filterHouses(_houses, street, cb)
       }
-      // fetch(baseUrl + '/house')
-      fetch(baseUrl + '/site/house')
+      // elFetch('/house')
+      elFetch('/site/house')
         .then((response) => response.json())
         .then((json) => {
           // _houses = json
@@ -92,7 +87,7 @@ export default {
         }).catch((ex) => console.log('ошибка получения списка домов данной улицы', ex))
     },
     deleteStreet (street, cb) {
-      fetch(baseUrl + '/street/' + street.id, {
+      elFetch('/street/' + street.id, {
         method: 'DELETE'
       })
         .then(() => cb(true))
@@ -104,7 +99,7 @@ export default {
       if (_groups.length > 0) {
         return cb(_groups)
       }
-      fetch(baseUrl + '/site/get_group')
+      elFetch('/site/get_group')
         .then((response) => response.json())
         .then((json) => {
           _groups = json
@@ -114,7 +109,7 @@ export default {
         .catch((ex) => console.log('ошибка получения списка групп', ex))
     },
     addGroup (title, cb) {
-      fetch(baseUrl + '/group', {
+      elFetch('/group', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -132,7 +127,7 @@ export default {
         .catch((ex) => console.log('ошибка добавления новой группы', ex))
     },
     addGroupCounter (data, cb) {
-      fetch(baseUrl + '/site/group', {
+      elFetch('/site/group', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -150,7 +145,7 @@ export default {
         .catch((ex) => console.log('ошибка добавления нового счетчика группы', ex))
     },
     addGroupTestimony (data, cb) {
-      fetch(baseUrl + '/site/group_testimony', {
+      elFetch('/site/group_testimony', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -175,7 +170,7 @@ export default {
         .catch((ex) => console.log('ошибка добавления показаний счетчика группы', ex))
     },
     getGroupTestimony (groupId, cb) {
-      fetch(baseUrl + '/site/testimony', {
+      elFetch('/site/testimony', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -191,7 +186,7 @@ export default {
         .catch((ex) => console.log('ошибка получения показаний счетчика группы', ex))
     },
     editGroup (group, title, cb) {
-      fetch(baseUrl + '/group/' + group.id, {
+      elFetch('/group/' + group.id, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -214,8 +209,8 @@ export default {
       if (_houses.length > 0) {
         return this.filterHouses(_houses, street, cb)
       }
-      // fetch(baseUrl + '/house')
-      fetch(baseUrl + '/site/house')
+      // elFetch('/house')
+      elFetch('/site/house')
         .then((response) => response.json())
         .then((json) => {
           // _houses = json
@@ -223,7 +218,7 @@ export default {
         }).catch((ex) => console.log('ошибка получения списка домов данной группы', ex))
     },
     deleteGroup (group, cb) {
-      fetch(baseUrl + '/group/' + group.id, {
+      elFetch('/group/' + group.id, {
         method: 'DELETE'
       })
         .then(() => cb(true))
@@ -232,7 +227,7 @@ export default {
   },
   house: {
     addHouse (title, cb) {
-      fetch(baseUrl + '/house', {
+      elFetch('/house', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -248,7 +243,7 @@ export default {
         .catch((ex) => console.log('ошибка добавления нового дома', ex))
     },
     addCounter (data, cb) {
-      fetch(baseUrl + '/site/counter', {
+      elFetch('/site/counter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -268,7 +263,7 @@ export default {
         .catch((ex) => console.log('ошибка добавления первого счетчика дома', ex))
     },
     addNewCounter (data, cb) {
-      fetch(baseUrl + '/site/counter', {
+      elFetch('/site/counter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -288,7 +283,7 @@ export default {
         .catch((ex) => console.log('ошибка добавления нового счетчика дома', ex))
     },
     editHouse (house, fio, phone, cb) {
-      fetch(baseUrl + '/house/' + house.id, {
+      elFetch('/house/' + house.id, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -306,7 +301,7 @@ export default {
         .catch((ex) => console.log('ошибка редактирования дома', ex))
     },
     addPay (data, cb) {
-      fetch(baseUrl + '/site/pay', {
+      elFetch('/site/pay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -325,8 +320,29 @@ export default {
         })
         .catch((ex) => console.log('ошибка выполения оплаты показаний', ex))
     },
+    addDeposit (data, cb) {
+      console.log(data)
+      elFetch('/deposit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          house_id: data.houseId,
+          date: Date(),
+          amount: data.amount,
+          purpose: data.purpose
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          _houses = []
+          cb(json)
+        })
+        .catch((ex) => console.log('ошибка добавления взноса', ex))
+    },
     getHistory (house, cb) {
-      fetch(baseUrl + '/site/history', {
+      elFetch('/site/history', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -339,12 +355,30 @@ export default {
         .then((json) => {
           cb(json)
         })
-        .catch((ex) => console.log('ошибка получения истории', ex))
+        .catch((ex) => console.log('ошибка получения истории платежей и показаний', ex))
+    },
+    getDeposit (data, cb) {
+      console.log(data)
+      elFetch('/site/deposit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          house_id: data.houseId
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+          cb(json)
+        })
+        .catch((ex) => console.log('ошибка получения истории взносов', ex))
     }
   },
   tariff: {
     addTariff (title, cb) {
-      fetch(baseUrl + '/site/add_price', {
+      elFetch('/site/add_price', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -362,7 +396,7 @@ export default {
         .catch((ex) => console.log('ошибка добавления тарифа', ex))
     },
     getTariffs (cb) {
-      fetch(baseUrl + '/site/price')
+      elFetch('/site/price')
         .then((response) => response.json())
         .then((json) => {
           cb(json)
@@ -370,7 +404,7 @@ export default {
         .catch((ex) => console.log('ошибка получения тарифа', ex))
     },
     getHouses (cb) {
-      fetch(baseUrl + '/site/house')
+      elFetch('/site/house')
         .then((response) => response.json())
         .then((json) => {
           cb(json)
@@ -379,7 +413,7 @@ export default {
   },
   testimony: {
     addHouseTestimony (data, cb) {
-      fetch(baseUrl + '/site/indication', {
+      elFetch('/site/indication', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

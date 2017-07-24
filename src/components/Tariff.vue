@@ -6,7 +6,7 @@
          transition="fade">
         <h4>
             {{ tariff }}
-            <small>грн/кВт</small>
+            <small> {{currency}}/кВт</small>
         </h4>
 
         <div class="a right">
@@ -43,7 +43,10 @@
     computed: {
       ...mapGetters({
         currentTariff: 'currentTariff'
-      })
+      }),
+      currency () {
+        return window.currency
+      }
     },
     mounted: function () {
       api.tariff.getTariffs((price) => {
@@ -55,7 +58,8 @@
         'addTariff'
       ]),
       doneEditTariff (e) {
-        const value = e.target.value.trim()
+        let value = e.target.value.trim()
+        value = parseFloat(value.replace(',', '.'))
         if (value && this.editMode) {
           this.addTariff(value)
 //          this.reload()

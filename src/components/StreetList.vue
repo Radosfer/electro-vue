@@ -4,7 +4,8 @@
             <li class="collection-header">
                 <h5>
                     Улицы
-                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons" title="Добавить новую улицу">add</i></a>
+                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons"
+                                                                               title="Добавить новую улицу">add</i></a>
                 </h5>
             </li>
             <li class="collection-item"
@@ -32,8 +33,16 @@
                 </form>
             </li>
         </ul>
+
+        <!--<div v-for="p in iii">-->
+            <!--<span class="badge red" data-badge-caption="" style="margin: 2px 2px;">{{p}}</span>-->
+        <!--</div>-->
+
         <spinner :loaded="loaded"></spinner>
     </div>
+
+
+
 </template>
 
 <script type="text/babel">
@@ -44,11 +53,16 @@
   import crud from '../mixin/crud'
   export default {
     mixins: [over, crud],
-    computed: mapGetters({
-      streets: 'allStreets',
-      loaded: 'loadedStreet',
-      current: 'currentStreet'
-    }),
+    computed: {
+      ...mapGetters({
+        streets: 'allStreets',
+        loaded: 'loadedStreet',
+        current: 'currentStreet'
+      }),
+      iii () {
+        return Array.apply(null, {length: 100}).map(Number.call, Number)
+      }
+    },
     methods: {
       ...mapActions([
         'selectStreet',

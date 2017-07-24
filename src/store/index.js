@@ -8,6 +8,7 @@ import houses from './modules/houses'
 import groups from './modules/groups'
 import mans from './modules/mans1'
 import tariffs from './modules/tariffs'
+import deposit from './modules/deposit'
 import counters from './modules/counters'
 import houseTestimony from './modules/houseTestimony'
 import pay from './modules/pay'
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     tariffs,
     counters,
     houseTestimony,
+    deposit,
     pay
   },
   strict: debug

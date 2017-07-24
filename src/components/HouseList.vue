@@ -64,7 +64,7 @@
                 </h5>
 
                 <div class="row" v-show="loaded">
-                    <div class="col s6"
+                    <div class="col s12"
                          v-if="!editMode && !editMode2"
                          v-for="p in houses"
                          :class="{active: p === current}"
