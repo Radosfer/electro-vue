@@ -97,7 +97,6 @@
 
 
 
-
                 <div class="collection-item" v-if="editMode">
                     <form @submit.prevent="validateBeforeSubmit">
                         <div class="row">
