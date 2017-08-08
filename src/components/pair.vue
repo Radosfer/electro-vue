@@ -1,5 +1,5 @@
 <template>
-    <div :class="classColor">
+    <div :class="classColor" style="padding: 3px">
         {{ data.name }}
         <span class="right">
             {{ data.value }}

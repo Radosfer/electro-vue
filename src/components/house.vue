@@ -1,12 +1,10 @@
 <template>
     <div>
-        <div class="card small z-depth-2 hoverable">
-            <div class="card-content">
-                <span class="card-title activator" @click="getHistoryHouse">
-                    Дом №{{ house.title }}
-                    <i class="material-icons right teal-text green-text" title="Посмотреть историю">history</i>
-                </span>
-                <span v-show="!editAddCounter && !editMode && !editModeTm && !editModePay && !editDeposit">
+        <div class="card small" >
+            <div class="card-content" style="padding-top: 0px">
+
+
+                <span v-show="!editAddCounter && !editMode && !editModeTm && !editModePay && !editDeposit && !modeHistory">
                     <pair :data="streetPair" color="green"></pair>
                     <pair :data="groupPair"></pair>
                     <pair :data="ownerPair" color="blue"></pair>
@@ -16,7 +14,7 @@
                     <pair :data="valuePay" :color="colorValue"></pair>
                 </span>
 
-                <span v-if="editMode && !editModeTm && !editModePay && !editDeposit">
+                <span v-if="editMode && !editModeTm && !editModePay && !editDeposit && !modeHistory">
                     <label for="fioEdit">Изменить ФИО</label>
                         <input id="fioEdit"
                                class="edit"
@@ -138,13 +136,8 @@
                                :placeholder="house.money + currency">
                     </div>
                 </span>
-            </div>
 
-            <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4">
-                    Дом №{{ house.title }}
-                    <i class="material-icons right teal-text">close</i>
-                </span>
+                <span v-if="modeHistory">
                 <div id="tableGroup">
                     <table>
                         <thead>
@@ -167,50 +160,62 @@
                         </tbody>
                     </table>
                 </div>
+
+                </span>
             </div>
 
-
-            <!--<div class="card-action">-->
-            <!--<a href="#!" class="green-text" @click="doEdit()"><i class="material-icons">mode_edit</i></a>-->
-            <!--<a href="#!" class="grey-text" @click="doEditAddCounter()"><i-->
-            <!--class="material-icons">add_circle_outline</i></a>-->
-            <!--<span class="right">-->
-            <!--<a href="#!" class="green-text" @click="doEditTm()"><i class="material-icons">publish</i></a>-->
-            <!--<a href="#!" class="green-text" @click="doEditPay()"><i class="material-icons">payment</i></a>-->
-            <!--</span>-->
-            <div class="fixed-action-btn horizontal click-to-toggle" style="position: absolute; " title="Меню">
-                <a class="btn-floating btn-large">
-                    <i class="material-icons">menu</i>
-                </a>
-                <ul>
-                    <li>
-                        <a class="btn-floating grey" @click="doEditDeposit()" title="Взнос">
-                            <i class="material-icons">monetization_on</i>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="btn-floating green" @click="doEdit()" title="Редактировать">
-                            <i class="material-icons">mode_edit</i>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="btn-floating grey" @click="doEditAddCounter()" title="Добавить новый счетчик">
-                            <i class="material-icons">add_circle_outline</i>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="btn-floating green" @click="doEditTm()" title="Ввести новые показания">
-                            <i class="material-icons">publish</i>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="btn-floating green" @click="doEditPay()" title="Оплатить">
-                            <i class="material-icons">payment</i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <!--<div class="card-reveal">-->
+                <!--<span class="card-title grey-text text-darken-4">-->
+                    <!--Дом №{{ house.title }}-->
+                    <!--<i class="material-icons right teal-text">close</i>-->
+                <!--</span>-->
+                <!--&lt;!&ndash;<div id="tableGroup">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<table>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<thead>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<th>Дата</th>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<th>Оплата</th>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<th>Последние показания (стартовые)</th>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<th>Тариф</th>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<th>Счет (грн)</th>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</thead>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<tbody>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<tr v-for="p in historyHouse">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td>{{p.date.slice(4, -25)}}</td>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td>{{p.pay}}</td>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td>{{p.testimony}} ({{p.start_indication}})</td>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td>{{p.tariff}}</td>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td>{{p.money}}</td>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</tbody>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</table>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
             <!--</div>-->
+
+
+            <div class="col s12 card-action center">
+                <a class="waves-effect waves-teal btn-flat" :class="{'green-text': editDeposit, 'grey-text': !editDeposit}" @click="doEditDeposit()" style="margin: 0" title="Взнос" >
+                    <i class="material-icons">monetization_on</i>
+                </a>
+                <a class="waves-effect waves-teal btn-flat" :class="{'green-text': editMode, 'grey-text': !editMode}" @click="doEdit()" style="margin: 0" title="Редактировать" >
+                    <i class="material-icons">mode_edit</i>
+                </a>
+                <a class="waves-effect waves-teal btn-flat" :class="{'green-text': editAddCounter, 'grey-text': !editAddCounter}" @click="doEditAddCounter()" style="margin: 0" title="Добавить новый счетчик" >
+                    <i class="material-icons">add_circle_outline</i>
+                </a>
+                <a class="waves-effect waves-teal btn-flat" :class="{'green-text': editModeTm, 'grey-text': !editModeTm}" @click="doEditTm()" style="margin: 0" title="Ввести новые показания" >
+                    <i class="material-icons">publish</i>
+                </a>
+                <a class="waves-effect waves-teal btn-flat" :class="{'green-text': editModePay, 'grey-text': !editModePay}" @click="doEditPay()" style="margin: 0" title="Оплатить" >
+                    <i class="material-icons">payment</i>
+                </a>
+                <a class="waves-effect waves-teal btn-flat" :class="{'green-text': modeHistory, 'grey-text': !modeHistory}" @click="doModeHistory()" style="margin: 0" title="Посмотреть историю" >
+                    <i class="material-icons" >history</i>
+                </a>
+
+            </div>
+
         </div>
     </div>
 </template>
@@ -229,6 +234,7 @@
         editModePay: false,
         editAddCounter: false,
         editDeposit: false,
+        modeHistory: false,
         validIndication: false,
         validNewCounterValue: false,
         newPhone: this.house.phone,
@@ -350,6 +356,7 @@
         this.validNewCounterValue = false
         this.editAddCounter = false
         this.editDeposit = false
+        this.modeHistory = false
       },
       doSwalEdit () {
         vswal({
@@ -370,6 +377,7 @@
         this.validNewCounterValue = false
         this.editAddCounter = false
         this.editDeposit = false
+        this.modeHistory = false
       },
       doEditPay () {
         this.getAllTariffs()
@@ -380,6 +388,18 @@
         this.validNewCounterValue = false
         this.editAddCounter = false
         this.editDeposit = false
+        this.modeHistory = false
+      },
+      doModeHistory () {
+        this.getHistoryHouse()
+        this.modeHistory = !this.modeHistory
+        this.editAddCounter = false
+        this.editModePay = false
+        this.editModeTm = false
+        this.editMode = false
+        this.validIndication = false
+        this.validNewCounterValue = false
+        this.editDeposit = false
       },
       doEditAddCounter () {
         this.editAddCounter = !this.editAddCounter
@@ -389,6 +409,7 @@
         this.validIndication = false
         this.validNewCounterValue = false
         this.editDeposit = false
+        this.modeHistory = false
       },
       doEditDeposit () {
         const {house} = this
@@ -401,6 +422,7 @@
         this.editMode = false
         this.validIndication = false
         this.validNewCounterValue = false
+        this.modeHistory = false
       },
       doneEdit (e) {
         const value = e.target.value.trim()
@@ -508,6 +530,7 @@
         this.validNewCounterValue = false
         this.editAddCounter = false
         this.editDeposit = false
+        this.modeHistory = false
       },
       getHistoryHouse () {
         const {house} = this
@@ -530,5 +553,21 @@
     }
     #tableDeposits {
         font-size: 10px;
+    }
+    tbody {
+        display:block;
+        height:150px;
+        overflow:auto;
+    }
+    thead, tbody tr {
+        display:table;
+        width:100%;
+        table-layout:fixed;
+    }
+    thead {
+        width: calc( 100% - 1em )
+    }
+    table {
+        width:100%;
     }
 </style>

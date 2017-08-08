@@ -1,8 +1,8 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col s12">
-            <div class="card-panel" v-show="groupMode">
-                <span v-if="!editAddGroupCounter && !editGroupTestimony">
+            <div class="card-panel" v-show="groupMode" >
+                <span v-if="!editAddGroupCounter && !editGroupTestimony" >
                     <table class="centered">
                         <thead>
                         <tr>
@@ -11,7 +11,7 @@
                         </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody style="height: 82px;">
                         <tr>
                             <td>{{count1}}</td>
                             <td>{{groupSpent}}</td>
@@ -20,9 +20,9 @@
                     </table>
                 </span>
 
-                <span v-if="editAddGroupCounter">
+                <span v-if="editAddGroupCounter" >
                     <label for="groupAddCntr">Введите стартовое показание нового счетчика группы</label>
-                    <input id="groupAddCntr"
+                    <input id="groupAddCntr" style="margin: 0 0 67px 0"
                            type="text"
                            class="validate"
                            v-focus="editAddGroupCounter"
@@ -38,7 +38,7 @@
 
                 <span v-if="editGroupTestimony">
                     <label for="groupIndication">Введите новые показания, предыдущие - {{groupLastIndication}}</label>
-                    <input id="groupIndication"
+                    <input id="groupIndication" style="margin: 0 0 67px 0"
                            type="text"
                            class="validate"
                            v-focus="editGroupTestimony"
@@ -51,29 +51,54 @@
                         </div>
                     </span>
                 </span>
-                <a href="#!" class="grey-text" @click="doEditGroupCounter()"><i
+                <div class="card-content">
+
+                </div>
+                <a href="#!" class="grey-text " @click="doEditGroupCounter()" title="Ввести новый счетчик группы"><i
                         class="material-icons">add_circle_outline</i></a>
-                <a href="#!" class="green-text right" @click="doEditGroupTestimony()"><i
+                <a href="#!" class="grey-text right" @click="doEditGroupTestimony()" title="Ввести новые показания счетчика группы"><i
                         class="material-icons">publish</i></a>
             </div>
 
             <div class="card-panel">
                 <h5>
                     Дома
-                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons" title="Добавить новый дом">add</i></a>
+                    <a href="#!" class="green-text right" @click="doEdit()"><i class="tiny material-icons"
+                                                                               title="Добавить новый дом">add</i></a>
                 </h5>
 
-                <div class="row" v-show="loaded">
-                    <div class="col s12"
-                         v-if="!editMode && !editMode2"
-                         v-for="p in houses"
-                         :class="{active: p === current}"
-                         transition="fade">
-                        <house :house="p"></house>
-                    </div>
+                <div v-show="loaded">
+                    <ul class="collapsible" data-collapsible="accordion" >
+                        <li v-if="!editMode && !editMode2"
+                            v-for="p in houses"
+                            :class="{active: p === current}"
+                            v-bind:value="p.id">
+                            <div class="collapsible-header">
+                                <b>{{ p.title }}</b> Владелец: <b>{{p.fio }}</b> Телефон: <b>{{p.phone}}</b>
+
+                                 <span class="badge red-text" v-if="p.money < 0" title="Отрицательный баланс">
+                                     <b>!</b>
+                                </span>
+                            </div>
+                            <div class="collapsible-body" style="padding: 0px; border-bottom: 0px " ><house :house="p" ></house></div>
+                        </li>
+                    </ul>
                 </div>
 
-                <li class="collection-item" v-if="editMode">
+                <!--<div class="row" v-show="loaded">-->
+                    <!--<div class="col s12"-->
+                         <!--v-if="!editMode && !editMode2"-->
+                         <!--v-for="p in houses"-->
+                         <!--:class="{active: p === current}"-->
+                         <!--transition="fade">-->
+                        <!--<house :house="p"></house>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+
+
+
+                <div class="collection-item" v-if="editMode">
                     <form @submit.prevent="validateBeforeSubmit">
                         <div class="row">
                             <div class="input-field col s12">
@@ -159,8 +184,8 @@
 
                         </div>
                     </form>
-                </li>
-                <li class="collection-item" v-if="editMode2 && !editMode">
+                </div>
+                <div class="collection-item" v-if="editMode2 && !editMode">
                     <form @submit.prevent="validateBeforeSubmit2">
                         <div class="row">
                             <div class="input-field col s12">
@@ -183,7 +208,7 @@
                                 </span>
                         </div>
                     </form>
-                </li>
+                </div>
             </div>
         </div>
     </div>
