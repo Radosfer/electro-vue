@@ -1,9 +1,10 @@
 <template>
     <div id="app">
-        <!--<h1 class="header">-->
-            <!--<i class="medium material-icons teal-text">trending_up</i>-->
-            <!--Electra-->
-        <!--</h1>-->
+        <a href="http://el.na-dachke.ru" >
+            <i class="material-icons grey-text"
+               style="font-size: 40px"
+               title="Вернуться на el.na-dachke.ru">arrow_back</i>
+        </a>
         <span></span>
         <div class="row">
             <div class="col s3">
