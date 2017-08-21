@@ -1,13 +1,17 @@
 <template>
     <div id="app">
-        <a href="http://el.na-dachke.ru" >
-            <i class="material-icons grey-text"
-               style="font-size: 40px"
-               title="Вернуться на el.na-dachke.ru">arrow_back</i>
-        </a>
+
         <span></span>
         <div class="row">
             <div class="col s3">
+                <div class="center">
+                    <a href="http://el.na-dachke.ru" >
+                        <i class="material-icons grey-text center"
+                           style="font-size: 40px"
+                           title="Вернуться на el.na-dachke.ru">home</i>
+                    </a>
+                </div>
+
                 <tariff></tariff>
                 <street-list></street-list>
                 <group-list></group-list>
