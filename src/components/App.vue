@@ -11,7 +11,6 @@
                            title="Вернуться на el.na-dachke.ru">home</i>
                     </a>
                 </div>
-
                 <tariff></tariff>
                 <street-list></street-list>
                 <group-list></group-list>
